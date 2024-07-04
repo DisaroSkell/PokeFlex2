@@ -1,0 +1,22 @@
+@font-face {
+    font-family: Alagard;
+    src: url(~/app/_assets/alagard.ttf);
+}
+@font-face {
+    font-family: Retro;
+    src: url(~/app/_assets/retro_gaming.ttf);
+}
+@font-face {
+    font-family: Big;
+    src: url(~/app/_assets/big.TTF);
+}
+
+body {
+    background-image: url(~/public/background.png);
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    color: rgb(216, 202, 8);
+}

@@ -1,0 +1,63 @@
+.quiz {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-family: 'Alagard', sans-serif;
+}
+
+.guessContainer {
+    height: 80%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    justify-content: space-between;
+    width: fit-content;
+
+    input {
+        width: 100%;
+        font-size: 30px;
+    }
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-around;
+    height: fit-content;
+    width: 100%;
+    margin-top: 10px;
+
+    button {
+        color: white;
+        border: solid;
+        border-radius: 20px;
+        border-color: rgb(19, 14, 10);
+        background-color: rgb(48, 42, 38);
+        font-family: 'Retro', sans-serif;
+        font-size: 30px;
+        text-align: center;
+        display: table;
+        padding: 5px 10px;
+        vertical-align: baseline;
+        cursor: pointer;
+    }
+}
+
+.pokeCard {
+    height: fit-content;
+    width: fit-content;
+    background-color: rgb(48, 42, 38);
+    border-radius: 20px;
+    border: 3px solid rgb(19, 14, 10);
+}
