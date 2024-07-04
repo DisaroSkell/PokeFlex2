@@ -1,12 +1,12 @@
 import Link from "next/link";
-import "./page.module.css";
+import "./page.css";
 
 export default function Home() {
   return (
-    <div>
+    <div className="mainContainer">
       <h1>Welcome to your dream land</h1>
-      <div className="navButton">
-        <Link href="/quiz">Go to Quiz</Link>
+      <div className="centered">
+        <Link className="navLink" href="/quiz">Go to Quiz</Link>
       </div>
     </div>
   );
