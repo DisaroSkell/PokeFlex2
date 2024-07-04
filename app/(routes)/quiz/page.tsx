@@ -6,7 +6,6 @@ import UniversalInput from "@/app/_components/universalInput.component";
 
 import Image from 'next/image';
 import "./quiz.css";
-import { cp } from "fs";
 
 export default function Quiz() {
     const defaultURL = 'https://pokeapi.co/api/v2/pokemon/'
@@ -33,13 +32,13 @@ export default function Quiz() {
         })
     }, [trigger])
 
-    useEffect(() => {
-        setSubmitFeedback('')
-    }, [currentInput])
-
     function guessThePokemonCallback() {
         const currentInputAsNumber = parseInt(currentInput)
         const currentPokeIdAsNumber = parseInt(currentPoke?.id)
+
+        if (isNaN(currentInputAsNumber) || isNaN(currentPokeIdAsNumber)) {
+            return
+        }
 
         if (currentInputAsNumber === currentPokeIdAsNumber) {
             setTrigger(trigger + 1)
@@ -47,21 +46,19 @@ export default function Quiz() {
             setCurrentInput('')
             setSubmitFeedback("You're right ;)")
         } else {
-            if(isNaN(currentInputAsNumber) || isNaN(currentPokeIdAsNumber)) {
-                setSubmitFeedback("You're wrong :D")
-            } else {
-                const diff = Math.abs(currentInputAsNumber - currentPokeIdAsNumber)
-
-                if(diff <= 5) setSubmitFeedback("You're close !")
-                if(diff === 10) setSubmitFeedback("Ahah... No ^^")
-                if(diff % 100 === 0) setSubmitFeedback("Really ?")
-            }
+            const diff = Math.abs(currentInputAsNumber - currentPokeIdAsNumber)
+            
+            if(diff <= 5) setSubmitFeedback("You're close !")
+            else if(diff === 10) setSubmitFeedback("Ahah... No ^^")
+            else if(diff % 100 === 0) setSubmitFeedback("Really ?")
+            else setSubmitFeedback("You're wrong :D")
         }
     }
 
     function giveUpCallback() {
         setTrigger(trigger - 1)
         setSubmitFeedback(`Dommage c'était le ${currentPoke.id}`)
+        setCurrentInput('')
     }
 
     return (
