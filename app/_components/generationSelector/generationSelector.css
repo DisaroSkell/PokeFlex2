@@ -1,0 +1,6 @@
+.allGensGroup {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 15px;
+}

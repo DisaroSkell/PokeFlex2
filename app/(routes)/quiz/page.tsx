@@ -2,24 +2,31 @@
 
 import { useEffect, useState } from "react";
 
-import UniversalInput from "@/app/_components/universalInput.component";
+import UniversalInput from "@/app/_components/universalInput/component";
+import GenerationSelector from "@/app/_components/generationSelector/component";
 
 import { defaultURL, pokemonsEndpoint } from "@/app/_types/api.type";
 
 import Image from 'next/image';
 import "./quiz.css";
+import { Generation } from "@/app/_types/generation.type";
 
 export default function Quiz() {
     const [currentPoke, setCurrentPoke] = useState<any>(null)
     const [currentInput, setCurrentInput] = useState('')
     const [submitFeedback, setSubmitFeedback] = useState('')
+    const [selectedGens, setSelectedGens] = useState<Generation[]>([])
 
     const [trigger, setTrigger] = useState(0)
     
     // fetch image
     useEffect(() => {
-        // Random between 1 and 1025
-        const randomId = Math.ceil(Math.random() * 1025)
+        if (selectedGens.length === 0) return
+
+        // Chooses a random selected gen
+        const randomGen = selectedGens[Math.floor(Math.random() * selectedGens.length)]
+        // Choose a random pokemon id in this gen
+        const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
 
         fetch(defaultURL + pokemonsEndpoint + randomId).then((res) => {
             if(res.ok) res.json().then((foundPoke) => {
@@ -28,9 +35,9 @@ export default function Quiz() {
                 }
             })
         }).catch((err) => {
-            console.log(err)
+            console.error(err)
         })
-    }, [trigger])
+    }, [trigger, selectedGens])
 
     function guessThePokemonCallback() {
         const currentInputAsNumber = parseInt(currentInput)
@@ -68,6 +75,8 @@ export default function Quiz() {
                 <div className="pokeCard">
                     <Image src={currentPoke ? currentPoke.sprites.front_default : '/Logo.png'} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
                 </div>
+
+                <GenerationSelector consumeSelectedGens={setSelectedGens} />
 
                 <div className="inputGroup">
                     <UniversalInput
