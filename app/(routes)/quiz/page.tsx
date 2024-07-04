@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 
 import UniversalInput from "@/app/_components/universalInput.component";
 
+import { defaultURL, pokemonsEndpoint } from "@/app/_types/api.type";
+
 import Image from 'next/image';
 import "./quiz.css";
 
 export default function Quiz() {
-    const defaultURL = 'https://pokeapi.co/api/v2/pokemon/'
-
     const [currentPoke, setCurrentPoke] = useState<any>(null)
     const [currentInput, setCurrentInput] = useState('')
     const [submitFeedback, setSubmitFeedback] = useState('')
@@ -21,7 +21,7 @@ export default function Quiz() {
         // Random between 1 and 1025
         const randomId = Math.ceil(Math.random() * 1025)
 
-        fetch(defaultURL + randomId).then((res) => {
+        fetch(defaultURL + pokemonsEndpoint + randomId).then((res) => {
             if(res.ok) res.json().then((foundPoke) => {
                 if(foundPoke) {
                     setCurrentPoke(foundPoke)
