@@ -54,10 +54,7 @@
     }
 }
 
-.pokeCard {
-    height: fit-content;
-    width: fit-content;
-    background-color: rgb(48, 42, 38);
-    border-radius: 20px;
-    border: 3px solid rgb(19, 14, 10);
+.absoluteRight {
+    position: absolute;
+    right: 5%;
 }

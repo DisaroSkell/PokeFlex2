@@ -9,7 +9,7 @@ import { Generation } from "@/app/_types/generation.type";
 import "./generationSelector.css"
 
 interface GenerationSelectorProps {
-    consumeSelectedGens: (value: Generation[]) => void
+    onSelectedGensUpdate: (value: Generation[]) => void
 }
 
 interface GenOptions {
@@ -18,13 +18,14 @@ interface GenOptions {
 }
 
 export default function GenerationSelector(props: GenerationSelectorProps) {
-    const [gens, setGens] = useState<Generation[]>([])
+    const [allGens, setAllGens] = useState<Generation[]>([])
     const [genOptions, setGenOptions] = useState<GenOptions[]>([])
+    const [unsavedChanges, setUnsavedChanges] = useState(false)
 
     useEffect(() => {
         getAllGens().then((gens) => {
-            setGens(gens)
-            props.consumeSelectedGens(gens)
+            setAllGens(gens)
+            props.onSelectedGensUpdate(gens)
             setGenOptions(gens.map((gen) => {return { name: gen.name, selected: true }}))
         })
     }, []) // Can't put props in dependencies because it create an infinite loop
@@ -39,39 +40,45 @@ export default function GenerationSelector(props: GenerationSelectorProps) {
                     label={gen.name}
                     value={gen.selected}
                     onValueChange={(newValue) => {
+                        setUnsavedChanges(true)
                         const newGenOptions: GenOptions[] = []
-                        const selectedGens: Generation[] = []
                         for (let iterator = 0; iterator < genOptions.length; iterator++) {
                             if(iterator === genIndex) {
                                 newGenOptions.push({
                                     name: genOptions[iterator].name,
                                     selected: newValue
                                 })
-
-                                if(newValue) {
-                                    selectedGens.push(gens[iterator])
-                                }
-                            } else {
-                                newGenOptions.push(genOptions[iterator])
-
-                                if(genOptions[iterator].selected) {
-                                    selectedGens.push(gens[iterator])
-                                }
-                            }
-
+                            } else newGenOptions.push(genOptions[iterator])
                         }
 
                         setGenOptions(newGenOptions)
-                        props.consumeSelectedGens(selectedGens)
                     }}
                 />
             )
         })
     }
+
+    function confirmChangesCallback() {
+        const selectedGens: Generation[] = []
+        for (let iterator = 0; iterator < genOptions.length; iterator++) {
+            if(genOptions[iterator].selected) {
+                selectedGens.push(allGens[iterator])
+            }
+        }
+        props.onSelectedGensUpdate(selectedGens)
+
+        setUnsavedChanges(false)
+    }
     
     return (
-        <div className="allGensGroup">
-            {gensToDisplay()}
+        <div className="genSelectorWrapper">
+            <h2>Select Pokémon Generations</h2>
+
+            <div className="allGensGroup">
+                {gensToDisplay()}
+            </div>
+
+            <button onClick={confirmChangesCallback} disabled={!unsavedChanges}>Confirm changes</button>
         </div>
     )
 }

@@ -73,7 +73,9 @@ export default function Quiz() {
                     <Image src={currentPoke ? currentPoke.sprites.front_default : '/PokeFlex2/Logo.png'} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
                 </div>
 
-                <GenerationSelector consumeSelectedGens={setSelectedGens} />
+                <div className="pokeCard absoluteRight">
+                    <GenerationSelector onSelectedGensUpdate={(newGens) => {setSelectedGens(newGens); setCurrentPoke(null)}} />
+                </div>
 
                 <div className="inputGroup">
                     <UniversalInput

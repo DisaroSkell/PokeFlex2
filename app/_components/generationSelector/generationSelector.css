@@ -4,3 +4,15 @@
     width: fit-content;
     padding: 15px;
 }
+
+.genSelectorWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+        font-size: 20px;
+        margin: 0;
+    }
+}
