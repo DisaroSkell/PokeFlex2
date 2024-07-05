@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    basePath: "/PokeFlex2",
     output: "export",
     images: {
       remotePatterns: [
