@@ -58,3 +58,10 @@
     position: absolute;
     right: 5%;
 }
+
+.quizUpperTextGroup {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    padding: 0 5%;
+}
