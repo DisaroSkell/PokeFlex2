@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import UniversalInput from "@/app/_components/universalInput/component";
 import GenerationSelector from "@/app/_components/generationSelector/component";
@@ -17,11 +17,9 @@ export default function Quiz() {
     const [submitFeedback, setSubmitFeedback] = useState('')
     const [selectedGens, setSelectedGens] = useState<Generation[]>([])
 
-    const [trigger, setTrigger] = useState(0)
-    
     // fetch image
     useEffect(() => {
-        if (selectedGens.length === 0) return
+        if (currentPoke !== null || selectedGens.length === 0) return
 
         // Chooses a random selected gen
         const randomGen = selectedGens[Math.floor(Math.random() * selectedGens.length)]
@@ -37,9 +35,9 @@ export default function Quiz() {
         }).catch((err) => {
             console.error(err)
         })
-    }, [trigger, selectedGens])
+    }, [currentPoke, selectedGens])
 
-    function guessThePokemonCallback() {
+    const guessThePokemonCallback = useCallback(() => {
         const currentInputAsNumber = parseInt(currentInput)
         const currentPokeIdAsNumber = parseInt(currentPoke?.id)
 
@@ -48,7 +46,6 @@ export default function Quiz() {
         }
 
         if (currentInputAsNumber === currentPokeIdAsNumber) {
-            setTrigger(trigger + 1)
             setCurrentPoke(null)
             setCurrentInput('')
             setSubmitFeedback("You're right ;)")
@@ -60,11 +57,11 @@ export default function Quiz() {
             else if(diff % 100 === 0) setSubmitFeedback("Really ?")
             else setSubmitFeedback("You're wrong :D")
         }
-    }
+    }, [currentInput, currentPoke])
 
     function giveUpCallback() {
-        setTrigger(trigger - 1)
         setSubmitFeedback(`Dommage c'était le ${currentPoke.id}`)
+        setCurrentPoke(null)
         setCurrentInput('')
     }
 
@@ -73,7 +70,7 @@ export default function Quiz() {
             {submitFeedback}
             <div className="guessContainer">
                 <div className="pokeCard">
-                    <Image src={currentPoke ? currentPoke.sprites.front_default : '/Logo.png'} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
+                    <Image src={currentPoke ? currentPoke.sprites.front_default : '/PokeFlex2/Logo.png'} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
                 </div>
 
                 <GenerationSelector consumeSelectedGens={setSelectedGens} />

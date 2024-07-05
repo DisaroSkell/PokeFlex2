@@ -3,6 +3,7 @@ const nextConfig = {
     basePath: "/PokeFlex2",
     output: "export",
     images: {
+      unoptimized: true,
       remotePatterns: [
         {
           protocol: 'https',
