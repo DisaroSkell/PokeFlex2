@@ -1,5 +1,5 @@
-import { defaultURL, generationsEndpoint } from "../_types/api.type"
-import { Generation } from "../_types/generation.type"
+import { defaultURL, generationsEndpoint } from "../types/api.type"
+import { Generation } from "../types/generation.type"
 
 const getAllGens = async (): Promise<Generation[]> => {
     const allGens: Generation[] = []

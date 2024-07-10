@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import UniversalInput from "@/app/_components/universalInput/component";
-import GenerationSelector from "@/app/_components/generationSelector/component";
+import UniversalInput from "@/src/app/_components/universalInput/component";
+import GenerationSelector from "@/src/app/_components/generationSelector/component";
 
-import { defaultURL, pokemonsEndpoint } from "@/app/_types/api.type";
+import { defaultURL, pokemonsEndpoint } from "@/src/types/api.type";
 
 import Image from 'next/image';
 import "./quiz.css";
-import { Generation } from "@/app/_types/generation.type";
+import { Generation } from "@/src/types/generation.type";
 
 export default function Quiz() {
     const [currentPoke, setCurrentPoke] = useState<any>(null)

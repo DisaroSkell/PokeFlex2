@@ -1,14 +1,14 @@
 @font-face {
     font-family: Alagard;
-    src: url(~/app/_assets/alagard.ttf);
+    src: url(~/src/assets/alagard.ttf);
 }
 @font-face {
     font-family: Retro;
-    src: url(~/app/_assets/retro_gaming.ttf);
+    src: url(~/src/assets/retro_gaming.ttf);
 }
 @font-face {
     font-family: Big;
-    src: url(~/app/_assets/big.TTF);
+    src: url(~/src/assets/big.TTF);
 }
 
 body {

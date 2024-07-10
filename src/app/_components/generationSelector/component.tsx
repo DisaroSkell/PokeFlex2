@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { getAllGens } from "../../_apiCalls/generations";
+import { getAllGens } from "../../../apiCalls/generations";
 
 import CheckboxWithLabel from "../checkboxWithLabel/component";
 
-import { Generation } from "@/app/_types/generation.type";
+import { Generation } from "@/src/types/generation.type";
 
 import "./generationSelector.css"
 
