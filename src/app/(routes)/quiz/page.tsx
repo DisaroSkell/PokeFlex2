@@ -23,7 +23,6 @@ export default function Quiz() {
     // fetch image
     useEffect(() => {
         if (!pokeHasToChange || selectedGens.length === 0) return
-        setPokeHasToChange(false)
         
         // Chooses a random selected gen
         const randomGen = selectedGens[Math.floor(Math.random() * selectedGens.length)]
@@ -35,9 +34,11 @@ export default function Quiz() {
                 if(foundPoke) {
                     setCurrentPoke(foundPoke)
                 }
+                setPokeHasToChange(false)
             })
         }).catch((err) => {
             console.error(err)
+            setPokeHasToChange(false)
         })
     }, [selectedGens, pokeHasToChange])
 
