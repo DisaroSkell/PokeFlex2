@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
 
-import { defaultURL, pokemonsEndpoint } from "@/src/types/api.type";
+import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
 import { useAppSelector } from "@/src/lib/hooks";
 
@@ -29,17 +29,15 @@ export default function Quiz() {
         // Choose a random pokemon id in this gen
         const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
         
-        fetch(defaultURL + pokemonsEndpoint + randomId).then((res) => {
-            if(res.ok) res.json().then((foundPoke) => {
-                if(foundPoke) {
-                    setCurrentPoke(foundPoke)
-                }
+        getPokeWithId(randomId)
+            .then((poke) => {
+                setCurrentPoke(poke)
                 setPokeHasToChange(false)
             })
-        }).catch((err) => {
-            console.error(err)
-            setPokeHasToChange(false)
-        })
+            .catch((err) => {
+                console.error(err)
+                setPokeHasToChange(false)
+            })
     }, [selectedGens, pokeHasToChange])
 
     useEffect(() => {
