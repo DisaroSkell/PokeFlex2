@@ -21,6 +21,7 @@ export default function Quiz() {
     const [currentInput, setCurrentInput] = useState('')
     const [submitFeedback, setSubmitFeedback] = useState('')
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
+    const [streakCount, setStreakCount] = useState(0)
 
     // fetch image
     useEffect(() => {
@@ -58,8 +59,10 @@ export default function Quiz() {
             setPokeHasToChange(true)
             setCurrentInput('')
             setSubmitFeedback("You're right ;)")
+            setStreakCount((streak) => streak + 1)
         } else {
             const diff = Math.abs(currentInputAsNumber - currentPokeIdAsNumber)
+            setStreakCount(0)
             
             if(diff <= 5) setSubmitFeedback("You're close !")
             else if(diff === 10) setSubmitFeedback("Ahah... No ^^")
@@ -69,16 +72,26 @@ export default function Quiz() {
     }, [currentInput, currentPoke])
 
     function giveUpCallback() {
-        setSubmitFeedback(`Dommage c'était le ${currentPoke.id}`)
-        setPokeHasToChange(true)
-        setCurrentInput('')
+        if(currentPoke) {
+            setSubmitFeedback(`It was n°${currentPoke.id}`)
+            setPokeHasToChange(true)
+            setCurrentInput('')
+            setStreakCount(0)
+        }
     }
 
     return (
         <div className="quiz">
-            {submitFeedback}
             <div className="guessContainer">
                 <div className="pokeCard">
+                    <div className="quizUpperTextGroup">
+                        <p>
+                            {submitFeedback}
+                        </p>
+                        <p>
+                            Streak: {streakCount}
+                        </p>
+                    </div>
                     <Image src={currentPoke ? currentPoke.sprites.front_default : `${nextConfig.basePath}/Logo.png`} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
                 </div>
 
