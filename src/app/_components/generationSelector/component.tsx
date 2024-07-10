@@ -33,14 +33,20 @@ export default function GenerationSelector(props: GenerationSelectorProps) {
 
     useEffect(() => {
         // check if selected gens and gen options matches
-        let i = 0;
-        while (i < selectedGens.length && genOptions.some(g => g.name === selectedGens[i].name && g.selected)) i++;
+        let misMatching = false
 
-        setUnsavedChanges(i !== selectedGens.length)
+        for (let i = 0; i < genOptions.length; i++) {
+            // mismatch case 0 : mismatch found before
+            // mismatch case 1 : genOptions option is selected but isn't in selected gens
+            // mismatch case 2 : genOptions option isn't selected but is in selected gens
+            // case 1 and 2 simplify to a XOR
+            misMatching = misMatching || (genOptions[i].selected !== selectedGens.some(g => g.name === genOptions[i].name))
+        }
+        
+        setUnsavedChanges(misMatching)
     }, [selectedGens, genOptions])
 
     function onGenOptionValueChange(genIndex: number, newValue: boolean) {
-        setUnsavedChanges(true)
         const newGenOptions: GenOptions[] = []
         for (let iterator = 0; iterator < genOptions.length; iterator++) {
             if(iterator === genIndex) {
