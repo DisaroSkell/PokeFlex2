@@ -7,25 +7,29 @@ import GenerationSelector from "@/src/app/_components/generationSelector/compone
 
 import { defaultURL, pokemonsEndpoint } from "@/src/types/api.type";
 
+import { useAppSelector } from "@/src/lib/hooks";
+
 import Image from 'next/image';
 import "./quiz.css";
-import { Generation } from "@/src/types/generation.type";
 
 export default function Quiz() {
+    const selectedGens = useAppSelector(state => state.gens.selectedGens)
+    
     const [currentPoke, setCurrentPoke] = useState<any>(null)
     const [currentInput, setCurrentInput] = useState('')
     const [submitFeedback, setSubmitFeedback] = useState('')
-    const [selectedGens, setSelectedGens] = useState<Generation[]>([])
+    const [pokeHasToChange, setPokeHasToChange] = useState(true)
 
     // fetch image
     useEffect(() => {
-        if (currentPoke !== null || selectedGens.length === 0) return
-
+        if (!pokeHasToChange || selectedGens.length === 0) return
+        setPokeHasToChange(false)
+        
         // Chooses a random selected gen
         const randomGen = selectedGens[Math.floor(Math.random() * selectedGens.length)]
         // Choose a random pokemon id in this gen
         const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
-
+        
         fetch(defaultURL + pokemonsEndpoint + randomId).then((res) => {
             if(res.ok) res.json().then((foundPoke) => {
                 if(foundPoke) {
@@ -35,7 +39,11 @@ export default function Quiz() {
         }).catch((err) => {
             console.error(err)
         })
-    }, [currentPoke, selectedGens])
+    }, [selectedGens, pokeHasToChange])
+
+    useEffect(() => {
+        setPokeHasToChange(true)
+    }, [selectedGens])
 
     const guessThePokemonCallback = useCallback(() => {
         const currentInputAsNumber = parseInt(currentInput)
@@ -46,7 +54,7 @@ export default function Quiz() {
         }
 
         if (currentInputAsNumber === currentPokeIdAsNumber) {
-            setCurrentPoke(null)
+            setPokeHasToChange(true)
             setCurrentInput('')
             setSubmitFeedback("You're right ;)")
         } else {
@@ -61,7 +69,7 @@ export default function Quiz() {
 
     function giveUpCallback() {
         setSubmitFeedback(`Dommage c'était le ${currentPoke.id}`)
-        setCurrentPoke(null)
+        setPokeHasToChange(true)
         setCurrentInput('')
     }
 
@@ -74,7 +82,7 @@ export default function Quiz() {
                 </div>
 
                 <div className="pokeCard absoluteRight">
-                    <GenerationSelector onSelectedGensUpdate={(newGens) => {setSelectedGens(newGens); setCurrentPoke(null)}} />
+                    <GenerationSelector />
                 </div>
 
                 <div className="inputGroup">
