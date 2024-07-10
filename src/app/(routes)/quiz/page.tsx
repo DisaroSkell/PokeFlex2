@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import nextConfig from "@/next.config.mjs"
+
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
 
@@ -77,7 +79,7 @@ export default function Quiz() {
             {submitFeedback}
             <div className="guessContainer">
                 <div className="pokeCard">
-                    <Image src={currentPoke ? currentPoke.sprites.front_default : '/PokeFlex2/Logo.png'} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
+                    <Image src={currentPoke ? currentPoke.sprites.front_default : `${nextConfig.basePath}/Logo.png`} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
                 </div>
 
                 <div className="pokeCard absoluteRight">
