@@ -5,11 +5,16 @@ import StoreProvider from "./storeProvider";
 
 import "./globals.css";
 
+import nextConfig from "@/next.config.mjs"
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "PokeFlex 2",
   description: "Ultimate Pokémon quiz",
+  icons: {
+    icon: `${nextConfig.basePath}/icon.png`,
+  },
 };
 
 export default function RootLayout({
