@@ -92,7 +92,12 @@ export default function Quiz() {
                             Streak: {streakCount}
                         </p>
                     </div>
-                    <Image src={currentPoke ? currentPoke.sprites.front_default : `${nextConfig.basePath}/Logo.png`} alt={currentPoke?.name ? currentPoke.name : ''} width={300} height={300} />
+                    <Image
+                        className={pokeHasToChange ? 'banana' : ''}
+                        src={pokeHasToChange ? `${nextConfig.basePath}/Logo.png` : currentPoke.sprites.front_default}
+                        alt={pokeHasToChange ? 'loading' : currentPoke.name }
+                        width={300} height={300}
+                    />
                 </div>
 
                 <div className="pokeCard absoluteRight">

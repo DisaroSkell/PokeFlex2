@@ -65,3 +65,12 @@
     width: 90%;
     padding: 0 5%;
 }
+
+.banana {
+    animation: 2s linear 0s infinite normal rotate;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
