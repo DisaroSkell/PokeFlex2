@@ -59,11 +59,23 @@
     right: 5%;
 }
 
+.absoluteLeft {
+    position: absolute;
+    left: 5%;
+}
+
 .quizUpperTextGroup {
     display: flex;
     justify-content: space-between;
     width: 90%;
     padding: 0 5%;
+}
+
+.quizSelectors {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-around;
 }
 
 .banana {
