@@ -1,5 +1,4 @@
-import { cp } from "fs";
-import { ChangeEvent, FormEvent, HTMLInputTypeAttribute, useEffect } from "react";
+import { FormEvent, HTMLInputTypeAttribute, useEffect } from "react";
 
 interface UniversalInputProps {
     inputValue: string
@@ -39,10 +38,22 @@ export default function UniversalInput({
         if (type === 'number') {
             const castedValue = parseInt(value)
 
-            return isNaN(castedValue) ? 0 : castedValue
+            return isNaN(castedValue) ? '' : castedValue.toString()
         }
 
         return value
+    }
+
+    function handleOnInput(event: FormEvent<HTMLInputElement>) {
+        let input = event.currentTarget.value;
+
+        inputChangeCallback(input);
+    }
+
+    function handleBeforeInput(event: FormEvent<HTMLInputElement>) {
+        const castedEvent = event.nativeEvent as KeyboardEvent
+
+        if (!castedEvent.key.match(/[0-9]/g)) event.preventDefault()
     }
 
     return (
@@ -50,8 +61,9 @@ export default function UniversalInput({
             id="universalInput"
             type={type}
             value={formatValue(inputValue)}
-            onChange={e => inputChangeCallback(e.target.value)}
             onKeyDown={(e) => { if(e.key === 'Enter') submitCallback() }}
+            onInput={handleOnInput}
+            onBeforeInput={handleBeforeInput}
         />
     )
 }
