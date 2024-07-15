@@ -1,0 +1,23 @@
+.infoDisplayer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 90%;
+    padding: 0 5%;
+    font-family: 'Retro', sans-serif;
+
+    p {
+        margin: 0;
+    }
+}
+
+.banana {
+    animation: 2s linear 0s infinite normal rotate;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

@@ -2,10 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import nextConfig from "@/next.config.mjs"
-
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
+import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
 
 import { PokeGuessOptions, PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type";
 
@@ -13,17 +12,20 @@ import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
 import { useAppSelector } from "@/src/lib/hooks";
 
-import Image from 'next/image';
 import "./quiz.css";
 
 export default function Quiz() {
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
     
     const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
-    const [currentInput, setCurrentInput] = useState('')
-    const [submitFeedback, setSubmitFeedback] = useState('')
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
     const [streakCount, setStreakCount] = useState(0)
+
+    const [currentInput, setCurrentInput] = useState('')
+    const [submitFeedback, setSubmitFeedback] = useState('')
+
+    const [selectedInfoOption, setSelectedInfoOption] = useState(PokeInfoOptions.Image)
+    const [selectedGuessOption, setSelectedGuessOption] = useState(PokeGuessOptions.ID)
 
     // fetch image
     useEffect(() => {
@@ -46,8 +48,10 @@ export default function Quiz() {
     }, [selectedGens, pokeHasToChange])
 
     useEffect(() => {
+        setSubmitFeedback('')
+        setStreakCount(0)
         setPokeHasToChange(true)
-    }, [selectedGens])
+    }, [selectedGens, selectedInfoOption, selectedGuessOption])
 
     const guessThePokemonCallback = useCallback(() => {
         const currentInputAsNumber = parseInt(currentInput)
@@ -88,12 +92,27 @@ export default function Quiz() {
         const options: JSX.Element[] = []
 
         for (let i = 0; i < pokeInfoKeys.length; i++) {
-            options.push(<option value={pokeInfoValues[i]} key={pokeInfoKeys[i]}>{pokeInfoKeys[i]}</option>)
+            options.push(<option
+                value={pokeInfoValues[i]}
+                key={pokeInfoKeys[i]}
+                disabled={pokeInfoValues[i].valueOf() === selectedGuessOption.valueOf()}
+            >
+                {pokeInfoKeys[i]}
+            </option>)
         }
 
         return <select
             name="pokeInfoOptions"
-            defaultValue={PokeInfoOptions.Image}
+            value={selectedInfoOption}
+            onChange={e => {
+                const newValue = e.target.value
+
+                const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === newValue)
+
+                if (foundOption) {
+                    setSelectedInfoOption(foundOption)
+                }
+            }}
         >{options}</select>
     }
 
@@ -103,12 +122,27 @@ export default function Quiz() {
         const options: JSX.Element[] = []
 
         for (let i = 0; i < pokeGuessKeys.length; i++) {
-            options.push(<option value={pokeGuessValues[i]} key={pokeGuessKeys[i]}>{pokeGuessKeys[i]}</option>)
+            options.push(<option
+                value={pokeGuessValues[i]}
+                key={pokeGuessKeys[i]}
+                disabled={pokeGuessValues[i].valueOf() === selectedInfoOption.valueOf()}
+            >
+                {pokeGuessKeys[i]}
+            </option>)
         }
 
         return <select
             name="pokeGuessOptions"
-            defaultValue={PokeGuessOptions.ID}
+            value={selectedGuessOption}
+            onChange={e => {
+                const newValue = e.target.value
+
+                const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === newValue)
+
+                if (foundOption) {
+                    setSelectedGuessOption(foundOption)
+                }
+            }}
         >{options}</select>
     }
 
@@ -120,8 +154,8 @@ export default function Quiz() {
             </div>
 
             <div className="guessContainer">
-                <div className="pokeCard">
-                    <div className="quizUpperTextGroup">
+                <div className="pokeCard infoContainer">
+                    <div className="infoContainerHeader">
                         <p>
                             {submitFeedback}
                         </p>
@@ -129,16 +163,9 @@ export default function Quiz() {
                             Streak: {streakCount}
                         </p>
                     </div>
-                    <Image
-                        className={pokeHasToChange ? 'banana' : ''}
-                        src={pokeHasToChange || !currentPoke ? `${nextConfig.basePath}/Logo.png` : currentPoke.imgUrl}
-                        alt={pokeHasToChange || !currentPoke ? 'loading' : currentPoke.name }
-                        width={300} height={300}
-                    />
-                </div>
-
-                <div className="pokeCard absoluteRight">
-                    <GenerationSelector />
+                    <div className="infoContainerContent">
+                        <PokeInfoDisplayer pokemon={pokeHasToChange ? null : currentPoke} infoType={selectedInfoOption} size={300} />
+                    </div>
                 </div>
 
                 <div className="inputGroup">
