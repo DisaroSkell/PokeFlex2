@@ -1,17 +1,19 @@
 import { FormEvent, HTMLInputTypeAttribute, useEffect } from "react";
 
+import { PokeGuessOptions } from "@/src/types/pokemon.type";
+
 interface UniversalInputProps {
     inputValue: string
     inputChangeCallback: (newValue: string) => void
     submitCallback: () => void
-    type: HTMLInputTypeAttribute
+    guessType: PokeGuessOptions
 }
 
 export default function UniversalInput({
     inputValue,
     inputChangeCallback,
     submitCallback,
-    type
+    guessType
 }: UniversalInputProps) {
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
@@ -35,7 +37,7 @@ export default function UniversalInput({
     }, [])
 
     function formatValue(value: string) {
-        if (type === 'number') {
+        if (convertGuessTypeToInputType(guessType) === 'number') {
             const castedValue = parseInt(value)
 
             return isNaN(castedValue) ? '' : castedValue.toString()
@@ -53,13 +55,24 @@ export default function UniversalInput({
     function handleBeforeInput(event: FormEvent<HTMLInputElement>) {
         const castedEvent = event.nativeEvent as KeyboardEvent
 
-        if (!castedEvent.key.match(/[0-9]/g)) event.preventDefault()
+        if (convertGuessTypeToInputType(guessType) === "number" && !castedEvent.key.match(/[0-9]/g)) event.preventDefault()
+    }
+
+    function convertGuessTypeToInputType (guessType: PokeGuessOptions): HTMLInputTypeAttribute {
+        switch(guessType) {
+            case PokeGuessOptions.ID:
+                return "number";
+            case PokeGuessOptions.Name:
+                return "text";
+            case PokeGuessOptions.Types:
+                return "text";
+        }
     }
 
     return (
         <input
             id="universalInput"
-            type={type}
+            type={convertGuessTypeToInputType(guessType)}
             value={formatValue(inputValue)}
             onKeyDown={(e) => { if(e.key === 'Enter') submitCallback() }}
             onInput={handleOnInput}

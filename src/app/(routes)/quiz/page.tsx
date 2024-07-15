@@ -53,21 +53,14 @@ export default function Quiz() {
         setPokeHasToChange(true)
     }, [selectedGens, selectedInfoOption, selectedGuessOption])
 
-    const guessThePokemonCallback = useCallback(() => {
-        const currentInputAsNumber = parseInt(currentInput)
-        const currentPokeIdAsNumber = currentPoke?.id ?? -1
-
-        if (isNaN(currentInputAsNumber) || currentPokeIdAsNumber === -1) {
-            return
-        }
-
-        if (currentInputAsNumber === currentPokeIdAsNumber) {
+    function guessWithID (guess: number, idToGuess: number) {
+        if (guess === idToGuess) {
             setPokeHasToChange(true)
             setCurrentInput('')
             setSubmitFeedback("You're right ;)")
             setStreakCount((streak) => streak + 1)
         } else {
-            const diff = Math.abs(currentInputAsNumber - currentPokeIdAsNumber)
+            const diff = Math.abs(guess - idToGuess)
             setStreakCount(0)
             
             if(diff <= 5) setSubmitFeedback("You're close !")
@@ -75,7 +68,64 @@ export default function Quiz() {
             else if(diff % 100 === 0) setSubmitFeedback("Really ?")
             else setSubmitFeedback("You're wrong :D")
         }
-    }, [currentInput, currentPoke])
+    }
+
+    function guessWithName (guess: string, nameToGuess: string) {
+        if (guess.trim().toLowerCase() === nameToGuess.trim().toLowerCase()) {
+            setPokeHasToChange(true)
+            setCurrentInput('')
+            setSubmitFeedback("You're right ;)")
+            setStreakCount((streak) => streak + 1)
+        } else {
+            setStreakCount(0)
+            
+            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("You're close !")
+            else setSubmitFeedback("You're wrong :D")
+        }
+    }
+
+    function guessWithTypes (guess: string, typesToGuess: {type1: PokeType; type2: PokeType|null}) {
+        const normalizedType1 = typesToGuess.type1.toString().trim().toLowerCase();
+        const normalizedType2 = (typesToGuess.type2?.toString() ?? '').trim().toLowerCase();
+        const typesAsString = normalizedType1 + normalizedType2;
+        const typesAlternateAsString = normalizedType2 + normalizedType1;
+        const normalizedGuess = guess.trim().toLowerCase();
+
+        if (normalizedGuess === typesAsString
+        ||  normalizedGuess === typesAlternateAsString) {
+            setPokeHasToChange(true)
+            setCurrentInput('')
+            setSubmitFeedback("You're right ;)")
+            setStreakCount((streak) => streak + 1)
+        } else {
+            setStreakCount(0)
+            
+            if(normalizedGuess === normalizedType1
+            || normalizedGuess === normalizedType2) setSubmitFeedback("You're missing one !")
+            else setSubmitFeedback("You're wrong :D")
+        }
+    }
+
+    const guessThePokemonCallback = useCallback(() => {
+        if (!currentInput) return
+
+        if (currentPoke) switch(selectedGuessOption) {
+            case PokeGuessOptions.ID:
+                const currentInputAsNumber = parseInt(currentInput);
+
+                if (isNaN(currentInputAsNumber)) {
+                    break;
+                }
+
+                return guessWithID(currentInputAsNumber, currentPoke.id);
+            case PokeGuessOptions.Name:
+                return guessWithName(currentInput, currentPoke.name);
+            case PokeGuessOptions.Types:
+                return guessWithTypes(currentInput, {type1: currentPoke.type1, type2: currentPoke.type2});
+        }
+
+        setSubmitFeedback("Something went wrong");
+    }, [currentInput, currentPoke, selectedGuessOption])
 
     function giveUpCallback() {
         if(currentPoke) {
@@ -171,7 +221,7 @@ export default function Quiz() {
                 <div className="inputGroup">
                     <UniversalInput
                         inputValue={currentInput}
-                        type="number"
+                        guessType={selectedGuessOption}
                         inputChangeCallback={setCurrentInput}
                         submitCallback={guessThePokemonCallback}
                     />
