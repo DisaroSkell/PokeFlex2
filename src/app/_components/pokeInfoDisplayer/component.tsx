@@ -21,6 +21,7 @@ export default function PokeInfoDisplayer({
             className={'banana'}
             src={`${nextConfig.basePath}/Logo.png`}
             alt={'loading'}
+            priority={true}
             width={width} height={height}
         />
     }
@@ -41,9 +42,9 @@ export default function PokeInfoDisplayer({
         }
 
         return <Image
-            className={!poke ? 'banana' : ''}
-            src={poke ? poke.imgUrl : `${nextConfig.basePath}/Logo.png`}
-            alt={poke?.name ? poke.name : 'loading'}
+            src={poke.imgUrl}
+            alt={poke.name}
+            priority={true}
             width={width} height={height}
         />
     }
