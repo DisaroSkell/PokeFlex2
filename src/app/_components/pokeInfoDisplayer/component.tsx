@@ -16,13 +16,30 @@ export default function PokeInfoDisplayer({
     infoType,
     size
 }: PokeInfoDisplayerProps) {
+    function getLoadingImage(width: number, height: number) {
+        return <Image
+            className={'banana'}
+            src={`${nextConfig.basePath}/Logo.png`}
+            alt={'loading'}
+            width={width} height={height}
+        />
+    }
+
     function getIDElem (id: number | null) {
+        if (!id) {
+            return getLoadingImage(size, size);
+        }
+
         return <p>
             {id}
         </p>
     }
 
     function getImageElem (poke: Pokemon | null, width: number, height: number) {
+        if (!poke) {
+            return getLoadingImage(size, size);
+        }
+
         return <Image
             className={!poke ? 'banana' : ''}
             src={poke ? poke.imgUrl : `${nextConfig.basePath}/Logo.png`}
@@ -32,6 +49,10 @@ export default function PokeInfoDisplayer({
     }
 
     function getNameElem (name: string | null) {
+        if (!name) {
+            return getLoadingImage(size, size);
+        }
+
         return <p>
             {name}
         </p>
