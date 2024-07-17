@@ -1,7 +1,7 @@
 import nextConfig from "@/next.config.mjs";
 import Image from 'next/image';
 
-import { PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type"
+import { PokeInfoOptions, Pokemon, shinyChance } from "@/src/types/pokemon.type"
 
 import "./pokeInfoDisplayer.css"
 
@@ -41,12 +41,25 @@ export default function PokeInfoDisplayer({
             return getLoadingImage(size, size);
         }
 
-        return <Image
-            src={poke.imgUrl}
+        // Don't ask why 4
+        const isShiny = Math.floor(Math.random() * shinyChance) === 4;
+        const image = isShiny && poke.shinyImgUrl ? poke.shinyImgUrl : poke.imgUrl
+
+        return <>
+        <Image
+            src={image}
             alt={poke.name}
             priority={true}
             width={width} height={height}
         />
+        {
+            isShiny
+            ? poke.shinyImgUrl
+                ? <p>✦ It&apos;s shiny ! ✦</p>
+                : <p>Pretend it is shiny</p>
+            : <></>
+        }
+        </>
     }
 
     function getNameElem (name: string | null) {
