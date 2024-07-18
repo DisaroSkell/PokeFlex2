@@ -18,6 +18,23 @@
     justify-content: space-between;
 }
 
+.infoContainer {
+    height: 50%;
+    width: 50%;
+}
+
+.infoContainerHeader {
+    display: flex;
+    justify-content: space-between;
+    height: 20%;
+    width: 90%;
+    padding: 0 5%;
+}
+
+.infoContainerContent {
+    height: 80%;
+}
+
 .inputGroup {
     display: flex;
     flex-direction: column;
@@ -59,18 +76,14 @@
     right: 5%;
 }
 
-.quizUpperTextGroup {
+.absoluteLeft {
+    position: absolute;
+    left: 5%;
+}
+
+.quizSelectors {
     display: flex;
-    justify-content: space-between;
-    width: 90%;
-    padding: 0 5%;
-}
-
-.banana {
-    animation: 2s linear 0s infinite normal rotate;
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-around;
 }

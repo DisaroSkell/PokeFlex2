@@ -2,26 +2,30 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import nextConfig from "@/next.config.mjs"
-
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
+import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
+
+import { PokeGuessOptions, PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
 import { useAppSelector } from "@/src/lib/hooks";
 
-import Image from 'next/image';
 import "./quiz.css";
 
 export default function Quiz() {
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
     
-    const [currentPoke, setCurrentPoke] = useState<any>(null)
-    const [currentInput, setCurrentInput] = useState('')
-    const [submitFeedback, setSubmitFeedback] = useState('')
+    const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
     const [streakCount, setStreakCount] = useState(0)
+
+    const [currentInput, setCurrentInput] = useState('')
+    const [submitFeedback, setSubmitFeedback] = useState('')
+
+    const [selectedInfoOption, setSelectedInfoOption] = useState(PokeInfoOptions.Image)
+    const [selectedGuessOption, setSelectedGuessOption] = useState(PokeGuessOptions.ID)
 
     // fetch image
     useEffect(() => {
@@ -44,24 +48,19 @@ export default function Quiz() {
     }, [selectedGens, pokeHasToChange])
 
     useEffect(() => {
+        setSubmitFeedback('')
+        setStreakCount(0)
         setPokeHasToChange(true)
-    }, [selectedGens])
+    }, [selectedGens, selectedInfoOption, selectedGuessOption])
 
-    const guessThePokemonCallback = useCallback(() => {
-        const currentInputAsNumber = parseInt(currentInput)
-        const currentPokeIdAsNumber = parseInt(currentPoke?.id)
-
-        if (isNaN(currentInputAsNumber) || isNaN(currentPokeIdAsNumber)) {
-            return
-        }
-
-        if (currentInputAsNumber === currentPokeIdAsNumber) {
+    function guessWithID (guess: number, idToGuess: number) {
+        if (guess === idToGuess) {
             setPokeHasToChange(true)
             setCurrentInput('')
             setSubmitFeedback("You're right ;)")
             setStreakCount((streak) => streak + 1)
         } else {
-            const diff = Math.abs(currentInputAsNumber - currentPokeIdAsNumber)
+            const diff = Math.abs(guess - idToGuess)
             setStreakCount(0)
             
             if(diff <= 5) setSubmitFeedback("You're close !")
@@ -69,7 +68,64 @@ export default function Quiz() {
             else if(diff % 100 === 0) setSubmitFeedback("Really ?")
             else setSubmitFeedback("You're wrong :D")
         }
-    }, [currentInput, currentPoke])
+    }
+
+    function guessWithName (guess: string, nameToGuess: string) {
+        if (guess.trim().toLowerCase() === nameToGuess.trim().toLowerCase()) {
+            setPokeHasToChange(true)
+            setCurrentInput('')
+            setSubmitFeedback("You're right ;)")
+            setStreakCount((streak) => streak + 1)
+        } else {
+            setStreakCount(0)
+            
+            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("You're close !")
+            else setSubmitFeedback("You're wrong :D")
+        }
+    }
+
+    function guessWithTypes (guess: string, typesToGuess: {type1: PokeType; type2: PokeType|null}) {
+        const normalizedType1 = typesToGuess.type1.toString().trim().toLowerCase();
+        const normalizedType2 = (typesToGuess.type2?.toString() ?? '').trim().toLowerCase();
+        const typesAsString = normalizedType1 + normalizedType2;
+        const typesAlternateAsString = normalizedType2 + normalizedType1;
+        const normalizedGuess = guess.trim().toLowerCase();
+
+        if (normalizedGuess === typesAsString
+        ||  normalizedGuess === typesAlternateAsString) {
+            setPokeHasToChange(true)
+            setCurrentInput('')
+            setSubmitFeedback("You're right ;)")
+            setStreakCount((streak) => streak + 1)
+        } else {
+            setStreakCount(0)
+            
+            if(normalizedGuess === normalizedType1
+            || normalizedGuess === normalizedType2) setSubmitFeedback("You're missing one !")
+            else setSubmitFeedback("You're wrong :D")
+        }
+    }
+
+    const guessThePokemonCallback = useCallback(() => {
+        if (!currentInput) return
+
+        if (currentPoke) switch(selectedGuessOption) {
+            case PokeGuessOptions.ID:
+                const currentInputAsNumber = parseInt(currentInput);
+
+                if (isNaN(currentInputAsNumber)) {
+                    break;
+                }
+
+                return guessWithID(currentInputAsNumber, currentPoke.id);
+            case PokeGuessOptions.Name:
+                return guessWithName(currentInput, currentPoke.name);
+            case PokeGuessOptions.Types:
+                return guessWithTypes(currentInput, {type1: currentPoke.type1, type2: currentPoke.type2});
+        }
+
+        setSubmitFeedback("Something went wrong");
+    }, [currentInput, currentPoke, selectedGuessOption])
 
     function giveUpCallback() {
         if(currentPoke) {
@@ -80,11 +136,76 @@ export default function Quiz() {
         }
     }
 
+    const getPokeInfoOptions = () => {
+        const pokeInfoKeys = Object.keys(PokeInfoOptions)
+        const pokeInfoValues = Object.values(PokeInfoOptions)
+        const options: JSX.Element[] = []
+
+        for (let i = 0; i < pokeInfoKeys.length; i++) {
+            options.push(<option
+                value={pokeInfoValues[i]}
+                key={pokeInfoKeys[i]}
+                disabled={pokeInfoValues[i].valueOf() === selectedGuessOption.valueOf()}
+            >
+                {pokeInfoKeys[i]}
+            </option>)
+        }
+
+        return <select
+            name="pokeInfoOptions"
+            value={selectedInfoOption}
+            onChange={e => {
+                const newValue = e.target.value
+
+                const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === newValue)
+
+                if (foundOption) {
+                    setSelectedInfoOption(foundOption)
+                }
+            }}
+        >{options}</select>
+    }
+
+    const getPokeGuessOptions = () => {
+        const pokeGuessKeys = Object.keys(PokeGuessOptions)
+        const pokeGuessValues = Object.values(PokeGuessOptions)
+        const options: JSX.Element[] = []
+
+        for (let i = 0; i < pokeGuessKeys.length; i++) {
+            options.push(<option
+                value={pokeGuessValues[i]}
+                key={pokeGuessKeys[i]}
+                disabled={pokeGuessValues[i].valueOf() === selectedInfoOption.valueOf()}
+            >
+                {pokeGuessKeys[i]}
+            </option>)
+        }
+
+        return <select
+            name="pokeGuessOptions"
+            value={selectedGuessOption}
+            onChange={e => {
+                const newValue = e.target.value
+
+                const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === newValue)
+
+                if (foundOption) {
+                    setSelectedGuessOption(foundOption)
+                }
+            }}
+        >{options}</select>
+    }
+
     return (
         <div className="quiz">
+            <div className="quizSelectors absoluteLeft">
+                <div className="pokeCard">{getPokeInfoOptions()}</div>
+                <div className="pokeCard">{getPokeGuessOptions()}</div>
+            </div>
+
             <div className="guessContainer">
-                <div className="pokeCard">
-                    <div className="quizUpperTextGroup">
+                <div className="pokeCard infoContainer">
+                    <div className="infoContainerHeader">
                         <p>
                             {submitFeedback}
                         </p>
@@ -92,22 +213,15 @@ export default function Quiz() {
                             Streak: {streakCount}
                         </p>
                     </div>
-                    <Image
-                        className={pokeHasToChange ? 'banana' : ''}
-                        src={pokeHasToChange ? `${nextConfig.basePath}/Logo.png` : currentPoke.sprites.front_default}
-                        alt={pokeHasToChange ? 'loading' : currentPoke.name }
-                        width={300} height={300}
-                    />
-                </div>
-
-                <div className="pokeCard absoluteRight">
-                    <GenerationSelector />
+                    <div className="infoContainerContent">
+                        <PokeInfoDisplayer pokemon={pokeHasToChange ? null : currentPoke} infoType={selectedInfoOption} />
+                    </div>
                 </div>
 
                 <div className="inputGroup">
                     <UniversalInput
                         inputValue={currentInput}
-                        type="number"
+                        guessType={selectedGuessOption}
                         inputChangeCallback={setCurrentInput}
                         submitCallback={guessThePokemonCallback}
                     />
@@ -116,6 +230,10 @@ export default function Quiz() {
                         <button onClick={giveUpCallback}>Give up</button>
                     </div>
                 </div>
+            </div>
+
+            <div className="pokeCard absoluteRight">
+                <GenerationSelector />
             </div>
         </div>
     );
