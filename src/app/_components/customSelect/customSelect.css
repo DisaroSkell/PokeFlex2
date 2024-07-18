@@ -1,0 +1,15 @@
+.customSelect {
+    border-radius: 10px;
+    color: white;
+    border-color: rgb(19, 14, 10);
+    background-color: rgb(66, 62, 59);
+    padding: 10% 0;
+
+    option:disabled {
+        color: rgb(122, 122, 122);
+    }
+}
+
+.customSelect:hover {
+    cursor: pointer;
+}
