@@ -214,7 +214,7 @@ export default function Quiz() {
                         </p>
                     </div>
                     <div className="infoContainerContent">
-                        <PokeInfoDisplayer pokemon={pokeHasToChange ? null : currentPoke} infoType={selectedInfoOption} size={300} />
+                        <PokeInfoDisplayer pokemon={pokeHasToChange ? null : currentPoke} infoType={selectedInfoOption} />
                     </div>
                 </div>
 

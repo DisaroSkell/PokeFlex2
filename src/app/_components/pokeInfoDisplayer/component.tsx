@@ -8,27 +8,25 @@ import "./pokeInfoDisplayer.css"
 interface PokeInfoDisplayerProps {
     pokemon: Pokemon | null
     infoType: PokeInfoOptions
-    size: number
 }
 
 export default function PokeInfoDisplayer({
     pokemon,
-    infoType,
-    size
+    infoType
 }: PokeInfoDisplayerProps) {
-    function getLoadingImage(width: number, height: number) {
+    function getLoadingImage() {
         return <Image
             className={'banana'}
             src={`${nextConfig.basePath}/Logo.png`}
             alt={'loading'}
             priority={true}
-            width={width} height={height}
+            width={1} height={1}
         />
     }
 
     function getIDElem (id: number | null) {
         if (!id) {
-            return getLoadingImage(size, size);
+            return getLoadingImage();
         }
 
         return <p>
@@ -36,9 +34,9 @@ export default function PokeInfoDisplayer({
         </p>
     }
 
-    function getImageElem (poke: Pokemon | null, width: number, height: number) {
+    function getImageElem (poke: Pokemon | null) {
         if (!poke) {
-            return getLoadingImage(size, size);
+            return getLoadingImage();
         }
 
         // Don't ask why 4
@@ -50,7 +48,7 @@ export default function PokeInfoDisplayer({
             src={image}
             alt={poke.name}
             priority={true}
-            width={width} height={height}
+            width={1} height={1}
         />
         {
             isShiny
@@ -64,7 +62,7 @@ export default function PokeInfoDisplayer({
 
     function getNameElem (name: string | null) {
         if (!name) {
-            return getLoadingImage(size, size);
+            return getLoadingImage();
         }
 
         return <p>
@@ -80,7 +78,7 @@ export default function PokeInfoDisplayer({
                 elem = getIDElem(pokemon ? pokemon.id : null);
                 break;
             case PokeInfoOptions.Image:
-                elem = getImageElem(pokemon, size, size);
+                elem = getImageElem(pokemon);
             break;
             case PokeInfoOptions.Name:
                 elem = getNameElem(pokemon ? pokemon.name : null);
