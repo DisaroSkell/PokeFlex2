@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import CheckboxWithLabel from "../checkboxWithLabel/component";
+import CustomButton from "../customButton/component";
 
 import { Generation } from "@/src/types/generation.type";
 
@@ -109,8 +110,8 @@ export default function GenerationSelector(props: GenerationSelectorProps) {
             </div>
 
             <div className="buttonsContainer">
-                <button onClick={cancelChangesCallback} disabled={!unsavedChanges}>Cancel changes</button>
-                <button onClick={confirmChangesCallback} disabled={!unsavedChanges || !isEmptyGenSelection()}>Confirm changes</button>
+                <CustomButton label="Confirm" type="primary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges} />
+                <CustomButton label="Cancel" type="alert" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges || !isEmptyGenSelection()} />
             </div>
         </div>
     )

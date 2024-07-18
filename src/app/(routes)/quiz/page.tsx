@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
+import CustomButton from "@/src/app/_components/customButton/component";
 import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
 
 import { PokeGuessOptions, PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type";
@@ -226,8 +227,10 @@ export default function Quiz() {
                         submitCallback={guessThePokemonCallback}
                     />
                     <div className="buttonGroup">
-                        <button onClick={guessThePokemonCallback}>Try ?</button>
-                        <button onClick={giveUpCallback}>Give up</button>
+                        <CustomButton label="Guess !" type={"primary"} onClickCallback={guessThePokemonCallback} />
+                        <div className="victimButton">
+                            <CustomButton label="Give up :(" type={"alert"} onClickCallback={giveUpCallback} />
+                        </div>
                     </div>
                 </div>
             </div>

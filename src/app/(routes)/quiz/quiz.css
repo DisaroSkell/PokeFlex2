@@ -50,24 +50,19 @@
 
 .buttonGroup {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
     height: fit-content;
     width: 100%;
     margin-top: 10px;
 
     button {
-        color: white;
-        border: solid;
-        border-radius: 20px;
-        border-color: rgb(19, 14, 10);
-        background-color: rgb(48, 42, 38);
-        font-family: 'Retro', sans-serif;
         font-size: 30px;
-        text-align: center;
-        display: table;
-        padding: 5px 10px;
-        vertical-align: baseline;
-        cursor: pointer;
+    }
+    
+    .victimButton {
+        transform: scale(0.6);
     }
 }
 
