@@ -1,0 +1,14 @@
+.customInput {
+    border: solid;
+    font-family: 'Retro', sans-serif;
+    padding: 2px;
+    cursor: text;
+    color: gray;
+    background-color: black;
+}
+
+.customInput:focus {
+    color: white;
+    background-color: rgb(66, 62, 59);
+    outline: none;
+}

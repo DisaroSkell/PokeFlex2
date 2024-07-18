@@ -2,6 +2,8 @@ import { FormEvent, HTMLInputTypeAttribute, useEffect } from "react";
 
 import { PokeGuessOptions } from "@/src/types/pokemon.type";
 
+import "./universalInput.css"
+
 interface UniversalInputProps {
     inputValue: string
     inputChangeCallback: (newValue: string) => void
@@ -71,6 +73,7 @@ export default function UniversalInput({
 
     return (
         <input
+            className="customInput"
             id="universalInput"
             type={convertGuessTypeToInputType(guessType)}
             value={formatValue(inputValue)}
