@@ -21,6 +21,7 @@ export default function Quiz() {
     
     const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
+    const [bestStreak, setBestStreak] = useState(0)
     const [streakCount, setStreakCount] = useState(0)
 
     const [currentInput, setCurrentInput] = useState('')
@@ -54,6 +55,10 @@ export default function Quiz() {
         setStreakCount(0)
         setPokeHasToChange(true)
     }, [selectedGens, selectedInfoOption, selectedGuessOption])
+
+    useEffect(() => {
+        setBestStreak((current) => streakCount > current ? streakCount : current)
+    }, [streakCount])
 
     function guessWithID (guess: number, idToGuess: number) {
         if (guess === idToGuess) {
@@ -211,9 +216,14 @@ export default function Quiz() {
                         <p>
                             {submitFeedback}
                         </p>
-                        <p>
-                            Streak: {streakCount}
-                        </p>
+                        <div className="streaksContainer">
+                            <p>
+                                Best Streak: {bestStreak}
+                            </p>
+                            <p>
+                                Streak: {streakCount}
+                            </p>
+                        </div>
                     </div>
                     <div className="infoContainerContent">
                         <PokeInfoDisplayer pokemon={pokeHasToChange ? null : currentPoke} infoType={selectedInfoOption} />
