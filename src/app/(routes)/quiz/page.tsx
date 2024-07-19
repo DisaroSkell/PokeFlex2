@@ -176,35 +176,33 @@ export default function Quiz() {
 
     return (
         <div className="quiz">
-            <div className="quizSelectors absoluteLeft">
-                <div className="pokeCard">
-                    <CustomSelect
-                        value={selectedInfoOption}
-                        options={getPokeInfoOptions()}
-                        disabledValues={[selectedGuessOption]}
-                        onChangeCallback={e => {
-                            const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === e.target.value)
-            
-                            if (foundOption) {
-                                setSelectedInfoOption(foundOption)
-                            }
-                        }}
-                    />
-                </div>
-                <div className="pokeCard">
-                    <CustomSelect
-                        value={selectedGuessOption}
-                        options={getPokeGuessOptions()}
-                        disabledValues={[selectedInfoOption]}
-                        onChangeCallback={e => {
-                            const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === e.target.value)
-            
-                            if (foundOption) {
-                                setSelectedGuessOption(foundOption)
-                            }
-                        }}
-                    />
-                </div>
+            <div className="quizSelectors pokeCard absoluteLeft">
+                <h2>Things you want to see</h2>
+                <CustomSelect
+                    value={selectedInfoOption}
+                    options={getPokeInfoOptions()}
+                    disabledValues={[selectedGuessOption]}
+                    onChangeCallback={e => {
+                        const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === e.target.value)
+        
+                        if (foundOption) {
+                            setSelectedInfoOption(foundOption)
+                        }
+                    }}
+                />
+                <h2>Things you want to guess</h2>
+                <CustomSelect
+                    value={selectedGuessOption}
+                    options={getPokeGuessOptions()}
+                    disabledValues={[selectedInfoOption]}
+                    onChangeCallback={e => {
+                        const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === e.target.value)
+        
+                        if (foundOption) {
+                            setSelectedGuessOption(foundOption)
+                        }
+                    }}
+                />
             </div>
 
             <div className="guessContainer">
