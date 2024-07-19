@@ -31,6 +31,17 @@
     padding: 0 5%;
 }
 
+.streaksContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 10px;
+    
+    p {
+        margin: 0;
+    }
+}
+
 .infoContainerContent {
     height: 80%;
 }
