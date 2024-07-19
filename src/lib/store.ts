@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import pokeGensReducer from './pokeGens/pokeGensSlice';
+import langReducer from './lang/langSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       gens: pokeGensReducer,
+      lang: langReducer,
     }
   })
 }
