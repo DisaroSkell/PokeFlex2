@@ -58,11 +58,11 @@
     margin-top: 10px;
 
     button {
-        font-size: 30px;
+        font-size: 40px;
     }
     
-    .victimButton {
-        transform: scale(0.6);
+    .victimButton > button {
+        transform: scale(0.5);
     }
 }
 

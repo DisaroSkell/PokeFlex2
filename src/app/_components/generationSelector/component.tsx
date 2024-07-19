@@ -110,8 +110,8 @@ export default function GenerationSelector(props: GenerationSelectorProps) {
             </div>
 
             <div className="buttonsContainer">
-                <CustomButton label="Confirm" type="primary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges} />
-                <CustomButton label="Cancel" type="alert" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges || !isEmptyGenSelection()} />
+                <CustomButton label="Cancel" type="primary" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges || !isEmptyGenSelection()} />
+                <CustomButton label="Confirm" type="secondary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges} />
             </div>
         </div>
     )

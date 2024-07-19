@@ -1,10 +1,9 @@
 .customButton {
     border: solid;
-    border-radius: 20px;
+    border-radius: 1rem;
     font-family: 'Retro', sans-serif;
     text-align: center;
-    display: table;
-    padding: 5px 10px;
+    padding: 10px 15px;
     vertical-align: baseline;
     cursor: pointer;
 }
@@ -25,12 +24,14 @@
 }
 
 .buttonSecondary {
-    background-color: transparent;
+    color: black;
+    background-color: rgb(216, 202, 8);
     border-color: rgb(19, 14, 10);
 }
 
 .buttonSecondary:disabled {
-    color: darkgray;
+    color: rgb(31, 31, 31);
+    background-color: rgb(104, 98, 12);
 }
 
 .buttonAlert {

@@ -8,7 +8,7 @@
 }
 
 .customInput:focus {
-    color: white;
+    color: rgb(216, 202, 8);
     background-color: rgb(66, 62, 59);
     outline: none;
 }
