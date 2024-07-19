@@ -2,6 +2,8 @@ import { FormEvent, HTMLInputTypeAttribute, useEffect } from "react";
 
 import { PokeGuessOptions } from "@/src/types/pokemon.type";
 
+import "./universalInput.css"
+
 interface UniversalInputProps {
     inputValue: string
     inputChangeCallback: (newValue: string) => void
@@ -52,10 +54,13 @@ export default function UniversalInput({
         inputChangeCallback(input);
     }
 
-    function handleBeforeInput(event: FormEvent<HTMLInputElement>) {
-        const castedEvent = event.nativeEvent as KeyboardEvent
+    function handleBeforeInput(event: React.CompositionEvent<HTMLInputElement>) {
+        if (!event.data) {
+            console.error("Couldn't read pressed key");
+            return;
+        }
 
-        if (convertGuessTypeToInputType(guessType) === "number" && !castedEvent.key.match(/[0-9]/g)) event.preventDefault()
+        if (convertGuessTypeToInputType(guessType) === "number" && !event.data.match(/[0-9]/g)) event.preventDefault()
     }
 
     function convertGuessTypeToInputType (guessType: PokeGuessOptions): HTMLInputTypeAttribute {
@@ -71,6 +76,7 @@ export default function UniversalInput({
 
     return (
         <input
+            className="customInput"
             id="universalInput"
             type={convertGuessTypeToInputType(guessType)}
             value={formatValue(inputValue)}

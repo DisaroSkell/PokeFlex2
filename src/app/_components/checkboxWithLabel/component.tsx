@@ -8,13 +8,13 @@ interface CheckboxWithLabelProps {
 
 export default function CheckboxWithLabel(props: CheckboxWithLabelProps) {
     return (
-        <div className="checkboxInputGroup">
-            <div>{props.label}</div>
+        <label className="checkboxInputGroup">
+            {props.label}
             <input
                 type="checkbox"
                 checked={props.value}
                 onChange={() => props.onValueChange(!props.value)}
             />
-        </div>
+        </label>
     )
 }

@@ -1,0 +1,46 @@
+.customButton {
+    border: solid;
+    border-radius: 1rem;
+    font-family: 'Retro', sans-serif;
+    text-align: center;
+    padding: 10px 15px;
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+.customButton:disabled {
+    cursor: not-allowed;
+}
+
+.buttonPrimary {
+    color: white;
+    border-color: rgb(19, 14, 10);
+    background-color: rgb(66, 62, 59);
+}
+
+.buttonPrimary:disabled {
+    color: darkgray;
+    background-color: rgb(71, 69, 66);
+}
+
+.buttonSecondary {
+    color: black;
+    background-color: rgb(216, 202, 8);
+    border-color: rgb(19, 14, 10);
+}
+
+.buttonSecondary:disabled {
+    color: rgb(31, 31, 31);
+    background-color: rgb(104, 98, 12);
+}
+
+.buttonAlert {
+    color: white;
+    border-color: rgb(19, 14, 10);
+    background-color: red;
+}
+
+.buttonAlert:disabled {
+    color: darkgray;
+    background-color: darkred;
+}

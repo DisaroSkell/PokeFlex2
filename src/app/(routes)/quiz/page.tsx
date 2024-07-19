@@ -1,9 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
+import CustomButton from "@/src/app/_components/customButton/component";
 import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
 
 import { PokeGuessOptions, PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type";
@@ -13,6 +14,7 @@ import { getPokeWithId } from "@/src/apiCalls/pokemons";
 import { useAppSelector } from "@/src/lib/hooks";
 
 import "./quiz.css";
+import CustomSelect from "../../_components/customSelect/component";
 
 export default function Quiz() {
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
@@ -139,68 +141,68 @@ export default function Quiz() {
     const getPokeInfoOptions = () => {
         const pokeInfoKeys = Object.keys(PokeInfoOptions)
         const pokeInfoValues = Object.values(PokeInfoOptions)
-        const options: JSX.Element[] = []
+        const options: {
+            value: string,
+            label: string
+        }[] = []
 
         for (let i = 0; i < pokeInfoKeys.length; i++) {
-            options.push(<option
-                value={pokeInfoValues[i]}
-                key={pokeInfoKeys[i]}
-                disabled={pokeInfoValues[i].valueOf() === selectedGuessOption.valueOf()}
-            >
-                {pokeInfoKeys[i]}
-            </option>)
+            options.push({
+                value: pokeInfoValues[i],
+                label: pokeInfoKeys[i]
+            })
         }
 
-        return <select
-            name="pokeInfoOptions"
-            value={selectedInfoOption}
-            onChange={e => {
-                const newValue = e.target.value
-
-                const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === newValue)
-
-                if (foundOption) {
-                    setSelectedInfoOption(foundOption)
-                }
-            }}
-        >{options}</select>
+        return options
     }
 
     const getPokeGuessOptions = () => {
         const pokeGuessKeys = Object.keys(PokeGuessOptions)
         const pokeGuessValues = Object.values(PokeGuessOptions)
-        const options: JSX.Element[] = []
+        const options: {
+            value: string,
+            label: string
+        }[] = []
 
         for (let i = 0; i < pokeGuessKeys.length; i++) {
-            options.push(<option
-                value={pokeGuessValues[i]}
-                key={pokeGuessKeys[i]}
-                disabled={pokeGuessValues[i].valueOf() === selectedInfoOption.valueOf()}
-            >
-                {pokeGuessKeys[i]}
-            </option>)
+            options.push({
+                value: pokeGuessValues[i],
+                label: pokeGuessKeys[i]
+            })
         }
 
-        return <select
-            name="pokeGuessOptions"
-            value={selectedGuessOption}
-            onChange={e => {
-                const newValue = e.target.value
-
-                const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === newValue)
-
-                if (foundOption) {
-                    setSelectedGuessOption(foundOption)
-                }
-            }}
-        >{options}</select>
+        return options
     }
 
     return (
         <div className="quiz">
-            <div className="quizSelectors absoluteLeft">
-                <div className="pokeCard">{getPokeInfoOptions()}</div>
-                <div className="pokeCard">{getPokeGuessOptions()}</div>
+            <div className="quizSelectors pokeCard absoluteLeft">
+                <h2>Things you want to see</h2>
+                <CustomSelect
+                    value={selectedInfoOption}
+                    options={getPokeInfoOptions()}
+                    disabledValues={[selectedGuessOption]}
+                    onChangeCallback={e => {
+                        const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === e.target.value)
+        
+                        if (foundOption) {
+                            setSelectedInfoOption(foundOption)
+                        }
+                    }}
+                />
+                <h2>Things you want to guess</h2>
+                <CustomSelect
+                    value={selectedGuessOption}
+                    options={getPokeGuessOptions()}
+                    disabledValues={[selectedInfoOption]}
+                    onChangeCallback={e => {
+                        const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === e.target.value)
+        
+                        if (foundOption) {
+                            setSelectedGuessOption(foundOption)
+                        }
+                    }}
+                />
             </div>
 
             <div className="guessContainer">
@@ -226,8 +228,10 @@ export default function Quiz() {
                         submitCallback={guessThePokemonCallback}
                     />
                     <div className="buttonGroup">
-                        <button onClick={guessThePokemonCallback}>Try ?</button>
-                        <button onClick={giveUpCallback}>Give up</button>
+                        <CustomButton label="Guess !" type={"primary"} onClickCallback={guessThePokemonCallback} />
+                        <div className="victimButton">
+                            <CustomButton label="Give up :(" type={"alert"} onClickCallback={giveUpCallback} />
+                        </div>
                     </div>
                 </div>
             </div>

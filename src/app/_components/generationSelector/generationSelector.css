@@ -1,10 +1,3 @@
-.allGensGroup {
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    padding: 15px;
-}
-
 .genSelectorWrapper {
     display: flex;
     flex-direction: column;
@@ -17,8 +10,19 @@
     }
 }
 
+.allGensGroup {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 15px;
+}
+
 .buttonsContainer {
     display: flex;
     width: 100%;
     justify-content: space-around;
+
+    button {
+        font-size: 20px;
+    }
 }

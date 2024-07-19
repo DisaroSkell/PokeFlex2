@@ -1,6 +1,22 @@
 .checkboxInputGroup {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    user-select: none;
     width: 100%;
     justify-content: space-between;
+
+    input[type="checkbox"] {
+        width: 1em;
+        height: 1rem;
+        accent-color: rgb(216, 202, 8);
+    }
+
+    input[type="checkbox"]:hover {
+        accent-color: rgb(141, 133, 17);
+    }
+}
+
+.checkboxInputGroup:hover {
+    color: rgb(141, 133, 17);
 }
