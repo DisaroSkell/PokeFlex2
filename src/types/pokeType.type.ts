@@ -1,4 +1,4 @@
-enum PokeType {
+/* enum PokeType {
     normal,
     fighting,
     flying,
@@ -19,4 +19,9 @@ enum PokeType {
     fairy,
     unknown,
     shadow,
+} */
+
+export interface PokeType {
+    id: string,
+    fullName: string
 }
