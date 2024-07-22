@@ -21,6 +21,14 @@ body {
     color: rgb(216, 202, 8);
 }
 
+.header {
+    height: 5%;
+}
+
+.mainContent {
+    height: 95%;
+}
+
 .pokeCard {
     height: fit-content;
     width: fit-content;
