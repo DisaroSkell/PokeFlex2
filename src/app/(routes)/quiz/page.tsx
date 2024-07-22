@@ -153,8 +153,8 @@ export default function Quiz() {
                 setSubmitFeedback(`Its name was ${currentPoke.name}`);
                 break;
             case PokeGuessOptions.Types:
-                if (currentPoke.type2) setSubmitFeedback(`Its types were ${currentPoke.type1} and ${currentPoke.type2}`);
-                else setSubmitFeedback(`Its type was ${currentPoke.type1}`);
+                if (currentPoke.type2) setSubmitFeedback(`Its types were ${currentPoke.type1.fullName} and ${currentPoke.type2.fullName}`);
+                else setSubmitFeedback(`Its type was ${currentPoke.type1.fullName}`);
                 break;
         }
     }
