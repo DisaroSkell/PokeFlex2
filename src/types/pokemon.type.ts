@@ -1,3 +1,5 @@
+import { PokeType } from "./pokeType.type"
+
 export interface Pokemon {
     id: number
     name: string
