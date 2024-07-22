@@ -60,38 +60,33 @@ export default function Quiz() {
         setBestStreak((current) => streakCount > current ? streakCount : current)
     }, [streakCount])
 
-    function guessWithID (guess: number, idToGuess: number) {
+    function guessWithID (guess: number, idToGuess: number): boolean {
         if (guess === idToGuess) {
-            setPokeHasToChange(true)
-            setCurrentInput('')
-            setSubmitFeedback("You're right ;)")
-            setStreakCount((streak) => streak + 1)
+            setSubmitFeedback("You're right ;)");
+            return true;
         } else {
             const diff = Math.abs(guess - idToGuess)
-            setStreakCount(0)
-            
-            if(diff <= 5) setSubmitFeedback("You're close !")
-            else if(diff === 10) setSubmitFeedback("Ahah... No ^^")
-            else if(diff % 100 === 0) setSubmitFeedback("Really ?")
-            else setSubmitFeedback("You're wrong :D")
+
+            if(diff <= 5) setSubmitFeedback("You're close !");
+            else if(diff === 10) setSubmitFeedback("Ahah... No ^^");
+            else if(diff % 100 === 0) setSubmitFeedback("Really ?");
+            else setSubmitFeedback("You're wrong :D");
+            return false;
         }
     }
 
-    function guessWithName (guess: string, nameToGuess: string) {
+    function guessWithName (guess: string, nameToGuess: string): boolean {
         if (guess.trim().toLowerCase() === nameToGuess.trim().toLowerCase()) {
-            setPokeHasToChange(true)
-            setCurrentInput('')
-            setSubmitFeedback("You're right ;)")
-            setStreakCount((streak) => streak + 1)
+            setSubmitFeedback("You're right ;)");
+            return true;
         } else {
-            setStreakCount(0)
-            
-            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("You're close !")
-            else setSubmitFeedback("You're wrong :D")
+            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("You're close !");
+            else setSubmitFeedback("You're wrong :D");
+            return false;
         }
     }
 
-    function guessWithTypes (guess: string, typesToGuess: {type1: PokeType; type2: PokeType|null}) {
+    function guessWithTypes (guess: string, typesToGuess: {type1: PokeType; type2: PokeType|null}): boolean {
         const normalizedType1 = typesToGuess.type1.toString().trim().toLowerCase();
         const normalizedType2 = (typesToGuess.type2?.toString() ?? '').trim().toLowerCase();
         const typesAsString = normalizedType1 + normalizedType2;
@@ -100,46 +95,71 @@ export default function Quiz() {
 
         if (normalizedGuess === typesAsString
         ||  normalizedGuess === typesAlternateAsString) {
-            setPokeHasToChange(true)
-            setCurrentInput('')
-            setSubmitFeedback("You're right ;)")
-            setStreakCount((streak) => streak + 1)
+            setSubmitFeedback("You're right ;)");
+            return true;
         } else {
-            setStreakCount(0)
-            
             if(normalizedGuess === normalizedType1
-            || normalizedGuess === normalizedType2) setSubmitFeedback("You're missing one !")
-            else setSubmitFeedback("You're wrong :D")
+            || normalizedGuess === normalizedType2) setSubmitFeedback("You're missing one !");
+            else setSubmitFeedback("You're wrong :D");
+            return false;
         }
     }
 
     const guessThePokemonCallback = useCallback(() => {
         if (!currentInput) return
 
+        let success = true;
+
         if (currentPoke) switch(selectedGuessOption) {
             case PokeGuessOptions.ID:
                 const currentInputAsNumber = parseInt(currentInput);
 
                 if (isNaN(currentInputAsNumber)) {
-                    break;
+                    setSubmitFeedback("Something went wrong");
+                    return;
                 }
 
-                return guessWithID(currentInputAsNumber, currentPoke.id);
+                success = guessWithID(currentInputAsNumber, currentPoke.id);
+                break;
             case PokeGuessOptions.Name:
-                return guessWithName(currentInput, currentPoke.name);
+                success = guessWithName(currentInput, currentPoke.name);
+                break;
             case PokeGuessOptions.Types:
-                return guessWithTypes(currentInput, {type1: currentPoke.type1, type2: currentPoke.type2});
+                success = guessWithTypes(currentInput, {type1: currentPoke.type1, type2: currentPoke.type2});
+                break;
         }
 
-        setSubmitFeedback("Something went wrong");
-    }, [currentInput, currentPoke, selectedGuessOption])
-
-    function giveUpCallback() {
-        if(currentPoke) {
-            setSubmitFeedback(`It was n°${currentPoke.id}`)
+        if (success) {
             setPokeHasToChange(true)
             setCurrentInput('')
+            setStreakCount((streak) => streak + 1)
+        } else {
             setStreakCount(0)
+        }
+    }, [currentInput, currentPoke, selectedGuessOption])
+
+    function giveSolution(guessOption: PokeGuessOptions) {
+        if (currentPoke) switch(guessOption) {
+            case PokeGuessOptions.ID:
+                setSubmitFeedback(`Its id was n°${currentPoke.id}`);
+                break;
+            case PokeGuessOptions.Name:
+                setSubmitFeedback(`Its name was ${currentPoke.name}`);
+                break;
+            case PokeGuessOptions.Types:
+                if (currentPoke.type2) setSubmitFeedback(`Its types were ${currentPoke.type1} and ${currentPoke.type2}`);
+                else setSubmitFeedback(`Its type was ${currentPoke.type1}`);
+                break;
+        }
+    }
+
+    function giveUpCallback() {
+        setPokeHasToChange(true);
+        setCurrentInput('');
+
+        if(currentPoke) {
+            setStreakCount(0);
+            giveSolution(selectedGuessOption);
         }
     }
 
