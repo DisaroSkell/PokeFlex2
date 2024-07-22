@@ -55,7 +55,7 @@ export const pokeGensSlice = createSliceWithThunks({
                 fulfilled: (state, action) => {
                     state.loading = false;
                     state.gens = action.payload;
-                    state.selectedGens = action.payload;
+                    if (!state.selectedGens.length) state.selectedGens = action.payload;
                 }
             }
         ),

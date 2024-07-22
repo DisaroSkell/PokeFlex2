@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
@@ -8,6 +8,7 @@ import CustomButton from "@/src/app/_components/customButton/component";
 import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
 
 import { PokeGuessOptions, PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type";
+import { PokeType } from "@/src/types/pokeType.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
@@ -18,6 +19,7 @@ import CustomSelect from "../../_components/customSelect/component";
 
 export default function Quiz() {
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
+    const selectedLang = useAppSelector(state => state.lang.selectedLang)
     
     const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
@@ -32,14 +34,14 @@ export default function Quiz() {
 
     // fetch image
     useEffect(() => {
-        if (!pokeHasToChange || selectedGens.length === 0) return
+        if (!pokeHasToChange || selectedGens.length === 0 || !selectedLang) return
         
         // Chooses a random selected gen
         const randomGen = selectedGens[Math.floor(Math.random() * selectedGens.length)]
         // Choose a random pokemon id in this gen
         const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
         
-        getPokeWithId(randomId)
+        getPokeWithId(randomId, selectedLang)
             .then((poke) => {
                 setCurrentPoke(poke)
                 setPokeHasToChange(false)
@@ -48,7 +50,7 @@ export default function Quiz() {
                 console.error(err)
                 setPokeHasToChange(false)
             })
-    }, [selectedGens, pokeHasToChange])
+    }, [selectedGens, selectedLang, pokeHasToChange])
 
     useEffect(() => {
         setSubmitFeedback('')
@@ -87,11 +89,15 @@ export default function Quiz() {
     }
 
     function guessWithTypes (guess: string, typesToGuess: {type1: PokeType; type2: PokeType|null}): boolean {
-        const normalizedType1 = typesToGuess.type1.toString().trim().toLowerCase();
-        const normalizedType2 = (typesToGuess.type2?.toString() ?? '').trim().toLowerCase();
+        const normalizedGuess = guess.replaceAll(/\s/g,'').toLowerCase();
+
+        /* const normalizedType1 = typesToGuess.type1.id.toString().trim().toLowerCase();
+        const normalizedType2 = (typesToGuess.type2?.id.toString() ?? '').trim().toLowerCase(); */
+
+        const normalizedType1 = typesToGuess.type1.fullName.toString().trim().toLowerCase();
+        const normalizedType2 = (typesToGuess.type2?.fullName.toString() ?? '').trim().toLowerCase();
         const typesAsString = normalizedType1 + normalizedType2;
         const typesAlternateAsString = normalizedType2 + normalizedType1;
-        const normalizedGuess = guess.trim().toLowerCase();
 
         if (normalizedGuess === typesAsString
         ||  normalizedGuess === typesAlternateAsString) {
@@ -147,8 +153,8 @@ export default function Quiz() {
                 setSubmitFeedback(`Its name was ${currentPoke.name}`);
                 break;
             case PokeGuessOptions.Types:
-                if (currentPoke.type2) setSubmitFeedback(`Its types were ${currentPoke.type1} and ${currentPoke.type2}`);
-                else setSubmitFeedback(`Its type was ${currentPoke.type1}`);
+                if (currentPoke.type2) setSubmitFeedback(`Its types were ${currentPoke.type1.fullName} and ${currentPoke.type2.fullName}`);
+                else setSubmitFeedback(`Its type was ${currentPoke.type1.fullName}`);
                 break;
         }
     }
