@@ -134,12 +134,28 @@ export default function Quiz() {
         setSubmitFeedback("Something went wrong");
     }, [currentInput, currentPoke, selectedGuessOption])
 
+    function giveSolution(guessOption: PokeGuessOptions) {
+        if (currentPoke) switch(guessOption) {
+            case PokeGuessOptions.ID:
+                setSubmitFeedback(`Its id was n°${currentPoke.id}`);
+                break;
+            case PokeGuessOptions.Name:
+                setSubmitFeedback(`Its name was ${currentPoke.name}`);
+                break;
+            case PokeGuessOptions.Types:
+                if (currentPoke.type2) setSubmitFeedback(`Its types were ${currentPoke.type1} and ${currentPoke.type2}`);
+                else setSubmitFeedback(`Its type was ${currentPoke.type1}`);
+                break;
+        }
+    }
+
     function giveUpCallback() {
+        setPokeHasToChange(true);
+        setCurrentInput('');
+
         if(currentPoke) {
-            setSubmitFeedback(`It was n°${currentPoke.id}`)
-            setPokeHasToChange(true)
-            setCurrentInput('')
-            setStreakCount(0)
+            setStreakCount(0);
+            giveSolution(selectedGuessOption);
         }
     }
 
