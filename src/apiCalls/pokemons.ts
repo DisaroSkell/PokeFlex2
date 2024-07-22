@@ -1,7 +1,11 @@
 import { defaultURL, pokemonsEndpoint } from "../types/api.type"
+import { Lang } from "../types/lang.type"
 import { Pokemon } from "../types/pokemon.type"
+import { getPokeType } from "./pokeTypes"
 
-const getPokeWithId = async (pokeId: number): Promise<Pokemon | null> => {
+import { getPokeNameWithId } from "./species"
+
+const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null> => {
     try {
         const pokeRes = await fetch(defaultURL + pokemonsEndpoint + pokeId)
         
@@ -19,15 +23,23 @@ const getPokeWithId = async (pokeId: number): Promise<Pokemon | null> => {
                 return null
             }
 
+            const pokemonTranslatedName = await getPokeNameWithId(json.id, lang);
+            if (!pokemonTranslatedName) return null;
+
+            const pokemonType1 = await getPokeType(json.types[0].type.url, lang);
+            if (!pokemonType1) return null;
+
+            const pokemonType2 = json.types[1]?.type?.url ? await getPokeType(json.types[1].type.url, lang) : null;
+
             const shinyImgUrl = json.sprites.front_shiny ? json.sprites.front_shiny : '';
 
             return {
                 id: json.id,
-                name: json.name,
+                name: pokemonTranslatedName,
                 imgUrl: json.sprites.front_default,
                 shinyImgUrl,
-                type1: json.types[0].type.name,
-                type2: json.types.length > 1 ? json.types[1].type.name : null,
+                type1: pokemonType1,
+                type2: pokemonType2,
             }
         }
     } catch (err) {
