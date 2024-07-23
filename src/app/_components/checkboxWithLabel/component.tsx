@@ -11,6 +11,7 @@ export default function CheckboxWithLabel(props: CheckboxWithLabelProps) {
         <label className="checkboxInputGroup">
             {props.label}
             <input
+                name={props.label}
                 type="checkbox"
                 checked={props.value}
                 onChange={() => props.onValueChange(!props.value)}
