@@ -140,7 +140,7 @@ export default function Quiz() {
             setCurrentInput('')
             setStreakCount((streak) => streak + 1)
         } else {
-            setStreakCount(0)
+            setStreakCount(-1)
         }
     }, [currentInput, currentPoke, selectedGuessOption])
 
@@ -247,7 +247,7 @@ export default function Quiz() {
                                 Best Streak: {bestStreak}
                             </p>
                             <p>
-                                Streak: {streakCount}
+                                Streak: {streakCount === -1 ? "broke :(" : streakCount}
                             </p>
                         </div>
                     </div>
