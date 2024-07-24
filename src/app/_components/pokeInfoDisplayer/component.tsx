@@ -39,8 +39,7 @@ export default function PokeInfoDisplayer({
             return getLoadingImage();
         }
 
-        // Don't ask why 4
-        const isShiny = Math.floor(Math.random() * shinyChance) === 4;
+        const isShiny = Math.random() < shinyChance;
         const image = isShiny && poke.shinyImgUrl ? poke.shinyImgUrl : poke.imgUrl
 
         return <>
