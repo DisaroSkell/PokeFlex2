@@ -33,7 +33,6 @@ export default function Home() {
         const foundLang = allLangs.find(lang => lang.id === e.target.value)
 
         if (foundLang) {
-            console.log("Changing lang to", foundLang.fullName)
             dispatch(setSelectedLang(foundLang))
         }
     }
