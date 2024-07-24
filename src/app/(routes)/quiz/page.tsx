@@ -86,7 +86,10 @@ export default function Quiz() {
     }
 
     function guessWithName (guess: string, nameToGuess: string): boolean {
-        if (guess.trim().toLowerCase() === nameToGuess.trim().toLowerCase()) {
+        const normalizedGuess = guess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
+        const normalizedName = nameToGuess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
+
+        if (normalizedGuess === normalizedName) {
             setSubmitFeedback("You're right ;)");
             return true;
         } else {
