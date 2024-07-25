@@ -35,7 +35,7 @@ export default function UniversalInput({
 
         document.addEventListener('keydown', handleKeyDown, true);
 
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown, true);
     }, [])
 
     function formatValue(value: string) {
@@ -80,7 +80,7 @@ export default function UniversalInput({
             id="universalInput"
             type={convertGuessTypeToInputType(guessType)}
             value={formatValue(inputValue)}
-            onKeyDown={(e) => { if(e.key === 'Enter') submitCallback() }}
+            onKeyUp={(e) => { if(e.key === 'Enter') submitCallback() }}
             onInput={handleOnInput}
             onBeforeInput={handleBeforeInput}
         />
