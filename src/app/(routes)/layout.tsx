@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import Header from "../_components/header/component";
+import Footer from "../_components/footer/component";
 import StoreProvider from "./storeProvider";
 
 import "./globals.css";
@@ -31,6 +32,9 @@ export default function RootLayout({
         </div>
         <div className="mainContent">
           <StoreProvider>{children}</StoreProvider>
+        </div>
+        <div className="footer">
+          <Footer />
         </div>
       </body>
     </html>
