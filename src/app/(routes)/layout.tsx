@@ -11,7 +11,7 @@ import nextConfig from "@/next.config.mjs"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PokeFlex 2",
+  title: "PokéFlex 2",
   description: "Ultimate Pokémon quiz",
   icons: {
     icon: `${nextConfig.basePath}/icon.png`,
