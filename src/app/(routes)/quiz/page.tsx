@@ -59,6 +59,7 @@ export default function Quiz() {
     }, [selectedGens, selectedLang, pokeHasToChange])
 
     useEffect(() => {
+        setCurrentInput('')
         setSubmitFeedback('')
         setStreakCount(0)
         setBestStreakKey(formatStreaksKey(selectedInfoOption, selectedGuessOption, selectedGens))
