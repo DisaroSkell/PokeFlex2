@@ -51,7 +51,9 @@ export default function UniversalInput({
     function handleOnInput(event: FormEvent<HTMLInputElement>) {
         let input = event.currentTarget.value;
 
-        inputChangeCallback(input);
+        // Limit input number size
+        if (!(convertGuessTypeToInputType(guessType) === "number")
+            || input.length < 10) inputChangeCallback(input);
     }
 
     function handleBeforeInput(event: React.CompositionEvent<HTMLInputElement>) {
@@ -60,7 +62,8 @@ export default function UniversalInput({
             return;
         }
 
-        if (convertGuessTypeToInputType(guessType) === "number" && !event.data.match(/[0-9]/g)) event.preventDefault()
+        if (convertGuessTypeToInputType(guessType) === "number"
+            && !event.data.match(/[0-9]/g)) event.preventDefault();
     }
 
     function convertGuessTypeToInputType (guessType: PokeGuessOptions): HTMLInputTypeAttribute {
@@ -78,6 +81,7 @@ export default function UniversalInput({
         <input
             className="customInput"
             id="universalInput"
+            maxLength={20}
             type={convertGuessTypeToInputType(guessType)}
             value={formatValue(inputValue)}
             onKeyDown={(e) => { if(e.key === 'Enter') submitCallback() }}
