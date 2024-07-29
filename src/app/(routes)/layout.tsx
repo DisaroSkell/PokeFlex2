@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import Header from "../_components/header/component";
+import Footer from "../_components/footer/component";
 import StoreProvider from "./storeProvider";
 
 import "./globals.css";
@@ -11,7 +12,7 @@ import nextConfig from "@/next.config.mjs"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PokeFlex 2",
+  title: "PokéFlex 2",
   description: "Ultimate Pokémon quiz",
   icons: {
     icon: `${nextConfig.basePath}/icon.png`,
@@ -31,6 +32,9 @@ export default function RootLayout({
         </div>
         <div className="mainContent">
           <StoreProvider>{children}</StoreProvider>
+        </div>
+        <div className="footer">
+          <Footer />
         </div>
       </body>
     </html>
