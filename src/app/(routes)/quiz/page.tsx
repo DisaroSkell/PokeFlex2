@@ -8,6 +8,7 @@ import GenerationSelector from "@/src/app/_components/generationSelector/compone
 import CustomButton from "@/src/app/_components/customButton/component";
 import CustomSelect from "../../_components/customSelect/component";
 import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
+import TypesGuessSelectors from "../../_components/typesGuessSelectors/component";
 
 import { PokeGuessOptions, PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type";
 import { PokeType } from "@/src/types/pokeType.type";
@@ -30,6 +31,8 @@ export default function Quiz() {
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
     
     const [currentInput, setCurrentInput] = useState('')
+    const [pokeType1Input, setPokeType1Input] = useState<PokeType | null>(null)
+    const [pokeType2Input, setPokeType2Input] = useState<PokeType | null>(null)
     const [submitFeedback, setSubmitFeedback] = useState('')
     
     const [selectedInfoOption, setSelectedInfoOption] = useState(PokeInfoOptions.Image)
@@ -67,6 +70,8 @@ export default function Quiz() {
         setStreakCount(0)
         setBestStreakKey(formatStreaksKey(selectedInfoOption, selectedGuessOption, selectedGens))
         setPokeHasToChange(true)
+        setPokeType1Input(null);
+        setPokeType2Input(null);
     }, [selectedGens, selectedInfoOption, selectedGuessOption])
 
     useEffect(() => {
@@ -103,36 +108,44 @@ export default function Quiz() {
         }
     }
 
-    function guessWithTypes (guess: string, typesToGuess: {type1: PokeType; type2: PokeType|null}): boolean {
-        const normalizedGuess = guess.replaceAll(/\s/g,'').toLowerCase();
-
-        /* const normalizedType1 = typesToGuess.type1.id.toString().trim().toLowerCase();
-        const normalizedType2 = (typesToGuess.type2?.id.toString() ?? '').trim().toLowerCase(); */
+    function guessWithTypes (
+        guessForType1: PokeType,
+        guessForType2: PokeType | null,
+        typesToGuess: {type1: PokeType; type2: PokeType|null}
+    ): boolean {
+        const normalizedGuessType1 = guessForType1.fullName.toString().trim().toLowerCase();
+        const normalizedGuessType2 = (guessForType2?.fullName.toString() ?? '').trim().toLowerCase();
+        const guessForTypes = normalizedGuessType1 + normalizedGuessType2;
+        const guessForTypesAlternate = normalizedGuessType2 + normalizedGuessType1;
 
         const normalizedType1 = typesToGuess.type1.fullName.toString().trim().toLowerCase();
         const normalizedType2 = (typesToGuess.type2?.fullName.toString() ?? '').trim().toLowerCase();
         const typesAsString = normalizedType1 + normalizedType2;
         const typesAlternateAsString = normalizedType2 + normalizedType1;
 
-        if (normalizedGuess === typesAsString
-        ||  normalizedGuess === typesAlternateAsString) {
+        if (guessForTypes === typesAsString
+        ||  guessForTypes === typesAlternateAsString
+        ||  guessForTypesAlternate === typesAsString
+        ||  guessForTypesAlternate === typesAlternateAsString) {
             setSubmitFeedback("You're right ;)");
             return true;
         } else {
-            if(normalizedGuess === normalizedType1
-            || normalizedGuess === normalizedType2) setSubmitFeedback("You're missing one !");
+            if(normalizedGuessType1 === normalizedType1
+            || normalizedGuessType1 === normalizedType2
+            || normalizedGuessType2 === normalizedType1
+            || normalizedGuessType2 === normalizedType2) setSubmitFeedback("One is right !");
             else setSubmitFeedback("You're wrong :D");
             return false;
         }
     }
 
     const guessThePokemonCallback = useCallback(() => {
-        if (!currentInput) return
-
         let success = true;
-
+        
         if (currentPoke) switch(selectedGuessOption) {
             case PokeGuessOptions.ID:
+                if (!currentInput) return
+
                 const currentInputAsNumber = parseInt(currentInput);
 
                 if (isNaN(currentInputAsNumber)) {
@@ -143,10 +156,14 @@ export default function Quiz() {
                 success = guessWithID(currentInputAsNumber, currentPoke.id);
                 break;
             case PokeGuessOptions.Name:
+                if (!currentInput) return
+
                 success = guessWithName(currentInput, currentPoke.name);
                 break;
             case PokeGuessOptions.Types:
-                success = guessWithTypes(currentInput, {type1: currentPoke.type1, type2: currentPoke.type2});
+                if (!pokeType1Input) return
+
+                success = guessWithTypes(pokeType1Input, pokeType2Input, {type1: currentPoke.type1, type2: currentPoke.type2});
                 break;
         }
 
@@ -158,7 +175,7 @@ export default function Quiz() {
         } else {
             setStreakCount(-1)
         }
-    }, [currentInput, currentPoke, selectedGuessOption])
+    }, [currentInput, currentPoke, selectedGuessOption, pokeType1Input, pokeType2Input])
 
     function giveSolution(pokeToGuess: Pokemon, guessOption: PokeGuessOptions) {
         switch(guessOption) {
@@ -284,12 +301,24 @@ export default function Quiz() {
                 </div>
 
                 <div className="inputGroup">
-                    <UniversalInput
-                        inputValue={currentInput}
-                        guessType={selectedGuessOption}
-                        inputChangeCallback={setCurrentInput}
-                        submitCallback={guessThePokemonCallback}
-                    />
+                    {
+                        selectedGuessOption === PokeGuessOptions.Types ?
+                        <TypesGuessSelectors 
+                            typesValue={{
+                                type1: pokeType1Input?.id ?? '',
+                                type2: pokeType2Input?.id ?? ''
+                            }}
+                            onTypesChange={(newType1, newType2) => {
+                                setPokeType1Input(newType1);
+                                setPokeType2Input(newType2);
+                            }} />
+                        : <UniversalInput
+                            inputValue={currentInput}
+                            guessType={selectedGuessOption}
+                            inputChangeCallback={setCurrentInput}
+                            submitCallback={guessThePokemonCallback}
+                        />
+                    }
                     <div className="buttonGroup">
                         <CustomButton label="Guess ! (↵)" type={"primary"} onClickCallback={guessThePokemonCallback} />
                         <div className="victimButton">

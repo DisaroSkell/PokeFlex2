@@ -5,11 +5,13 @@ import storage from './storage'
 import pokeGensReducer from './pokeGens/pokeGensSlice';
 import langReducer from './lang/langSlice';
 import streakReducer from './streak/streakSlice';
+import pokeTypesReducer from './pokeTypes/pokeTypesSlice';
 
 const rootReducer = combineReducers({
     gens: pokeGensReducer,
     lang: langReducer,
     streak: streakReducer,
+    pokeTypes: pokeTypesReducer,
 })
 
 const persistConfig = {
@@ -23,11 +25,11 @@ export const makeStore = () => {
     let store = configureStore({
         reducer: persistedReducer,
         middleware: (getDefaultMiddleware) =>
-          getDefaultMiddleware({
-            serializableCheck: {
-              ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-            },
-          }),
+            getDefaultMiddleware({
+                serializableCheck: {
+                    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+                },
+            }),
     })
 
     let persistor = persistStore(store)
