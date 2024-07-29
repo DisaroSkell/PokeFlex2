@@ -160,30 +160,41 @@ export default function Quiz() {
         }
     }, [currentInput, currentPoke, selectedGuessOption])
 
-    function giveSolution(guessOption: PokeGuessOptions) {
-        if (currentPoke) switch(guessOption) {
+    function giveSolution(pokeToGuess: Pokemon, guessOption: PokeGuessOptions) {
+        switch(guessOption) {
             case PokeGuessOptions.ID:
-                setSubmitFeedback(`Its id was n°${currentPoke.id}`);
+                setSubmitFeedback(`Its id was n°${pokeToGuess.id}`);
                 break;
             case PokeGuessOptions.Name:
-                setSubmitFeedback(`Its name was ${currentPoke.name}`);
+                setSubmitFeedback(`Its name was ${pokeToGuess.name}`);
                 break;
             case PokeGuessOptions.Types:
-                if (currentPoke.type2) setSubmitFeedback(`Its types were ${currentPoke.type1.fullName} and ${currentPoke.type2.fullName}`);
-                else setSubmitFeedback(`Its type was ${currentPoke.type1.fullName}`);
+                if (pokeToGuess.type2) setSubmitFeedback(`Its types were ${pokeToGuess.type1.fullName} and ${pokeToGuess.type2.fullName}`);
+                else setSubmitFeedback(`Its type was ${pokeToGuess.type1.fullName}`);
                 break;
         }
     }
 
-    function giveUpCallback() {
+    const giveUpCallback = useCallback(() => {
         setPokeHasToChange(true);
         setCurrentInput('');
 
         if(currentPoke) {
             setStreakCount(0);
-            giveSolution(selectedGuessOption);
+            giveSolution(currentPoke, selectedGuessOption);
         }
-    }
+    }, [currentPoke, selectedGuessOption])
+
+    // Give up key listener
+    useEffect(() => {
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (e.key === "Escape") giveUpCallback();
+        }
+
+        document.addEventListener('keyup', handleKeyUp, true);
+
+        return () => document.removeEventListener('keyup', handleKeyUp, true);
+    }, [giveUpCallback])
 
     const getPokeInfoOptions = () => {
         const pokeInfoKeys = Object.keys(PokeInfoOptions)
@@ -280,9 +291,9 @@ export default function Quiz() {
                         submitCallback={guessThePokemonCallback}
                     />
                     <div className="buttonGroup">
-                        <CustomButton label="Guess !" type={"primary"} onClickCallback={guessThePokemonCallback} />
+                        <CustomButton label="Guess ! (↵)" type={"primary"} onClickCallback={guessThePokemonCallback} />
                         <div className="victimButton">
-                            <CustomButton label="Give up :(" type={"alert"} onClickCallback={giveUpCallback} />
+                            <CustomButton label="Give up :( (Esc)" type={"alert"} onClickCallback={giveUpCallback} />
                         </div>
                     </div>
                     <audio ref={audioRef} src={`${nextConfig.basePath}/sounds/success.mp3`} />
