@@ -67,6 +67,7 @@ export default function UniversalInput({
 
         if (convertGuessTypeToInputType(guessType) === "number"
             && !event.data.match(/[0-9]/g)) event.preventDefault();
+        else if (!event.data.match(/^[\p{L}0-9]$/gu)) event.preventDefault();
     }
 
     function convertGuessTypeToInputType (guessType: PokeGuessOptions): HTMLInputTypeAttribute {
