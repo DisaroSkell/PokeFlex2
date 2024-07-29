@@ -1,6 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react";
+import nextConfig from "@/next.config.mjs";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
@@ -37,6 +38,8 @@ export default function Quiz() {
     const [streakCount, setStreakCount] = useState(0)
     const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
+
+    const audioRef = useRef<HTMLAudioElement>(null)
 
     // fetch image
     useEffect(() => {
@@ -150,6 +153,7 @@ export default function Quiz() {
             setPokeHasToChange(true)
             setCurrentInput('')
             setStreakCount((streak) => streak + 1)
+            audioRef.current?.play()
         } else {
             setStreakCount(-1)
         }
@@ -280,6 +284,7 @@ export default function Quiz() {
                             <CustomButton label="Give up :(" type={"alert"} onClickCallback={giveUpCallback} />
                         </div>
                     </div>
+                    <audio ref={audioRef} src={`${nextConfig.basePath}/sounds/success.mp3`} />
                 </div>
             </div>
 
