@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import LanguageSelectors from "../_components/languageSelectors/component";
+import LanguageSelectors from "@/src/app/_components/languageSelectors/component";
 
 import "./page.css";
 
