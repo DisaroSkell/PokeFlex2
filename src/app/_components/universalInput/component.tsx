@@ -1,3 +1,5 @@
+'use client'
+
 import { FormEvent, HTMLInputTypeAttribute, useEffect } from "react";
 
 import { PokeGuessOptions } from "@/src/types/pokemon.type";
@@ -17,11 +19,12 @@ export default function UniversalInput({
     submitCallback,
     guessType
 }: UniversalInputProps) {
+    // "Enter for submit" listener
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
             const universalInput = document.getElementById("universalInput") as HTMLInputElement;
 
-            if (universalInput && universalInput !== document.activeElement && e.key !== 'Tab') {
+            if (universalInput && universalInput !== document.activeElement && e.key.match(/^[\p{L}0-9]$/gu)) {
                 universalInput.focus();
                 if (universalInput.type === 'number') {
                     universalInput.type = 'text';
@@ -64,6 +67,7 @@ export default function UniversalInput({
 
         if (convertGuessTypeToInputType(guessType) === "number"
             && !event.data.match(/[0-9]/g)) event.preventDefault();
+        else if (!event.data.match(/^[\p{L}0-9]$/gu)) event.preventDefault();
     }
 
     function convertGuessTypeToInputType (guessType: PokeGuessOptions): HTMLInputTypeAttribute {
@@ -77,16 +81,14 @@ export default function UniversalInput({
         }
     }
 
-    return (
-        <input
-            className="customInput"
-            id="universalInput"
-            maxLength={20}
-            type={convertGuessTypeToInputType(guessType)}
-            value={formatValue(inputValue)}
-            onKeyUp={(e) => { if(e.key === 'Enter') submitCallback() }}
-            onInput={handleOnInput}
-            onBeforeInput={handleBeforeInput}
-        />
-    )
+    return <input
+        className="customInput"
+        id="universalInput"
+        maxLength={20}
+        type={convertGuessTypeToInputType(guessType)}
+        value={formatValue(inputValue)}
+        onKeyUp={(e) => { if(e.key === 'Enter') submitCallback() }}
+        onInput={handleOnInput}
+        onBeforeInput={handleBeforeInput}
+    />
 }
