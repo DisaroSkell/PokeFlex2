@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
 import CustomButton from "@/src/app/_components/customButton/component";
-import CustomSelect from "../../_components/customSelect/component";
+import QuizOptionsSelectors from "../../_components/quizOptionsSelectors/component";
 import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
 import TypesGuessSelectors from "../../_components/typesGuessSelectors/component";
 
@@ -64,6 +64,7 @@ export default function Quiz() {
             })
     }, [selectedGens, selectedLang, pokeHasToChange])
 
+    // Resets on change selectors value
     useEffect(() => {
         setCurrentInput('')
         setSubmitFeedback('')
@@ -74,6 +75,7 @@ export default function Quiz() {
         setPokeType2Input(null);
     }, [selectedGens, selectedInfoOption, selectedGuessOption])
 
+    // Streak increase check
     useEffect(() => {
         if (streakCount > (streaks[bestStreakKey] ?? 0))
             dispatch(incrementStreak(bestStreakKey));
@@ -213,70 +215,14 @@ export default function Quiz() {
         return () => document.removeEventListener('keyup', handleKeyUp, true);
     }, [giveUpCallback])
 
-    const getPokeInfoOptions = () => {
-        const pokeInfoKeys = Object.keys(PokeInfoOptions)
-        const pokeInfoValues = Object.values(PokeInfoOptions)
-        const options: {
-            value: string,
-            label: string
-        }[] = []
-
-        for (let i = 0; i < pokeInfoKeys.length; i++) {
-            options.push({
-                value: pokeInfoValues[i],
-                label: pokeInfoKeys[i]
-            })
-        }
-
-        return options
-    }
-
-    const getPokeGuessOptions = () => {
-        const pokeGuessKeys = Object.keys(PokeGuessOptions)
-        const pokeGuessValues = Object.values(PokeGuessOptions)
-        const options: {
-            value: string,
-            label: string
-        }[] = []
-
-        for (let i = 0; i < pokeGuessKeys.length; i++) {
-            options.push({
-                value: pokeGuessValues[i],
-                label: pokeGuessKeys[i]
-            })
-        }
-
-        return options
-    }
-
     return (
         <div className="quiz">
-            <div className="quizSelectors pokeCard absoluteLeft">
-                <h2>Things you want to see</h2>
-                <CustomSelect
-                    value={selectedInfoOption}
-                    options={getPokeInfoOptions()}
-                    disabledValues={[selectedGuessOption]}
-                    onChangeCallback={e => {
-                        const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === e.target.value)
-        
-                        if (foundOption) {
-                            setSelectedInfoOption(foundOption)
-                        }
-                    }}
-                />
-                <h2>Things you want to guess</h2>
-                <CustomSelect
-                    value={selectedGuessOption}
-                    options={getPokeGuessOptions()}
-                    disabledValues={[selectedInfoOption]}
-                    onChangeCallback={e => {
-                        const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === e.target.value)
-        
-                        if (foundOption) {
-                            setSelectedGuessOption(foundOption)
-                        }
-                    }}
+            <div className="absoluteLeft">
+                <QuizOptionsSelectors
+                    infoOptionValue={selectedInfoOption}
+                    onInfoOptionChange={setSelectedInfoOption}
+                    guessOptionValue={selectedGuessOption}
+                    onGuessOptionChange={setSelectedGuessOption}
                 />
             </div>
 

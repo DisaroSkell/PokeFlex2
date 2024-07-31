@@ -86,14 +86,3 @@
     position: absolute;
     left: 5%;
 }
-
-.quizSelectors {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-
-    h2 {
-        margin: 0 0 10px;
-        font-size: 20px;
-    }
-}
