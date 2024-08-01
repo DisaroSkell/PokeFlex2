@@ -3,6 +3,7 @@
 import { ChangeEvent, useState } from "react";
 
 import { Lang } from "@/src/types/lang.type";
+import { useTranslation } from "react-i18next";
 
 import { fetchLangs, setSelectedLang } from "@/src/lib/lang/langSlice";
 import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
@@ -19,6 +20,8 @@ interface LanguageSelectorsProps {
 
 export default function LanguageSelectors({
 }: LanguageSelectorsProps) {
+    const { t } = useTranslation();
+
     const allLangs = useAppSelector(state => state.lang.langs)
     const selectedLang = useAppSelector(state => state.lang.selectedLang)
     const dispatch = useAppDispatch()
@@ -50,10 +53,10 @@ export default function LanguageSelectors({
     }
 
     return <div className="pokeCard languageCard">
-        <h2>Select your language</h2>
+        <h2>{t("common:select-lang")}</h2>
         <div className="cardContent">
             <div className="languageSelector">
-                <h3>Texts language :</h3>
+                <h3>{t("common:text-lang")}</h3>
                 <CustomSelect
                     value={"en"}
                     options={[{label: "English", value: "en"}]}
@@ -63,7 +66,7 @@ export default function LanguageSelectors({
             </div>
             <div className="verticalSeparator" />
             <div className="languageSelector">
-                <h3>Pokémon language :</h3>
+                <h3>{t("common:poke-lang")}</h3>
                 <CustomSelect
                     value={selectedLang.id}
                     options={mapLanguagesToOptions(allLangs)}
@@ -71,7 +74,7 @@ export default function LanguageSelectors({
                     onChangeCallback={onChangePokeLang}
                 />
                 <CustomButton
-                    label={"Load more languages"}
+                    label={t("common:load-langs")}
                     type={"primary"}
                     onClickCallback={loadMoreLangs}
                     disabled={isButtonDisabled}

@@ -1,0 +1,18 @@
+{
+    "best-streak": "Best streak",
+    "current-streak": "Streak",
+    "streak-broke": "Broke :(",
+    "guess": "Guess",
+    "giveup": "Give up",
+    "problem": "Something went wrong",
+    "right": "You're right ;)",
+    "wrong": "You're wrong :D",
+    "halfright": "One is right !",
+    "close": "You're close !",
+    "stupid": "Ahah... No ^^",
+    "far": "Really ?",
+    "solution-id": "Its id was n°{{poke.id}}",
+    "solution-name": "Its name was {{poke.name}}",
+    "solution-types": "Its types were {{pokeToGuess.type1.fullName}} and {{pokeToGuess.type2.fullName}}",
+    "solution-type": "Its type was {{pokeToGuess.type1.fullName}}"
+}
