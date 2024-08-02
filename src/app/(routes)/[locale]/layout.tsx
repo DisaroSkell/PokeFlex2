@@ -1,13 +1,12 @@
+import nextConfig from "@/next.config.mjs"
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import Header from "../_components/header/component";
-import Footer from "../_components/footer/component";
-import StoreProvider from "./storeProvider";
+import Header from "../../_components/header/component";
+import Footer from "../../_components/footer/component";
+import StoreProvider from "../../_components/providers/storeProvider";
 
 import "./globals.css";
-
-import nextConfig from "@/next.config.mjs"
 
 const inter = Inter({ subsets: ["latin"] });
 

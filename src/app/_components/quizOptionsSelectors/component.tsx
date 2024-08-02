@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslation } from "react-i18next";
+
 import CustomSelect from "../customSelect/component";
 
 import { PokeGuessOptions, PokeInfoOptions } from "@/src/types/pokemon.type";
@@ -17,6 +21,8 @@ export default function QuizOptionsSelectors({
     guessOptionValue,
     onGuessOptionChange
 }: QuizOptionsSelectorsProps) {
+    const { t } = useTranslation();
+
     const getPokeInfoOptions = () => {
         const pokeInfoKeys = Object.keys(PokeInfoOptions);
         const pokeInfoValues = Object.values(PokeInfoOptions);
@@ -54,7 +60,7 @@ export default function QuizOptionsSelectors({
     }
 
     return <div className="quizSelectors pokeCard">
-        <h2>Things you want to see</h2>
+        <h2>{t("common:select-info-option")}</h2>
         <CustomSelect
             value={infoOptionValue}
             options={getPokeInfoOptions()}
@@ -67,7 +73,7 @@ export default function QuizOptionsSelectors({
                 }
             }}
         />
-        <h2>Things you want to guess</h2>
+        <h2>{t("common:select-guess-option")}</h2>
         <CustomSelect
             value={guessOptionValue}
             options={getPokeGuessOptions()}

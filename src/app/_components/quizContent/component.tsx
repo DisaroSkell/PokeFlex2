@@ -2,6 +2,7 @@
 
 import nextConfig from "@/next.config.mjs";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import UniversalInput from "@/src/app/_components/universalInput/component";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
@@ -23,11 +24,14 @@ import { formatStreaksKey } from "@/src/utils/streaks";
 import "./quizContent.css";
 
 export default function QuizContent() {
+    const { t } = useTranslation();
+
     const dispatch = useAppDispatch()
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
     const selectedLang = useAppSelector(state => state.lang.selectedLang)
     
     const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
+    const [previousPoke, setPreviousPoke] = useState<Pokemon | null>(null)
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
     
     const [currentInput, setCurrentInput] = useState('')
@@ -83,15 +87,15 @@ export default function QuizContent() {
 
     function guessWithID (guess: number, idToGuess: number): boolean {
         if (guess === idToGuess) {
-            setSubmitFeedback("You're right ;)");
+            setSubmitFeedback("right");
             return true;
         } else {
             const diff = Math.abs(guess - idToGuess)
 
-            if(diff <= 5) setSubmitFeedback("You're close !");
-            else if(diff === 10) setSubmitFeedback("Ahah... No ^^");
-            else if(diff % 100 === 0) setSubmitFeedback("Really ?");
-            else setSubmitFeedback("You're wrong :D");
+            if(diff <= 5) setSubmitFeedback("close");
+            else if(diff === 10) setSubmitFeedback("stupid");
+            else if(diff % 100 === 0) setSubmitFeedback("far");
+            else setSubmitFeedback("wrong");
             return false;
         }
     }
@@ -101,11 +105,11 @@ export default function QuizContent() {
         const normalizedName = nameToGuess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
 
         if (normalizedGuess === normalizedName) {
-            setSubmitFeedback("You're right ;)");
+            setSubmitFeedback("right");
             return true;
         } else {
-            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("You're close !");
-            else setSubmitFeedback("You're wrong :D");
+            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("close");
+            else setSubmitFeedback("wrong");
             return false;
         }
     }
@@ -129,14 +133,14 @@ export default function QuizContent() {
         ||  guessForTypes === typesAlternateAsString
         ||  guessForTypesAlternate === typesAsString
         ||  guessForTypesAlternate === typesAlternateAsString) {
-            setSubmitFeedback("You're right ;)");
+            setSubmitFeedback("right");
             return true;
         } else {
             if(normalizedGuessType1 === normalizedType1
             || normalizedGuessType1 === normalizedType2
             || normalizedGuessType2 === normalizedType1
-            || normalizedGuessType2 === normalizedType2) setSubmitFeedback("One is right !");
-            else setSubmitFeedback("You're wrong :D");
+            || normalizedGuessType2 === normalizedType2) setSubmitFeedback("halfright");
+            else setSubmitFeedback("wrong");
             return false;
         }
     }
@@ -151,7 +155,7 @@ export default function QuizContent() {
                 const currentInputAsNumber = parseInt(currentInput);
 
                 if (isNaN(currentInputAsNumber)) {
-                    setSubmitFeedback("Something went wrong");
+                    setSubmitFeedback("problem");
                     return;
                 }
 
@@ -182,23 +186,23 @@ export default function QuizContent() {
     function giveSolution(pokeToGuess: Pokemon, guessOption: PokeGuessOptions) {
         switch(guessOption) {
             case PokeGuessOptions.ID:
-                setSubmitFeedback(`Its id was n°${pokeToGuess.id}`);
+                setSubmitFeedback("solution-id");
                 break;
             case PokeGuessOptions.Name:
-                setSubmitFeedback(`Its name was ${pokeToGuess.name}`);
+                setSubmitFeedback("solution-name");
                 break;
             case PokeGuessOptions.Types:
-                if (pokeToGuess.type2) setSubmitFeedback(`Its types were ${pokeToGuess.type1.fullName} and ${pokeToGuess.type2.fullName}`);
-                else setSubmitFeedback(`Its type was ${pokeToGuess.type1.fullName}`);
+                if (pokeToGuess.type2) setSubmitFeedback("solution-types");
+                else setSubmitFeedback("solution-type");
                 break;
         }
     }
 
     const giveUpCallback = useCallback(() => {
-        setPokeHasToChange(true);
-        setCurrentInput('');
-
         if(currentPoke) {
+            setPreviousPoke(currentPoke);
+            setPokeHasToChange(true);
+            setCurrentInput('');
             setStreakCount(0);
             giveSolution(currentPoke, selectedGuessOption);
         }
@@ -230,14 +234,14 @@ export default function QuizContent() {
                 <div className="pokeCard infoContainer">
                     <div className="infoContainerHeader">
                         <p>
-                            {submitFeedback}
+                            {t(submitFeedback, { poke: previousPoke })}
                         </p>
                         <div className="streaksContainer">
                             <p>
-                                Best Streak: {streaks[bestStreakKey] ?? 0}
+                                {t("best-streak")}: {streaks[bestStreakKey] ?? 0}
                             </p>
                             <p>
-                                Streak: {streakCount === -1 ? "broke :(" : streakCount}
+                                {t("current-streak")}: {streakCount === -1 ? t("streak-broke") : streakCount}
                             </p>
                         </div>
                     </div>
@@ -266,9 +270,9 @@ export default function QuizContent() {
                         />
                     }
                     <div className="buttonGroup">
-                        <CustomButton label="Guess ! (↵)" type={"primary"} onClickCallback={guessThePokemonCallback} />
+                        <CustomButton label={`${t("guess")} ! (↵)`} type={"primary"} onClickCallback={guessThePokemonCallback} />
                         <div className="victimButton">
-                            <CustomButton label="Give up :( (Esc)" type={"alert"} onClickCallback={giveUpCallback} />
+                            <CustomButton label={`${t("giveup")} :( (Esc)`} type={"alert"} onClickCallback={giveUpCallback} />
                         </div>
                     </div>
                     <audio ref={audioRef} src={`${nextConfig.basePath}/sounds/success.mp3`} />

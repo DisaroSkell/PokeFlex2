@@ -1,4 +1,7 @@
+'use client';
+
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import CheckboxWithLabel from "../checkboxWithLabel/component";
 import CustomButton from "../customButton/component";
@@ -10,14 +13,17 @@ import { setSelectedGens } from "@/src/lib/pokeGens/pokeGensSlice";
 
 import "./generationSelector.css"
 
-interface GenerationSelectorProps {}
-
 interface GenOptions {
     name: string
     selected: boolean
 }
 
-export default function GenerationSelector(props: GenerationSelectorProps) {
+interface GenerationSelectorProps {}
+
+export default function GenerationSelector({
+}: GenerationSelectorProps) {
+    const { t } = useTranslation();
+
     const allGens = useAppSelector(state => state.gens.gens)
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
     const dispatch = useAppDispatch()
@@ -103,15 +109,15 @@ export default function GenerationSelector(props: GenerationSelectorProps) {
     
     return (
         <div className="genSelectorWrapper">
-            <h2>Select Pokémon Generations</h2>
+            <h2>{t("common:select-gens")}</h2>
 
             <div className="allGensGroup">
                 {gensToDisplay()}
             </div>
 
             <div className="buttonsContainer">
-                <CustomButton label="Cancel" type="primary" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges || !isEmptyGenSelection()} />
-                <CustomButton label="Confirm" type="secondary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges} />
+                <CustomButton label={t("common:cancel")} type="primary" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges || !isEmptyGenSelection()} />
+                <CustomButton label={t("common:confirm")} type="secondary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges} />
             </div>
         </div>
     )

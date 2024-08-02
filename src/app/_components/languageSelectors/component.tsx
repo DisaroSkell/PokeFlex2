@@ -1,8 +1,14 @@
 'use client';
 
 import { ChangeEvent, useState } from "react";
+import nextConfig from "@/next.config.mjs";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
-import { Lang } from "@/src/types/lang.type";
+import { i18nConfig } from "@/i18nConfig";
+
+import { Lang, supportedLanguages } from "@/src/types/lang.type";
 
 import { fetchLangs, setSelectedLang } from "@/src/lib/lang/langSlice";
 import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
@@ -23,6 +29,11 @@ export default function LanguageSelectors({
     const selectedLang = useAppSelector(state => state.lang.selectedLang)
     const dispatch = useAppDispatch()
 
+    const { i18n, t } = useTranslation();
+    const currentLocale = i18n.language;
+    const router = useRouter();
+    const currentPathname = usePathname();
+
     const [isButtonDisabled, setButtonDisabled] = useState(false)
 
     function mapLanguagesToOptions(langs: Lang[]) {
@@ -41,7 +52,30 @@ export default function LanguageSelectors({
     }
 
     function onChangeI18nLang(e: ChangeEvent<HTMLSelectElement>) {
-        // TODO
+        const newLocale = e.target.value;
+
+        if (newLocale === currentLocale) return;
+
+        const daysBeforeExpiration = 30;
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime()
+                             + daysBeforeExpiration
+                             * 24 * 60 * 60 * 1000);
+
+        document.cookie = `NEXT_LOCALE=${newLocale};expires=${expirationDate.toUTCString()};path=${nextConfig.basePath}`;
+
+        let newPath = '';
+
+        if (
+            currentLocale === i18nConfig.defaultLocale
+            && !i18nConfig.prefixDefault
+        ) {
+            newPath = `/${newLocale}${currentPathname}`;
+        } else {
+            newPath = currentPathname.replace(`/${currentLocale}`, `/${newLocale}`);
+        }
+
+        router.push(newPath);
     }
 
     function loadMoreLangs() {
@@ -50,20 +84,20 @@ export default function LanguageSelectors({
     }
 
     return <div className="pokeCard languageCard">
-        <h2>Select your language</h2>
+        <h2>{t("common:select-lang")}</h2>
         <div className="cardContent">
             <div className="languageSelector">
-                <h3>Texts language :</h3>
+                <h3>{t("common:text-lang")}</h3>
                 <CustomSelect
-                    value={"en"}
-                    options={[{label: "English", value: "en"}]}
+                    value={currentLocale}
+                    options={mapLanguagesToOptions(supportedLanguages)}
                     disabledValues={[]}
                     onChangeCallback={onChangeI18nLang}
                 />
             </div>
             <div className="verticalSeparator" />
             <div className="languageSelector">
-                <h3>Pokémon language :</h3>
+                <h3>{t("common:poke-lang")}</h3>
                 <CustomSelect
                     value={selectedLang.id}
                     options={mapLanguagesToOptions(allLangs)}
@@ -71,7 +105,7 @@ export default function LanguageSelectors({
                     onChangeCallback={onChangePokeLang}
                 />
                 <CustomButton
-                    label={"Load more languages"}
+                    label={t("common:load-langs")}
                     type={"primary"}
                     onClickCallback={loadMoreLangs}
                     disabled={isButtonDisabled}
