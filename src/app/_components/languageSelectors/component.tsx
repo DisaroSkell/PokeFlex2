@@ -1,9 +1,14 @@
 'use client';
 
 import { ChangeEvent, useState } from "react";
-
-import { Lang } from "@/src/types/lang.type";
+import nextConfig from "@/next.config.mjs";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+
+import { i18nConfig } from "@/i18nConfig";
+
+import { Lang, supportedLanguages } from "@/src/types/lang.type";
 
 import { fetchLangs, setSelectedLang } from "@/src/lib/lang/langSlice";
 import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
@@ -20,11 +25,14 @@ interface LanguageSelectorsProps {
 
 export default function LanguageSelectors({
 }: LanguageSelectorsProps) {
-    const { t } = useTranslation();
-
     const allLangs = useAppSelector(state => state.lang.langs)
     const selectedLang = useAppSelector(state => state.lang.selectedLang)
     const dispatch = useAppDispatch()
+
+    const { i18n, t } = useTranslation();
+    const currentLocale = i18n.language;
+    const router = useRouter();
+    const currentPathname = usePathname();
 
     const [isButtonDisabled, setButtonDisabled] = useState(false)
 
@@ -44,7 +52,30 @@ export default function LanguageSelectors({
     }
 
     function onChangeI18nLang(e: ChangeEvent<HTMLSelectElement>) {
-        // TODO
+        const newLocale = e.target.value;
+
+        if (newLocale === currentLocale) return;
+
+        const daysBeforeExpiration = 30;
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime()
+                             + daysBeforeExpiration
+                             * 24 * 60 * 60 * 1000);
+
+        document.cookie = `NEXT_LOCALE=${newLocale};expires=${expirationDate.toUTCString()};path=${nextConfig.basePath}`;
+
+        let newPath = '';
+
+        if (
+            currentLocale === i18nConfig.defaultLocale
+            && !i18nConfig.prefixDefault
+        ) {
+            newPath = `/${newLocale}${currentPathname}`;
+        } else {
+            newPath = currentPathname.replace(`/${currentLocale}`, `/${newLocale}`);
+        }
+
+        router.push(newPath);
     }
 
     function loadMoreLangs() {
@@ -58,8 +89,8 @@ export default function LanguageSelectors({
             <div className="languageSelector">
                 <h3>{t("common:text-lang")}</h3>
                 <CustomSelect
-                    value={"en"}
-                    options={[{label: "English", value: "en"}]}
+                    value={currentLocale}
+                    options={mapLanguagesToOptions(supportedLanguages)}
                     disabledValues={[]}
                     onChangeCallback={onChangeI18nLang}
                 />
