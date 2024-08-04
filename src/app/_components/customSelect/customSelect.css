@@ -13,3 +13,12 @@
 .customSelect:hover {
     cursor: pointer;
 }
+
+.customSelect:disabled {
+    color: darkgray;
+    background-color: rgb(58, 53, 49);
+}
+
+.customSelect:disabled:hover {
+    cursor: not-allowed;
+}

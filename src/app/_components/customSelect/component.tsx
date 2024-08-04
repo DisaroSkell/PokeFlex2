@@ -8,6 +8,7 @@ interface CustomSelectProps {
         value: string
         label: string
     }[]
+    disabled?: boolean
     disabledValues: string[]
     onChangeCallback: (e: ChangeEvent<HTMLSelectElement>) => void
 }
@@ -15,6 +16,7 @@ interface CustomSelectProps {
 export default function CustomSelect({
     value,
     options,
+    disabled,
     disabledValues,
     onChangeCallback
 }: CustomSelectProps) {
@@ -35,6 +37,7 @@ export default function CustomSelect({
             className="customSelect"
             name="pokeGuessOptions"
             value={value}
+            disabled={disabled}
             onChange={onChangeCallback}
         >{builtOptions}</select>
     }
