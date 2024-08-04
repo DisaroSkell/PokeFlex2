@@ -176,6 +176,8 @@ export default function QuizContent() {
         if (success) {
             setPokeHasToChange(true)
             setCurrentInput('')
+            setPokeType1Input(null)
+            setPokeType2Input(null)
             setStreakCount((streak) => streak + 1)
             audioRef.current?.play()
         } else {
@@ -203,6 +205,8 @@ export default function QuizContent() {
             setPreviousPoke(currentPoke);
             setPokeHasToChange(true);
             setCurrentInput('');
+            setPokeType1Input(null);
+            setPokeType2Input(null);
             setStreakCount(0);
             giveSolution(currentPoke, selectedGuessOption);
         }
