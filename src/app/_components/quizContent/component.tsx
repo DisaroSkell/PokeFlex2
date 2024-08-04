@@ -85,6 +85,22 @@ export default function QuizContent() {
             dispatch(incrementStreak(bestStreakKey));
     }, [streakCount, streaks, bestStreakKey, dispatch])
 
+    const isCurrentGuessEmpty = useCallback(() => {
+        switch(selectedGuessOption) {
+            case PokeGuessOptions.ID:
+                if (!currentInput) return true;
+                break;
+            case PokeGuessOptions.Name:
+                if (!currentInput) return true;
+                break;
+            case PokeGuessOptions.Types:
+                if (!pokeType1Input) return true;
+                break;
+        }
+
+        return false;
+    }, [selectedGuessOption, currentInput, pokeType1Input]);
+
     function guessWithID (guess: number, idToGuess: number): boolean {
         if (guess === idToGuess) {
             setSubmitFeedback("right");
@@ -270,7 +286,7 @@ export default function QuizContent() {
                         />
                     }
                     <div className="buttonGroup">
-                        <CustomButton label={`${t("guess")} ! (↵)`} type={"primary"} onClickCallback={guessThePokemonCallback} />
+                        <CustomButton label={`${t("guess")} ! (↵)`} type={"primary"} onClickCallback={guessThePokemonCallback} disabled={isCurrentGuessEmpty()} />
                         <div className="victimButton">
                             <CustomButton label={`${t("giveup")} :( (Esc)`} type={"alert"} onClickCallback={giveUpCallback} />
                         </div>
