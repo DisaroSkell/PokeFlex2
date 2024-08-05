@@ -10,6 +10,10 @@
     font-family: Big;
     src: url(~/src/assets/big.TTF);
 }
+@font-face {
+    font-family: retro-monospaced;
+    src: url(~/src/assets/kongtext.ttf);
+}
 
 /* CSS reset */
 h1,
