@@ -40,6 +40,12 @@
     height: 80%;
 }
 
+.timerContainer {
+    display: flex;
+    justify-content: center;
+    font-family: 'retro-monospaced', sans-serif;
+}
+
 .inputGroup {
     display: flex;
     flex-direction: column;

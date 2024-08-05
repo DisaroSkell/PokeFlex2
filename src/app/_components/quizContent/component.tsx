@@ -22,6 +22,7 @@ import { incrementStreak, selectStreaks } from "@/src/lib/streak/streakSlice";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quizContent.css";
+import { displayTimer } from "@/src/utils/utils";
 
 export default function QuizContent() {
     const { t } = useTranslation();
@@ -46,6 +47,8 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
 
+    const [currentTime, setTime] = useState(0);
+
     const audioRef = useRef<HTMLAudioElement>(null)
 
     // fetch image
@@ -67,6 +70,15 @@ export default function QuizContent() {
                 setPokeHasToChange(false)
             })
     }, [selectedGens, selectedLang, pokeHasToChange])
+
+    // Timer handler
+    useEffect(() => {
+        const toto = setInterval(() => {
+            setTime(timer => timer + 1);
+        }, 10);
+
+        return () => clearInterval(toto);
+    }, []);
 
     // Resets on change selectors value
     useEffect(() => {
@@ -195,6 +207,7 @@ export default function QuizContent() {
             setPokeType1Input(null)
             setPokeType2Input(null)
             setStreakCount((streak) => streak + 1)
+            setTime(0);
             audioRef.current?.play()
         } else {
             setStreakCount(-1)
@@ -224,6 +237,7 @@ export default function QuizContent() {
             setPokeType1Input(null);
             setPokeType2Input(null);
             setStreakCount(0);
+            setTime(0);
             giveSolution(currentPoke, selectedGuessOption);
         }
     }, [currentPoke, selectedGuessOption])
@@ -268,6 +282,10 @@ export default function QuizContent() {
                     <div className="infoContainerContent">
                         <PokeInfoDisplayer pokemon={pokeHasToChange ? null : currentPoke} infoType={selectedInfoOption} />
                     </div>
+                </div>
+
+                <div className="timerContainer">
+                    {displayTimer(currentTime*10).slice(0, -1)}
                 </div>
 
                 <div className="inputGroup">
