@@ -51,14 +51,15 @@ export default function TypesGuessSelectors({
         <CustomSelect
             value={typesValue.type1}
             options={getPokeTypesAsOptions(pokeTypes)}
-            disabledValues={['']}
+            disabledValues={['', typesValue.type2]}
             onChangeCallback={(e) => changeTypes(e.target.value, typesValue.type2)}
         />
         <CustomSelect
             value={typesValue.type2}
             options={getPokeTypesAsOptions(pokeTypes)}
-            disabledValues={[]}
+            disabledValues={[typesValue.type1]}
             onChangeCallback={(e) => changeTypes(typesValue.type1, e.target.value)}
+            disabled={typesValue.type1 === ''}
         />
     </div>
 }
