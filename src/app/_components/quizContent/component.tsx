@@ -16,14 +16,14 @@ import { PokeType } from "@/src/types/pokeType.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
+import { useCountdownTimer } from "@/src/lib/hooks/useCountdownTimer";
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 
+import { displayTimer } from "@/src/utils/utils";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quizContent.css";
-import { displayTimer } from "@/src/utils/utils";
-import { useChrono } from "@/src/lib/hooks/useChrono";
 
 export default function QuizContent() {
     const { t } = useTranslation();
@@ -48,7 +48,7 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
 
-    const [timer, , , resetTimer] = useChrono();
+    const [timer, resumeTimer, pauseTimer, resetTimer] = useCountdownTimer(30000);
 
     const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -82,6 +82,12 @@ export default function QuizContent() {
         setPokeType1Input(null);
         setPokeType2Input(null);
     }, [selectedGens, selectedInfoOption, selectedGuessOption])
+
+    // Reset timer on Pokémon change
+    useEffect(() => {
+        resumeTimer();
+        resetTimer();
+    }, [currentPoke, resumeTimer, resetTimer]);
 
     // Streak increase check
     useEffect(() => {
@@ -199,12 +205,12 @@ export default function QuizContent() {
             setPokeType1Input(null)
             setPokeType2Input(null)
             setStreakCount((streak) => streak + 1)
-            resetTimer();
+            pauseTimer();
             audioRef.current?.play()
         } else {
             setStreakCount(-1)
         }
-    }, [currentInput, currentPoke, selectedGuessOption, pokeType1Input, pokeType2Input, resetTimer])
+    }, [currentInput, currentPoke, selectedGuessOption, pokeType1Input, pokeType2Input, pauseTimer])
 
     function giveSolution(pokeToGuess: Pokemon, guessOption: PokeGuessOptions) {
         switch(guessOption) {
@@ -229,10 +235,10 @@ export default function QuizContent() {
             setPokeType1Input(null);
             setPokeType2Input(null);
             setStreakCount(0);
-            resetTimer();
+            pauseTimer();
             giveSolution(currentPoke, selectedGuessOption);
         }
-    }, [currentPoke, selectedGuessOption, resetTimer])
+    }, [currentPoke, selectedGuessOption, pauseTimer])
 
     // Give up key listener
     useEffect(() => {
