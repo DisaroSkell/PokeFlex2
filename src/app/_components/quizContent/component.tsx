@@ -16,8 +16,8 @@ import { PokeType } from "@/src/types/pokeType.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
-import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
-import { incrementStreak, selectStreaks } from "@/src/lib/streak/streakSlice";
+import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
+import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 
 import { formatStreaksKey } from "@/src/utils/streaks";
 

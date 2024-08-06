@@ -10,8 +10,8 @@ import { i18nConfig } from "@/i18nConfig";
 
 import { Lang, supportedLanguages } from "@/src/types/lang.type";
 
-import { fetchLangs, setSelectedLang } from "@/src/lib/lang/langSlice";
-import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
+import { fetchLangs, setSelectedLang } from "@/src/lib/store/lang/langSlice";
+import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 
 import { capitalize } from "@/src/utils/utils";
 
