@@ -23,6 +23,7 @@ import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quizContent.css";
 import { displayTimer } from "@/src/utils/utils";
+import { useChrono } from "@/src/lib/hooks/useChrono";
 
 export default function QuizContent() {
     const { t } = useTranslation();
@@ -47,7 +48,7 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
 
-    const [currentTime, setTime] = useState(0);
+    const [timer, , , resetTimer] = useChrono();
 
     const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -70,15 +71,6 @@ export default function QuizContent() {
                 setPokeHasToChange(false)
             })
     }, [selectedGens, selectedLang, pokeHasToChange])
-
-    // Timer handler
-    useEffect(() => {
-        const toto = setInterval(() => {
-            setTime(timer => timer + 1);
-        }, 10);
-
-        return () => clearInterval(toto);
-    }, []);
 
     // Resets on change selectors value
     useEffect(() => {
@@ -207,12 +199,12 @@ export default function QuizContent() {
             setPokeType1Input(null)
             setPokeType2Input(null)
             setStreakCount((streak) => streak + 1)
-            setTime(0);
+            resetTimer();
             audioRef.current?.play()
         } else {
             setStreakCount(-1)
         }
-    }, [currentInput, currentPoke, selectedGuessOption, pokeType1Input, pokeType2Input])
+    }, [currentInput, currentPoke, selectedGuessOption, pokeType1Input, pokeType2Input, resetTimer])
 
     function giveSolution(pokeToGuess: Pokemon, guessOption: PokeGuessOptions) {
         switch(guessOption) {
@@ -237,10 +229,10 @@ export default function QuizContent() {
             setPokeType1Input(null);
             setPokeType2Input(null);
             setStreakCount(0);
-            setTime(0);
+            resetTimer();
             giveSolution(currentPoke, selectedGuessOption);
         }
-    }, [currentPoke, selectedGuessOption])
+    }, [currentPoke, selectedGuessOption, resetTimer])
 
     // Give up key listener
     useEffect(() => {
@@ -285,7 +277,7 @@ export default function QuizContent() {
                 </div>
 
                 <div className="timerContainer">
-                    {displayTimer(currentTime*10).slice(0, -1)}
+                    {displayTimer(timer).slice(0, -1)}
                 </div>
 
                 <div className="inputGroup">
