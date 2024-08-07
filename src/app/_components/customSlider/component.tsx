@@ -10,7 +10,6 @@ interface CustomSliderProps {
     disabled?: boolean
 }
 
-// Values of min, max and value are in seconds
 export default function CustomSlider({
     min,
     max,
