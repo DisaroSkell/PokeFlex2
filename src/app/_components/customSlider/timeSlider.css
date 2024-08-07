@@ -1,0 +1,16 @@
+.timerSlider {
+    height: 100%;
+    width: 100%;
+
+    input {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .inputValue {
+        display: flex;
+        justify-content: center;
+        font-family: 'retro-monospaced', sans-serif;
+        font-size: 15px;
+    }
+}

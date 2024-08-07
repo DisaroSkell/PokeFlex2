@@ -24,6 +24,8 @@ import { displayTimer } from "@/src/utils/utils";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quizContent.css";
+import CheckboxWithLabel from "../checkboxWithLabel/component";
+import TimeSlider from "../customSlider/timeSlider";
 
 export default function QuizContent() {
     const { t } = useTranslation();
@@ -48,8 +50,9 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
 
+    const [autoGiveup, setAutoGiveup] = useState(false);
     const [secondsBetweenMons, setSecondsBetweenMons] = useState(30);
-    const [timer, resumeTimer, pauseTimer, resetTimer] = useCountdownTimer(secondsBetweenMons * 1000, () => giveUpCallback());
+    const [timer, resumeTimer, pauseTimer, resetTimer] = useCountdownTimer(secondsBetweenMons * 1000, () => autoGiveUpCallback());
 
     const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -84,11 +87,11 @@ export default function QuizContent() {
         setPokeType2Input(null);
     }, [selectedGens, selectedInfoOption, selectedGuessOption])
 
-    // Reset timer on Pokémon change
+    // Reset timer on Pokémon change and auto give up value change
     useEffect(() => {
         resumeTimer();
         resetTimer();
-    }, [currentPoke, resumeTimer, resetTimer]);
+    }, [currentPoke, autoGiveup, resumeTimer, resetTimer]);
 
     // Streak increase check
     useEffect(() => {
@@ -241,6 +244,10 @@ export default function QuizContent() {
         }
     }, [currentPoke, selectedGuessOption, pauseTimer])
 
+    const autoGiveUpCallback = useCallback(() => {
+        if (autoGiveup) giveUpCallback();
+    }, [autoGiveup, giveUpCallback]);
+
     // Give up key listener
     useEffect(() => {
         const handleKeyUp = (e: KeyboardEvent) => {
@@ -283,9 +290,9 @@ export default function QuizContent() {
                     </div>
                 </div>
 
-                <div className="timerContainer">
+                {autoGiveup ? <div className="timerContainer">
                     {displayTimer(timer).slice(0, -1)}
-                </div>
+                </div> : <></>}
 
                 <div className="inputGroup">
                     {
@@ -316,8 +323,19 @@ export default function QuizContent() {
                 </div>
             </div>
 
-            <div className="pokeCard absoluteRight">
-                <GenerationSelector />
+            <div className="absoluteRight">
+                <div className="pokeCard">
+                    <GenerationSelector />
+                </div>
+                <div className="pokeCard timerSliderContainer">
+                    <CheckboxWithLabel
+                        key={"autogiveup"}
+                        label={"Enable auto give up ?"}
+                        value={autoGiveup}
+                        onValueChange={setAutoGiveup}
+                    />
+                    <TimeSlider min={1} max={5 * 60} value={secondsBetweenMons} label="Time before auto give up" onChange={setSecondsBetweenMons} />
+                </div>
             </div>
         </div>
     );
