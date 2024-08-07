@@ -7,9 +7,17 @@
         width: 100%;
     }
 
+    input:disabled {
+        cursor: not-allowed;
+    }
+
     .inputValue {
         display: flex;
         justify-content: center;
         font-size: 15px;
     }
+}
+
+.disabledValue {
+    color: darkgray;
 }

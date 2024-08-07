@@ -7,10 +7,18 @@
         width: 100%;
     }
 
+    input:disabled {
+        cursor: not-allowed;
+    }
+
     .inputValue {
         display: flex;
         justify-content: center;
         font-family: 'retro-monospaced', sans-serif;
         font-size: 15px;
     }
+}
+
+.disabledTimer {
+    color: darkgray;
 }
