@@ -1,0 +1,5 @@
+.timerContainer {
+    display: flex;
+    justify-content: center;
+    font-family: 'retro-monospaced', sans-serif;
+}

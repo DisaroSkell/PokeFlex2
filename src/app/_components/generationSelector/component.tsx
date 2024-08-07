@@ -8,8 +8,8 @@ import CustomButton from "../customButton/component";
 
 import { Generation } from "@/src/types/generation.type";
 
-import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
-import { setSelectedGens } from "@/src/lib/pokeGens/pokeGensSlice";
+import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
+import { setSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
 
 import "./generationSelector.css"
 

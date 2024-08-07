@@ -7,8 +7,8 @@ import { PokeType } from "@/src/types/pokeType.type";
 
 import CustomSelect from "../customSelect/component";
 
-import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
-import { fetchPokeTypes, selectPokeTypes } from "@/src/lib/pokeTypes/pokeTypesSlice";
+import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
+import { fetchPokeTypes, selectPokeTypes } from "@/src/lib/store/pokeTypes/pokeTypesSlice";
 
 import "./typesGuessSelectors.css";
 
