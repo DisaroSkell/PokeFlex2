@@ -1,7 +1,8 @@
 import { Dispatch, useCallback, useEffect, useState } from "react";
 
 export function useCountdownTimer(
-    startTime: number = 100000, // 1 minute
+    startTime: number = 60000, // 1 minute
+    timeOverCallback?: () => void,
     refreshRate: number = 10, // 0.01 second
 ): [
     number,
@@ -24,6 +25,7 @@ export function useCountdownTimer(
             setRemainingTime(prevTime => {
                 if (prevTime - (Date.now() - lastUpdateDate) <= 0) {
                     setPaused(true);
+                    if (timeOverCallback) timeOverCallback();
                     return 0;
                 }
 
@@ -33,7 +35,7 @@ export function useCountdownTimer(
         }, refreshRate);
 
         return () => clearInterval(interval)
-    }, [refreshRate, paused, lastUpdateDate]);
+    }, [refreshRate, paused, lastUpdateDate, timeOverCallback]);
 
     const resume: Dispatch<void> = useCallback(() => {
         setPaused(false);

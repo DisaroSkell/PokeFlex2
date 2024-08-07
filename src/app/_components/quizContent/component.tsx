@@ -48,7 +48,8 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
 
-    const [timer, resumeTimer, pauseTimer, resetTimer] = useCountdownTimer(30000);
+    const [secondsBetweenMons, setSecondsBetweenMons] = useState(30);
+    const [timer, resumeTimer, pauseTimer, resetTimer] = useCountdownTimer(secondsBetweenMons * 1000, () => giveUpCallback());
 
     const audioRef = useRef<HTMLAudioElement>(null)
 
