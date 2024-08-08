@@ -23,6 +23,7 @@ export default function Header({
         </div>
         <div className="pages">
             <Link className="pageButton" href="/quiz">Quiz</Link>
+            <Link className="pageButton" href="/settings">Settings</Link>
         </div>
     </div>
 }
