@@ -22,7 +22,6 @@
 }
 
 .infoContainerHeader {
-    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     height: 20%;

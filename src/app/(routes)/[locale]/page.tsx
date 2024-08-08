@@ -22,7 +22,6 @@ export default async function Home({
         <TranslationsProvider locale={locale} namespaces={i18nNamespaces} resources={resources}>
             <div className="mainContainer">
                 <h1>{t("welcome")}</h1>
-                <LanguageSelectors />
                 <Link className="navLink" href="/quiz">{t("go-quiz")}</Link>
             </div>
         </TranslationsProvider>

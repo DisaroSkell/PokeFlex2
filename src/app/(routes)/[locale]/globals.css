@@ -23,6 +23,10 @@ p {
     margin: 0;
     padding: 0;
 }
+
+* {
+    box-sizing: border-box;
+}
 /* End CSS reset */
 
 body {
@@ -49,7 +53,6 @@ body {
 }
 
 .pokeCard {
-    box-sizing: border-box;
     height: fit-content;
     width: fit-content;
     background-color: rgb(48, 42, 38);

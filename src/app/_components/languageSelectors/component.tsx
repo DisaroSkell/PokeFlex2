@@ -83,7 +83,7 @@ export default function LanguageSelectors({
         dispatch(fetchLangs())
     }
 
-    return <div className="pokeCard languageCard">
+    return <div className="languageCard">
         <h2>{t("common:select-lang")}</h2>
         <div className="cardContent">
             <div className="languageSelector">
