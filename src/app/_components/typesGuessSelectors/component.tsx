@@ -33,7 +33,17 @@ export default function TypesGuessSelectors({
         return [{value: '', label: ' '}, ...pokeTypes.map(type => {return {
             value: type.id,
             label: type.fullName
-        }})];
+        }}).sort((a, b) => {
+            if (a.label.match(/[^\p{L}]/gu) && !b.label.match(/[^\p{L}]/gu)) {
+                return 1;
+            }
+            
+            if (b.label.match(/[^\p{L}]/gu) && !a.label.match(/[^\p{L}]/gu)) {
+                return -1;
+            }
+
+            return a.label.localeCompare(b.label);
+        })];
     }
 
     function changeTypes(type1Value: string, type2Value: string) {
