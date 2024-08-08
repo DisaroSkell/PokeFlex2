@@ -333,11 +333,11 @@ export default function QuizContent() {
                 <div className="pokeCard timerSliderContainer">
                     <CheckboxWithLabel
                         key={"autogiveup"}
-                        label={"Auto give up"}
+                        label={t("auto-giveup")}
                         value={autoGiveup}
                         onValueChange={setAutoGiveup}
                     />
-                    <TimeSlider min={1} max={5 * 60} value={secondsBetweenMons} label="Time before auto give up" onChange={setSecondsBetweenMons} disabled={!autoGiveup} />
+                    <TimeSlider min={1} max={5 * 60} value={secondsBetweenMons} label={t("time-before-giveup")} onChange={setSecondsBetweenMons} disabled={!autoGiveup} />
                 </div>
             </div>
         </div>
