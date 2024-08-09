@@ -2,13 +2,21 @@ import nextConfig from "@/next.config.mjs";
 import Link from "next/link";
 import Image from 'next/image';
 
+import initTranslations from "@/src/i18n";
+
 import "./header.css"
 
+const i18nNamespaces = ["header"];
+
 interface HeaderProps {
+    locale: string
 }
 
-export default function Header({
+export default async function Header({
+    locale,
 }: HeaderProps) {
+    const { t } = await initTranslations(locale, i18nNamespaces);
+
     return <div className="pokeHeader">
         <div className="container">
             <Link href="/">
@@ -22,8 +30,8 @@ export default function Header({
             </Link>
         </div>
         <div className="pages">
-            <Link className="pageButton" href="/quiz">Quiz</Link>
-            <Link className="pageButton" href="/settings">Settings</Link>
+            <Link className="pageButton" href="/quiz">{t("quiz")}</Link>
+            <Link className="pageButton" href="/settings">{t("settings")}</Link>
         </div>
     </div>
 }
