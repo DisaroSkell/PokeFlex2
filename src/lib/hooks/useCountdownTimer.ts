@@ -25,7 +25,6 @@ export function useCountdownTimer(
             setRemainingTime(prevTime => {
                 if (prevTime - (Date.now() - lastUpdateDate) <= 0) {
                     setPaused(true);
-                    if (timeOverCallback) timeOverCallback();
                     return 0;
                 }
 
@@ -36,6 +35,12 @@ export function useCountdownTimer(
 
         return () => clearInterval(interval)
     }, [refreshRate, paused, lastUpdateDate, timeOverCallback]);
+
+    useEffect(() => {
+        if (remainingTime === 0 && timeOverCallback) timeOverCallback();
+    // Call this when timeOverCallback is updated wouldn't be relevant
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [remainingTime]);
 
     const resume: Dispatch<void> = useCallback(() => {
         setPaused(false);
