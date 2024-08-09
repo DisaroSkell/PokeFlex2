@@ -10,6 +10,24 @@
     font-family: Big;
     src: url(~/src/assets/big.TTF);
 }
+@font-face {
+    font-family: retro-monospaced;
+    src: url(~/src/assets/kongtext.ttf);
+}
+
+/* CSS reset */
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+/* End CSS reset */
 
 body {
     background-image: url(~/public/background.png);
@@ -19,14 +37,19 @@ body {
     height: 100vh;
     width: 100vw;
     color: rgb(216, 202, 8);
+    font-family: 'Alagard', sans-serif !important;
 }
 
 .header {
-    height: 5%;
+    height: 5rem;
 }
 
 .mainContent {
-    height: 95%;
+    height: calc(100vh - 7rem);
+}
+
+.footer {
+    height: 2rem;
 }
 
 .pokeCard {

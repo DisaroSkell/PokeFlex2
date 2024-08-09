@@ -1,0 +1,11 @@
+{
+    "confirm": "Valider",
+    "cancel": "Annuler",
+    "select-lang": "Sélectionnez la langue",
+    "text-lang": "Langue des textes",
+    "poke-lang": "Langue des noms de Pokémons",
+    "load-langs": "Charger plus",
+    "select-gens": "Sélectionnez les générations",
+    "select-info-option": "Information donnée",
+    "select-guess-option": "Information à donner"
+}

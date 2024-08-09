@@ -4,8 +4,8 @@ import { useRef } from 'react'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
-import { makeStore, AppStore } from '@/src/lib/store'
-import { fetchPokeGens } from '@/src/lib/pokeGens/pokeGensSlice'
+import { makeStore, AppStore } from '@/src/lib/store/store'
+import { fetchPokeGens } from '@/src/lib/store/pokeGens/pokeGensSlice'
 
 interface StoreProviderProps {
     children: React.ReactNode
