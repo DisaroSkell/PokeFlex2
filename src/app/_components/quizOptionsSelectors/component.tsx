@@ -34,7 +34,7 @@ export default function QuizOptionsSelectors({
         for (let i = 0; i < pokeInfoKeys.length; i++) {
             options.push({
                 value: pokeInfoValues[i],
-                label: pokeInfoKeys[i]
+                label: t(pokeInfoValues[i])
             })
         }
 
@@ -52,7 +52,7 @@ export default function QuizOptionsSelectors({
         for (let i = 0; i < pokeGuessKeys.length; i++) {
             options.push({
                 value: pokeGuessValues[i],
-                label: pokeGuessKeys[i]
+                label: t(pokeGuessValues[i])
             })
         }
 

@@ -20,20 +20,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: {locale: string};
 }>) {
   return (
     <html lang="en" data-lt-installed="true">
       <body className={inter.className}>
         <div className="header">
-          <Header />
+          <Header locale={params.locale} />
         </div>
         <div className="mainContent">
           <StoreProvider>{children}</StoreProvider>
         </div>
         <div className="footer">
-          <Footer />
+          <Footer locale={params.locale} />
         </div>
       </body>
     </html>
