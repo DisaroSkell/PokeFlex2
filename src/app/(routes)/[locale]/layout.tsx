@@ -35,7 +35,7 @@ export default function RootLayout({
           <StoreProvider>{children}</StoreProvider>
         </div>
         <div className="footer">
-          <Footer />
+          <Footer locale={params.locale} />
         </div>
       </body>
     </html>
