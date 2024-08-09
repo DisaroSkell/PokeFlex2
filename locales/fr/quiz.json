@@ -16,5 +16,9 @@
     "solution-types": "Il était type {{poke.type1.fullName}} et {{poke.type2.fullName}}",
     "solution-type": "Il était type {{poke.type1.fullName}}",
     "auto-giveup": "Abandon auto",
-    "time-before-giveup": "Temps avant abandon auto"
+    "time-before-giveup": "Temps avant abandon auto",
+    "id": "ID",
+    "name": "Nom",
+    "imgUrl": "Image",
+    "types": "Types"
 }
