@@ -9,7 +9,7 @@ import CustomButton from "../customButton/component";
 import { Generation } from "@/src/types/generation.type";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
-import { setSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
+import { fetchPokeGens, setSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
 
 import "./generationSelector.css"
 
@@ -22,7 +22,7 @@ interface GenerationSelectorProps {}
 
 export default function GenerationSelector({
 }: GenerationSelectorProps) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const allGens = useAppSelector(state => state.gens.gens)
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
@@ -30,6 +30,10 @@ export default function GenerationSelector({
 
     const [genOptions, setGenOptions] = useState<GenOptions[]>([])
     const [unsavedChanges, setUnsavedChanges] = useState(false)
+
+    useEffect(() => {
+        dispatch(fetchPokeGens({id: i18n.language, fullName: i18n.language}))
+    }, [dispatch, i18n.language]);
 
     useEffect(() => {
         setGenOptions(allGens.map((gen) => {return{

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect } from "react";
 import nextConfig from "@/next.config.mjs";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
@@ -16,7 +16,6 @@ import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { capitalize } from "@/src/utils/utils";
 
 import CustomSelect from "../../_components/customSelect/component";
-import CustomButton from "../../_components/customButton/component";
 
 import "./languageSelectors.css";
 
@@ -34,7 +33,9 @@ export default function LanguageSelectors({
     const router = useRouter();
     const currentPathname = usePathname();
 
-    const [isButtonDisabled, setButtonDisabled] = useState(false)
+    useEffect(() => {
+        dispatch(fetchLangs())
+    }, [dispatch]);
 
     function mapLanguagesToOptions(langs: Lang[]) {
         return langs.map(l => ({
@@ -78,11 +79,6 @@ export default function LanguageSelectors({
         router.push(newPath);
     }
 
-    function loadMoreLangs() {
-        setButtonDisabled(true)
-        dispatch(fetchLangs())
-    }
-
     return <div className="languageCard">
         <h2>{t("common:select-lang")}</h2>
         <div className="cardContent">
@@ -103,12 +99,6 @@ export default function LanguageSelectors({
                     options={mapLanguagesToOptions(allLangs)}
                     disabledValues={[]}
                     onChangeCallback={onChangePokeLang}
-                />
-                <CustomButton
-                    label={t("common:load-langs")}
-                    type={"primary"}
-                    onClickCallback={loadMoreLangs}
-                    disabled={isButtonDisabled}
                 />
             </div>
         </div>

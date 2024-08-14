@@ -5,7 +5,6 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
 import { makeStore, AppStore } from '@/src/lib/store/store'
-import { fetchPokeGens } from '@/src/lib/store/pokeGens/pokeGensSlice'
 
 interface StoreProviderProps {
     children: React.ReactNode
@@ -17,7 +16,6 @@ export default function StoreProvider({
   const storeRef = useRef<AppStore>()
   if (!storeRef.current) {
     storeRef.current = makeStore()
-    storeRef.current.dispatch(fetchPokeGens())
   }
 
   return <Provider store={storeRef.current}>
