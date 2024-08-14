@@ -1,0 +1,30 @@
+.settingsPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    background-color: rgb(71, 64, 59);
+}
+
+.settingsGrid {
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 15px;
+    column-gap: 15px;
+}
+
+.settingsGrid > * {
+    width: 100%;
+    height: 100%;
+    justify-self: center;
+}

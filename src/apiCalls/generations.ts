@@ -1,7 +1,8 @@
 import { defaultURL, generationsEndpoint } from "../types/api.type"
 import { Generation } from "../types/generation.type"
+import { Lang } from "../types/lang.type"
 
-const getAllGens = async (): Promise<Generation[]> => {
+const getAllGens = async (lang: Lang): Promise<Generation[]> => {
     const allGens: Generation[] = []
     let lastEnteredPokemonId = 0
 
@@ -12,9 +13,11 @@ const getAllGens = async (): Promise<Generation[]> => {
         for (let index = 0; index < allGensJson.results.length; index++) {
             const specificGenRes = await fetch(allGensJson.results[index].url)
             const specificGenJson = await specificGenRes.json()
-            
+
             allGens.push({
-                name: specificGenJson.names.find((elem: any) => elem.language.name === 'en').name ?? "",
+                name: specificGenJson.names.find((elem: any) => {
+                    return elem.language.name.toLowerCase() === lang.id.toLowerCase()
+                }).name ?? "",
                 firstPokemonId: lastEnteredPokemonId + 1,
                 lastPokemonId: lastEnteredPokemonId + specificGenJson.pokemon_species.length
             })

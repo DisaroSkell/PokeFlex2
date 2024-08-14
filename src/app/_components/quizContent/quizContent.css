@@ -2,11 +2,9 @@
     height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    font-family: 'Alagard', sans-serif;
 }
 
 .guessContainer {
@@ -27,23 +25,24 @@
     display: flex;
     justify-content: space-between;
     height: 20%;
-    width: 90%;
-    padding: 0 5%;
+    width: 100%;
+    padding: 2%;
 }
 
 .streaksContainer {
     display: flex;
     flex-direction: column;
-    padding: 15px;
     gap: 10px;
-    
-    p {
-        margin: 0;
-    }
 }
 
 .infoContainerContent {
     height: 80%;
+}
+
+.timerContainer {
+    display: flex;
+    justify-content: center;
+    font-family: 'retro-monospaced', sans-serif;
 }
 
 .inputGroup {
@@ -77,7 +76,18 @@
     }
 }
 
+.timerSliderContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .absoluteRight {
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    justify-content: space-around;
+    align-items: center;
     position: absolute;
     right: 5%;
 }
@@ -85,15 +95,4 @@
 .absoluteLeft {
     position: absolute;
     left: 5%;
-}
-
-.quizSelectors {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-
-    h2 {
-        margin: 0 0 10px;
-        font-size: 20px;
-    }
 }

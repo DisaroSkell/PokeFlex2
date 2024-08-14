@@ -1,0 +1,33 @@
+.languageCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.cardContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50%;
+    width: 100%;
+}
+
+.languageSelector {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
+.verticalSeparator {
+    height: 100%;
+    width: 5px;
+    background-color: rgb(19, 14, 10);
+    border-radius: 30px;
+}

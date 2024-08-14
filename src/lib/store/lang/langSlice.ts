@@ -3,7 +3,7 @@ import { createSliceWithThunks } from '../customCreateSlice';
 
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { Lang } from "@/src/types/lang.type"
+import { defaultLanguage, Lang, supportedLanguages } from "@/src/types/lang.type"
 import { getAllOfficialLanguages } from '@/src/apiCalls/lang';
 
 interface LangState {
@@ -16,22 +16,9 @@ interface LangState {
     } | null
 }
 
-const english: Lang = {
-    id: "en",
-    fullName: "English"
-}
-const french: Lang = {
-    id: "fr",
-    fullName: "Français"
-}
-const japanese: Lang = {
-    id: "ja-Hrkt",
-    fullName: "日本語"
-}
-
 const initialState: LangState = {
-    langs: [english, french, japanese],
-    selectedLang: english,
+    langs: supportedLanguages,
+    selectedLang: defaultLanguage,
     loading: false,
     error: null,
 }
