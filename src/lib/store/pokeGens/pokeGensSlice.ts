@@ -4,6 +4,7 @@ import { createSliceWithThunks } from '../customCreateSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { Generation } from '@/src/types/generation.type'
 import { getAllGens } from '@/src/apiCalls/generations';
+import { Lang } from '@/src/types/lang.type';
 
 interface GenState {
     gens: Generation[]
@@ -26,15 +27,21 @@ export const pokeGensSlice = createSliceWithThunks({
     name: 'pokeGens',
     initialState,
     reducers: (create) => ({
-        fetchPokeGens: create.asyncThunk(
-            async (_, { rejectWithValue }) => {
+        fetchPokeGens: create.asyncThunk<
+        Generation[],
+        Lang, 
+        {
+            rejectValue: { status: number, message: string }
+        }
+    >(
+            async (lang, { rejectWithValue }) => {
                 try {
-                    return await getAllGens();
+                    return await getAllGens(lang);
                 } catch (error: any) {
                     if (error.status && error.message) {
                         return rejectWithValue(error);
                     } else {
-                        return rejectWithValue("Unknown error !");
+                        return rejectWithValue({status: 500, message: "Unknown error !"});
                     }
                 }
             },
