@@ -19,7 +19,7 @@ export default async function Header({
 
     return <div className="pokeHeader">
         <div className="container">
-            <Link href="/">
+            <Link href={`/${locale}/`}>
                 <Image
                     className="logoImg"
                     src={`${nextConfig.basePath}/Logo.png`}
@@ -30,8 +30,8 @@ export default async function Header({
             </Link>
         </div>
         <div className="pages">
-            <Link className="pageButton" href="/quiz">{t("quiz")}</Link>
-            <Link className="pageButton" href="/settings">{t("settings")}</Link>
+            <Link className="pageButton" href={`/${locale}/quiz`}>{t("quiz")}</Link>
+            <Link className="pageButton" href={`/${locale}/settings`}>{t("settings")}</Link>
         </div>
     </div>
 }

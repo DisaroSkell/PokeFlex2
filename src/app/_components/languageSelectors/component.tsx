@@ -62,7 +62,7 @@ export default function LanguageSelectors({
                              + daysBeforeExpiration
                              * 24 * 60 * 60 * 1000);
 
-        document.cookie = `NEXT_LOCALE=${newLocale};expires=${expirationDate.toUTCString()};path=${nextConfig.basePath}`;
+        document.cookie = `NEXT_LOCALE=${newLocale};expires=${expirationDate.toUTCString()};path=${nextConfig.basePath};SameSite=Strict`;
 
         let newPath = '';
 
