@@ -8,4 +8,5 @@ export const i18nConfig: I18nConfig = {
     locales: i18nSupportedLanguages,
     defaultLocale: i18nDefaultLanguage,
     basePath: nextConfig.basePath,
+    prefixDefault: true,
 };
