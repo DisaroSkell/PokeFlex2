@@ -1,5 +1,7 @@
 import initTranslations from "@/src/i18n";
 
+import { i18nSupportedLanguages } from "@/i18nConfig";
+
 import TranslationsProvider from "@/src/app/_components/providers/translationsProvider";
 import LanguageSelectors from "@/src/app/_components/languageSelectors/component";
 
@@ -7,6 +9,10 @@ import "./settings.css";
 import GenerationSelector from "@/src/app/_components/generationSelector/component";
 
 const i18nNamespaces = ["settings", "common"];
+
+export async function generateStaticParams() {
+    return i18nSupportedLanguages.map((i18nLang) => ({locale: i18nLang}));
+}
 
 interface QuizPageProps {
     params: { locale: string }
