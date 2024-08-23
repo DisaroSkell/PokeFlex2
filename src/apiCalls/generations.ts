@@ -15,6 +15,7 @@ const getAllGens = async (lang: Lang): Promise<Generation[]> => {
             const specificGenJson = await specificGenRes.json()
 
             allGens.push({
+                id: specificGenJson.id,
                 name: specificGenJson.names.find((elem: any) => {
                     return elem.language.name.toLowerCase() === lang.id.toLowerCase()
                 }).name ?? "",

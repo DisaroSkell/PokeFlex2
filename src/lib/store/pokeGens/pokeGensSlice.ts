@@ -8,7 +8,7 @@ import { Lang } from '@/src/types/lang.type';
 
 interface GenState {
     gens: Generation[]
-    selectedGens: Generation[]
+    selectedGens: number[]
     loading: boolean
     error: {
         status: number
@@ -62,18 +62,20 @@ export const pokeGensSlice = createSliceWithThunks({
                 fulfilled: (state, action) => {
                     state.loading = false;
                     state.gens = action.payload;
-                    if (!state.selectedGens.length) state.selectedGens = action.payload;
+                    if (!state.selectedGens.length) state.selectedGens = action.payload.map(gen => gen.id);
                 }
             }
         ),
         setSelectedGens: create.reducer((state, action: PayloadAction<Generation[]>) => {
-            state.selectedGens = action.payload;
+            state.selectedGens = action.payload.map(gen => gen.id);
         }),
         addToSelectedGens: create.reducer((state, action: PayloadAction<Generation>) => {
-            state.selectedGens.push(action.payload);
+            if (state.selectedGens.some(genId => genId === action.payload.id)) return;
+
+            state.selectedGens.push(action.payload.id);
         }),
         removeFromSelectedGens: create.reducer((state, action: PayloadAction<Generation>) => {
-            const indexToRemove = state.selectedGens.findIndex((g) => g.name === action.payload.name);
+            const indexToRemove = state.selectedGens.findIndex(genId => genId === action.payload.id);
 
             if (indexToRemove !== -1) state.selectedGens.splice(indexToRemove, 1);
         })

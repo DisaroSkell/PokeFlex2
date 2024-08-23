@@ -30,6 +30,7 @@ export default function QuizContent() {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch()
+    const allGens = useAppSelector(state => state.gens.gens)
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
     const selectedLang = useAppSelector(state => state.lang.selectedLang)
     
@@ -61,7 +62,7 @@ export default function QuizContent() {
         if (!pokeHasToChange || selectedGens.length === 0 || !selectedLang) return
         
         // Chooses a random selected gen
-        const randomGen = selectedGens[Math.floor(Math.random() * selectedGens.length)]
+        const randomGen = allGens[selectedGens[Math.floor(Math.random() * selectedGens.length)]]
         // Choose a random pokemon id in this gen
         const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
         
@@ -74,18 +75,22 @@ export default function QuizContent() {
                 console.error(err)
                 setPokeHasToChange(false)
             })
-    }, [selectedGens, selectedLang, pokeHasToChange])
+    }, [allGens, selectedGens, selectedLang, pokeHasToChange])
 
     // Resets on change selectors value
     useEffect(() => {
         setCurrentInput('')
         setSubmitFeedback('')
         setStreakCount(0)
-        setBestStreakKey(formatStreaksKey(selectedInfoOption, selectedGuessOption, selectedGens))
+        setBestStreakKey(formatStreaksKey(
+            selectedInfoOption,
+            selectedGuessOption,
+            allGens.filter(gen => selectedGens.some(selected => gen.id === selected))
+        ));
         setPokeHasToChange(true)
         setPokeType1Input(null);
         setPokeType2Input(null);
-    }, [selectedGens, selectedInfoOption, selectedGuessOption])
+    }, [allGens, selectedGens, selectedInfoOption, selectedGuessOption])
 
     // Reset timer on Pokémon change and auto give up value change
     useEffect(() => {

@@ -14,7 +14,8 @@ import { fetchPokeGens, setSelectedGens } from "@/src/lib/store/pokeGens/pokeGen
 import "./generationSelector.css"
 
 interface GenOptions {
-    name: string
+    key: number
+    label: string
     selected: boolean
 }
 
@@ -37,8 +38,9 @@ export default function GenerationSelector({
 
     useEffect(() => {
         setGenOptions(allGens.map((gen) => {return{
-            name: gen.name,
-            selected: selectedGens.some((g) => gen.name === g.name)
+            key: gen.id,
+            label: gen.name,
+            selected: selectedGens.some((genId) => gen.id === genId)
         }}))
     }, [allGens, selectedGens])
 
@@ -51,7 +53,7 @@ export default function GenerationSelector({
             // mismatch case 1 : genOptions option is selected but isn't in selected gens
             // mismatch case 2 : genOptions option isn't selected but is in selected gens
             // case 1 and 2 simplify to a XOR
-            misMatching = misMatching || (genOptions[i].selected !== selectedGens.some(g => g.name === genOptions[i].name))
+            misMatching = misMatching || (genOptions[i].selected !== selectedGens.some(genId => genId === genOptions[i].key))
         }
         
         setUnsavedChanges(misMatching)
@@ -62,7 +64,8 @@ export default function GenerationSelector({
         for (let iterator = 0; iterator < genOptions.length; iterator++) {
             if(iterator === genIndex) {
                 newGenOptions.push({
-                    name: genOptions[iterator].name,
+                    key: genOptions[iterator].key,
+                    label: genOptions[iterator].label,
                     selected: newValue
                 })
             } else newGenOptions.push(genOptions[iterator])
@@ -72,13 +75,11 @@ export default function GenerationSelector({
     }
 
     const gensToDisplay = () => {
-        let key = 0
         return genOptions.map((gen, genIndex) => {
-            key++
             return (
                 <CheckboxWithLabel
-                    key={`${gen.name}-${key}`}
-                    label={gen.name}
+                    key={gen.key}
+                    label={gen.label}
                     value={gen.selected}
                     onValueChange={(newValue) => onGenOptionValueChange(genIndex, newValue)}
                 />
@@ -106,8 +107,9 @@ export default function GenerationSelector({
 
     function cancelChangesCallback() {
         setGenOptions(allGens.map((gen) => {return{
-            name: gen.name,
-            selected: selectedGens.some((g) => gen.name === g.name)
+            key: gen.id,
+            label: gen.name,
+            selected: selectedGens.some((genId) => gen.id === genId)
         }}))
     }
     
