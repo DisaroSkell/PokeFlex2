@@ -62,7 +62,9 @@ export default function QuizContent() {
         if (!pokeHasToChange || selectedGens.length === 0 || !selectedLang) return
         
         // Chooses a random selected gen
-        const randomGen = allGens[selectedGens[Math.floor(Math.random() * selectedGens.length)]]
+        const randomGen = allGens
+            .find(gen => gen.id === selectedGens[Math.floor(Math.random() * selectedGens.length)])
+            ?? allGens[0];
         // Choose a random pokemon id in this gen
         const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
         
