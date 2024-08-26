@@ -25,6 +25,7 @@ import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSli
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quizContent.css";
+import AutoGiveupSelector from "../autoGiveupSelector/component";
 
 export default function QuizContent() {
     const { t } = useTranslation();
@@ -33,6 +34,7 @@ export default function QuizContent() {
     const allGens = useAppSelector(state => state.gens.gens)
     const selectedGens = useAppSelector(state => state.gens.selectedGens)
     const selectedLang = useAppSelector(state => state.lang.selectedLang)
+    const userSettings = useAppSelector(state => state.userSettings)
     
     const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
     const [previousPoke, setPreviousPoke] = useState<Pokemon | null>(null)
@@ -50,8 +52,6 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
 
-    const [autoGiveup, setAutoGiveup] = useState(false);
-    const [secondsBetweenMons, setSecondsBetweenMons] = useState(30);
     const [isTimerPaused, setTimerPaused] = useState(false);
     const [timerResetKey, setTimerResetKey] = useState(0);
 
@@ -98,7 +98,7 @@ export default function QuizContent() {
     useEffect(() => {
         setTimerPaused(false);
         setTimerResetKey(key => key + 1);
-    }, [currentPoke, autoGiveup]);
+    }, [currentPoke, userSettings.autoGiveup.enabled]);
 
     // Streak increase check
     useEffect(() => {
@@ -252,8 +252,8 @@ export default function QuizContent() {
     }, [currentPoke, selectedGuessOption])
 
     const autoGiveUpCallback = useCallback(() => {
-        if (autoGiveup) giveUpCallback();
-    }, [autoGiveup, giveUpCallback]);
+        if (userSettings.autoGiveup.enabled) giveUpCallback();
+    }, [userSettings.autoGiveup.enabled, giveUpCallback]);
 
     // Give up key listener
     useEffect(() => {
@@ -297,8 +297,8 @@ export default function QuizContent() {
                     </div>
                 </div>
 
-                {autoGiveup && <CountdownTimer
-                    startTime={secondsBetweenMons * 1000}
+                {userSettings.autoGiveup.enabled && <CountdownTimer
+                    startTime={userSettings.autoGiveup.selectedTimeBeforeGiveup * 1000}
                     paused={isTimerPaused}
                     resetKey={timerResetKey}
                     timeOverCallback={() => autoGiveUpCallback()}
@@ -337,14 +337,8 @@ export default function QuizContent() {
                 <div className="pokeCard">
                     <GenerationSelector />
                 </div>
-                <div className="pokeCard timerSliderContainer">
-                    <CheckboxWithLabel
-                        key={"autogiveup"}
-                        label={t("auto-giveup")}
-                        value={autoGiveup}
-                        onValueChange={setAutoGiveup}
-                    />
-                    <TimeSlider min={1} max={5 * 60} value={secondsBetweenMons} label={t("time-before-giveup")} onChange={setSecondsBetweenMons} disabled={!autoGiveup} />
+                <div className="pokeCard">
+                    <AutoGiveupSelector />
                 </div>
             </div>
         </div>

@@ -6,12 +6,14 @@ import pokeGensReducer from './pokeGens/pokeGensSlice';
 import langReducer from './lang/langSlice';
 import streakReducer from './streak/streakSlice';
 import pokeTypesReducer from './pokeTypes/pokeTypesSlice';
+import userSettingsReducer from './userSettings/userSettingsSlice';
 
 const rootReducer = combineReducers({
     gens: pokeGensReducer,
     lang: langReducer,
     streak: streakReducer,
     pokeTypes: pokeTypesReducer,
+    userSettings: userSettingsReducer,
 })
 
 const persistConfig = {
