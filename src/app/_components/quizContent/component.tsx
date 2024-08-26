@@ -10,11 +10,9 @@ import CustomButton from "@/src/app/_components/customButton/component";
 import QuizOptionsSelectors from "../../_components/quizOptionsSelectors/component";
 import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
 import TypesGuessSelectors from "../../_components/typesGuessSelectors/component";
-import CheckboxWithLabel from "../checkboxWithLabel/component";
 import CountdownTimer from "../countdownTimer/component";
-import TimeSlider from "../customSlider/timeSlider";
 
-import { PokeGuessOptions, PokeInfoOptions, Pokemon } from "@/src/types/pokemon.type";
+import { PokeGuessOptions, Pokemon } from "@/src/types/pokemon.type";
 import { PokeType } from "@/src/types/pokeType.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
@@ -44,9 +42,6 @@ export default function QuizContent() {
     const [pokeType1Input, setPokeType1Input] = useState<PokeType | null>(null)
     const [pokeType2Input, setPokeType2Input] = useState<PokeType | null>(null)
     const [submitFeedback, setSubmitFeedback] = useState('')
-    
-    const [selectedInfoOption, setSelectedInfoOption] = useState(PokeInfoOptions.Image)
-    const [selectedGuessOption, setSelectedGuessOption] = useState(PokeGuessOptions.ID)
     
     const [streakCount, setStreakCount] = useState(0)
     const streaks = useAppSelector(selectStreaks)
@@ -85,14 +80,14 @@ export default function QuizContent() {
         setSubmitFeedback('')
         setStreakCount(0)
         setBestStreakKey(formatStreaksKey(
-            selectedInfoOption,
-            selectedGuessOption,
+            userSettings.chosenQuizOptions.infoOption,
+            userSettings.chosenQuizOptions.guessOption,
             allGens.filter(gen => selectedGens.some(selected => gen.id === selected))
         ));
         setPokeHasToChange(true)
         setPokeType1Input(null);
         setPokeType2Input(null);
-    }, [allGens, selectedGens, selectedInfoOption, selectedGuessOption])
+    }, [allGens, selectedGens, userSettings.chosenQuizOptions])
 
     // Reset timer on Pokémon change and auto give up value change
     useEffect(() => {
@@ -107,7 +102,7 @@ export default function QuizContent() {
     }, [streakCount, streaks, bestStreakKey, dispatch])
 
     const isCurrentGuessEmpty = useCallback(() => {
-        switch(selectedGuessOption) {
+        switch(userSettings.chosenQuizOptions.guessOption) {
             case PokeGuessOptions.ID:
                 if (!currentInput) return true;
                 break;
@@ -120,7 +115,7 @@ export default function QuizContent() {
         }
 
         return false;
-    }, [selectedGuessOption, currentInput, pokeType1Input]);
+    }, [userSettings.chosenQuizOptions.guessOption, currentInput, pokeType1Input]);
 
     function guessWithID (guess: number, idToGuess: number): boolean {
         if (guess === idToGuess) {
@@ -185,7 +180,7 @@ export default function QuizContent() {
     const guessThePokemonCallback = useCallback(() => {
         let success = true;
         
-        if (currentPoke) switch(selectedGuessOption) {
+        if (currentPoke) switch(userSettings.chosenQuizOptions.guessOption) {
             case PokeGuessOptions.ID:
                 if (!currentInput) return
 
@@ -221,7 +216,7 @@ export default function QuizContent() {
         } else {
             setStreakCount(-1)
         }
-    }, [currentInput, currentPoke, selectedGuessOption, pokeType1Input, pokeType2Input])
+    }, [currentInput, currentPoke, userSettings.chosenQuizOptions.guessOption, pokeType1Input, pokeType2Input])
 
     function giveSolution(pokeToGuess: Pokemon, guessOption: PokeGuessOptions) {
         switch(guessOption) {
@@ -247,9 +242,9 @@ export default function QuizContent() {
             setPokeType2Input(null);
             setStreakCount(0);
             setTimerPaused(true);
-            giveSolution(currentPoke, selectedGuessOption);
+            giveSolution(currentPoke, userSettings.chosenQuizOptions.guessOption);
         }
-    }, [currentPoke, selectedGuessOption])
+    }, [currentPoke, userSettings.chosenQuizOptions.guessOption])
 
     const autoGiveUpCallback = useCallback(() => {
         if (userSettings.autoGiveup.enabled) giveUpCallback();
@@ -269,12 +264,7 @@ export default function QuizContent() {
     return (
         <div className="quiz">
             <div className="absoluteLeft">
-                <QuizOptionsSelectors
-                    infoOptionValue={selectedInfoOption}
-                    onInfoOptionChange={setSelectedInfoOption}
-                    guessOptionValue={selectedGuessOption}
-                    onGuessOptionChange={setSelectedGuessOption}
-                />
+                <QuizOptionsSelectors />
             </div>
 
             <div className="guessContainer">
@@ -293,7 +283,10 @@ export default function QuizContent() {
                         </div>
                     </div>
                     <div className="infoContainerContent">
-                        <PokeInfoDisplayer pokemon={pokeHasToChange ? null : currentPoke} infoType={selectedInfoOption} />
+                        <PokeInfoDisplayer
+                            pokemon={pokeHasToChange ? null : currentPoke}
+                            infoType={userSettings.chosenQuizOptions.infoOption}
+                        />
                     </div>
                 </div>
 
@@ -306,7 +299,7 @@ export default function QuizContent() {
 
                 <div className="inputGroup">
                     {
-                        selectedGuessOption === PokeGuessOptions.Types ?
+                        userSettings.chosenQuizOptions.guessOption === PokeGuessOptions.Types ?
                         <TypesGuessSelectors 
                             typesValue={{
                                 type1: pokeType1Input?.id ?? '',
@@ -318,7 +311,7 @@ export default function QuizContent() {
                             }} />
                         : <UniversalInput
                             inputValue={currentInput}
-                            guessType={selectedGuessOption}
+                            guessType={userSettings.chosenQuizOptions.guessOption}
                             inputChangeCallback={setCurrentInput}
                             submitCallback={guessThePokemonCallback}
                         />
