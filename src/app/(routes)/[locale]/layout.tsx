@@ -3,6 +3,7 @@ import Footer from "../../_components/footer/component";
 import StoreProvider from "../../_components/providers/storeProvider";
 
 import "../globals.css";
+import { HTMLLangHandler } from "../../_components/htmlLangHandler/component";
 
 export default function DefaultLayout({
   children,
@@ -13,6 +14,7 @@ export default function DefaultLayout({
 }>) {
   return (
     <>
+      <HTMLLangHandler locale={params.locale} />
       <div className="header">
         <Header locale={params.locale} />
       </div>
