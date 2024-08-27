@@ -4,13 +4,14 @@ import nextConfig from "@/next.config.mjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import UniversalInput from "@/src/app/_components/universalInput/component";
-import GenerationSelector from "@/src/app/_components/generationSelector/component";
-import CustomButton from "@/src/app/_components/customButton/component";
-import QuizOptionsSelectors from "../../_components/quizOptionsSelectors/component";
-import PokeInfoDisplayer from "../../_components/pokeInfoDisplayer/component";
-import TypesGuessSelectors from "../../_components/typesGuessSelectors/component";
+import AutoGiveupSelector from "../autoGiveupSelector/component";
 import CountdownTimer from "../countdownTimer/component";
+import CustomButton from "../customButton/component";
+import GenerationSelector from "../generationSelector/component";
+import PokeInfoDisplayer from "../pokeInfoDisplayer/component";
+import QuizOptionsSelectors from "../quizOptionsSelectors/component";
+import TypesGuessSelectors from "../typesGuessSelectors/component";
+import UniversalInput from "../universalInput/component";
 
 import { PokeGuessOptions, Pokemon } from "@/src/types/pokemon.type";
 import { PokeType } from "@/src/types/pokeType.type";
@@ -18,21 +19,24 @@ import { PokeType } from "@/src/types/pokeType.type";
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
+import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
+import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
+import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
 
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quizContent.css";
-import AutoGiveupSelector from "../autoGiveupSelector/component";
 
 export default function QuizContent() {
     const { t } = useTranslation();
 
-    const dispatch = useAppDispatch()
-    const allGens = useAppSelector(state => state.gens.gens)
-    const selectedGens = useAppSelector(state => state.gens.selectedGens)
-    const selectedLang = useAppSelector(state => state.lang.selectedLang)
-    const userSettings = useAppSelector(state => state.userSettings)
+    const dispatch = useAppDispatch();
+    const allGens = useAppSelector(selectGens);
+    const selectedGens = useAppSelector(selectSelectedGens);
+    const selectedLang = useAppSelector(selectCurrentLang);
+    const streaks = useAppSelector(selectStreaks);
+    const userSettings = useAppSelector(selectUserSettings);
     
     const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
     const [previousPoke, setPreviousPoke] = useState<Pokemon | null>(null)
@@ -44,7 +48,6 @@ export default function QuizContent() {
     const [submitFeedback, setSubmitFeedback] = useState('')
     
     const [streakCount, setStreakCount] = useState(0)
-    const streaks = useAppSelector(selectStreaks)
     const [bestStreakKey, setBestStreakKey] = useState('')
 
     const [isTimerPaused, setTimerPaused] = useState(false);

@@ -91,6 +91,7 @@ export const {
 
 export const selectIsLoading = (state: RootState) => state.gens.loading;
 export const selectGens = (state: RootState) => state.gens.gens;
+export const selectSelectedGens = (state: RootState) => state.gens.selectedGens;
 export const selectError = (state: RootState) => state.gens.error;
 
 export default pokeGensSlice.reducer;

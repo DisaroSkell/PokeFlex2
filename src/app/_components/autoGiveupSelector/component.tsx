@@ -15,7 +15,6 @@ export default function AutoGiveupSelector() {
     const autoGiveupSetting = useAppSelector(state => state.userSettings.autoGiveup)
     const dispatch = useAppDispatch();
 
-
     const setAutoGiveup = useCallback((newValue: boolean) => {
         dispatch(setAutoGiveupSetting({
             enabled: newValue,
