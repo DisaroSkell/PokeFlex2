@@ -37,6 +37,9 @@
 
 .infoContainerContent {
     height: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .inputGroup {
@@ -78,9 +81,4 @@
     align-items: center;
     position: absolute;
     right: 5%;
-}
-
-.absoluteLeft {
-    position: absolute;
-    left: 5%;
 }
