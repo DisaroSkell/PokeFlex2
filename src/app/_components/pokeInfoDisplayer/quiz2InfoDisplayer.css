@@ -1,7 +1,8 @@
 .infoDisplayer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 10%;
     height: 100%;
     width: 98%;
     padding: 0 1%;
