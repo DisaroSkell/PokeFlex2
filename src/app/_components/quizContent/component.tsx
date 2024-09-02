@@ -25,6 +25,7 @@ import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSli
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
 
 import { formatStreaksKey } from "@/src/utils/streaks";
+import { normalizePokeName } from "@/src/utils/utils";
 
 import "./quizContent.css";
 
@@ -136,8 +137,8 @@ export default function QuizContent() {
     }
 
     function guessWithName (guess: string, nameToGuess: string): boolean {
-        const normalizedGuess = guess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
-        const normalizedName = nameToGuess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
+        const normalizedGuess = normalizePokeName(guess);
+        const normalizedName = normalizePokeName(nameToGuess);
 
         if (normalizedGuess === normalizedName) {
             setSubmitFeedback("right");

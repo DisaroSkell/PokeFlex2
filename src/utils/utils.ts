@@ -2,6 +2,15 @@ export function capitalize(s: string) {
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+export function normalizePokeName(s: string) {
+    return s
+        .trim()
+        .replaceAll(/[^\p{L}]/gu, '')
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/\p{Diacritic}/gu, '');
+}
+
 export function formatNumberToMinNdigits(numberToFormat: number, n: number): string {
     if (n <= 0) {
         return numberToFormat.toString()
