@@ -13,7 +13,7 @@ import UniversalInput from "../universalInput/component";
 
 import { PokeGuessOptions, PokeInfoOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
 
-import { usePoke } from "@/src/lib/hooks/usePoke";
+import { use2Pokes } from "@/src/lib/hooks/use2Pokes";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
@@ -31,17 +31,21 @@ export default function Quiz2Content() {
 
     const dispatch = useAppDispatch();
     const allGens = useAppSelector(selectGens);
-    const selectedGens = useAppSelector(selectSelectedGens);
+    const selectedGensID = useAppSelector(selectSelectedGens);
     const selectedLang = useAppSelector(selectCurrentLang);
     const streaks = useAppSelector(selectStreaks);
     const userSettings = useAppSelector(selectUserSettings);
+
+    const selectedGens = useMemo(() => {
+        return allGens.filter(gen => selectedGensID.some(selected => gen.id === selected));
+    }, [selectedGensID]);
     
     const [
         poke1,
-        isPokeLoading,,
         poke2,
+        isPokeLoading,
         changePokes,
-    ] = usePoke(selectedLang, allGens.filter(gen => selectedGens.some(selected => gen.id === selected)));
+    ] = use2Pokes(selectedLang, selectedGens);
     const [previousAnswer, setPreviousAnswer] = useState<Pokemon | null>(null);
     const [pokeHasToChange, setPokeHasToChange] = useState(true);
     const [guessingPos, setGuessingPos] = useState<PokePos | null>(null);
@@ -89,7 +93,7 @@ export default function Quiz2Content() {
         setBestStreakKey("q2-" + formatStreaksKey(
             PokeInfoOptions.Image,
             PokeGuessOptions.Name,
-            allGens.filter(gen => selectedGens.some(selected => gen.id === selected))
+            selectedGens,
         ));
         setPokeHasToChange(true)
     }, [allGens, selectedGens, userSettings.chosenQuizOptions])

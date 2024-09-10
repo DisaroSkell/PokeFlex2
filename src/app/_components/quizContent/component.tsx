@@ -1,7 +1,7 @@
 'use client'
 
 import nextConfig from "@/next.config.mjs";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import AutoGiveupSelector from "../autoGiveupSelector/component";
@@ -26,7 +26,6 @@ import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSli
 
 import { guessWithID, guessWithName, guessWithTypes } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
-import { normalizePokeName } from "@/src/utils/utils";
 
 import "./quizContent.css";
 
@@ -35,16 +34,20 @@ export default function QuizContent() {
 
     const dispatch = useAppDispatch();
     const allGens = useAppSelector(selectGens);
-    const selectedGens = useAppSelector(selectSelectedGens);
+    const selectedGensID = useAppSelector(selectSelectedGens);
     const selectedLang = useAppSelector(selectCurrentLang);
     const streaks = useAppSelector(selectStreaks);
     const userSettings = useAppSelector(selectUserSettings);
+
+    const selectedGens = useMemo(() => {
+        return allGens.filter(gen => selectedGensID.some(selected => gen.id === selected));
+    }, [selectedGensID]);
     
     const [
         currentPoke,
         isPokeLoading,
         changePoke,
-    ] = usePoke(selectedLang, allGens.filter(gen => selectedGens.some(selected => gen.id === selected)));
+    ] = usePoke(selectedLang, selectedGens);
     const [previousPoke, setPreviousPoke] = useState<Pokemon | null>(null)
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
     
@@ -77,7 +80,7 @@ export default function QuizContent() {
         setBestStreakKey(formatStreaksKey(
             userSettings.chosenQuizOptions.infoOption,
             userSettings.chosenQuizOptions.guessOption,
-            allGens.filter(gen => selectedGens.some(selected => gen.id === selected))
+            selectedGens,
         ));
         setPokeHasToChange(true)
         setPokeType1Input(null);

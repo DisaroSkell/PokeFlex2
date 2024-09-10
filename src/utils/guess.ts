@@ -1,5 +1,7 @@
 import { PokeType } from "../types/pokeType.type";
 
+import { normalizePokeName } from "./utils";
+
 interface guessReturnType {
     success: boolean,
     feedback: string
@@ -27,8 +29,8 @@ export function guessWithID (guess: number, idToGuess: number): guessReturnType 
 }
 
 export function guessWithName (guess: string, nameToGuess: string): guessReturnType {
-    const normalizedGuess = guess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
-    const normalizedName = nameToGuess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
+    const normalizedGuess = normalizePokeName(guess);
+    const normalizedName = normalizePokeName(nameToGuess);
 
     if (normalizedGuess === normalizedName) {
         return {
