@@ -39,6 +39,8 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks);
     const userSettings = useAppSelector(selectUserSettings);
     
+    const QUEUE_CAPACITY = 2
+    const [pokeQueue, setPokeQueue] = useState<Pokemon[]>([])
     const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
     const [previousPoke, setPreviousPoke] = useState<Pokemon | null>(null)
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
@@ -56,39 +58,58 @@ export default function QuizContent() {
 
     const audioRef = useRef<HTMLAudioElement>(null)
 
-    // fetch image
-    useEffect(() => {
-        if (!pokeHasToChange || selectedGens.length === 0 || !selectedLang) return
-        
+    const fillQueueByOne = useCallback(async () => {
+        if (selectedGens.length === 0) return;
+
         // Chooses a random selected gen
         const randomGen = allGens
             .find(gen => gen.id === selectedGens[Math.floor(Math.random() * selectedGens.length)])
             ?? allGens[0];
         // Choose a random pokemon id in this gen
-        const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
+        const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId);
         
-        getPokeWithId(randomId, selectedLang)
-            .then((poke) => {
-                setCurrentPoke(poke)
-                setPokeHasToChange(false)
-            })
-            .catch((err) => {
-                console.error(err)
-                setPokeHasToChange(false)
-            })
-    }, [allGens, selectedGens, selectedLang, pokeHasToChange])
+        const poke = await getPokeWithId(randomId, selectedLang);
+        if (poke) setPokeQueue(prevQueue => {
+            if (prevQueue.length >= QUEUE_CAPACITY) {
+                return prevQueue;
+            }
+
+            return [...prevQueue, poke];
+        });
+    }, [allGens, selectedGens, selectedLang]);
+
+    // Change poke to display
+    useEffect(() => {
+        if (!pokeHasToChange) return;
+        
+        setPokeQueue(currentValue => {
+            if (currentValue.length === 0 || !pokeHasToChange) return currentValue;
+
+            setPokeHasToChange(false);
+            const newValue = [...currentValue];
+            setCurrentPoke(newValue.shift() ?? null);
+
+            return newValue;
+        });
+    }, [pokeHasToChange, pokeQueue]);
+
+    // Fill queue
+    useEffect(() => {
+        fillQueueByOne();
+    }, [pokeQueue, fillQueueByOne]);
 
     // Resets on change selectors value
     useEffect(() => {
-        setCurrentInput('')
-        setSubmitFeedback('')
-        setStreakCount(0)
+        setCurrentInput('');
+        setSubmitFeedback('');
+        setStreakCount(0);
         setBestStreakKey(formatStreaksKey(
             userSettings.chosenQuizOptions.infoOption,
             userSettings.chosenQuizOptions.guessOption,
             allGens.filter(gen => selectedGens.some(selected => gen.id === selected))
         ));
-        setPokeHasToChange(true)
+        setPokeQueue([]);
+        setPokeHasToChange(true);
         setPokeType1Input(null);
         setPokeType2Input(null);
     }, [allGens, selectedGens, userSettings.chosenQuizOptions])
