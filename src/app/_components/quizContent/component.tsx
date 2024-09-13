@@ -23,6 +23,7 @@ import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGen
 import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
+import { fetchPokeNames, selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 
 import { guessWithID, guessWithName, guessWithTypes } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
@@ -36,6 +37,7 @@ export default function QuizContent() {
     const allGens = useAppSelector(selectGens);
     const selectedGensID = useAppSelector(selectSelectedGens);
     const selectedLang = useAppSelector(selectCurrentLang);
+    const pokeNames = useAppSelector(selectPokeNames);
     const streaks = useAppSelector(selectStreaks);
     const userSettings = useAppSelector(selectUserSettings);
 
@@ -63,6 +65,11 @@ export default function QuizContent() {
     const [timerResetKey, setTimerResetKey] = useState(0);
 
     const audioRef = useRef<HTMLAudioElement>(null)
+
+    // set poke names
+    useEffect(() => {
+        dispatch(fetchPokeNames(selectedLang));
+    }, [dispatch, selectedLang]);
 
     // fetch image
     useEffect(() => {
@@ -214,6 +221,42 @@ export default function QuizContent() {
         return () => document.removeEventListener('keyup', handleKeyUp, true);
     }, [giveUpCallback])
 
+    const onInputChangeCallback = useCallback(async (newValue: string) => {
+        setCurrentInput(newValue);
+
+        if (currentPoke && userSettings.chosenQuizOptions.guessOption === PokeGuessOptions.Name) {
+            const startsWith: string[] = [];
+            let foundName: string | undefined = undefined;
+            const normedInput = normalizePokeName(newValue);
+            pokeNames.forEach(elem => {
+                const normedName = normalizePokeName(elem.name);
+                if (normedName === normedInput) {
+                    foundName = elem.name;
+                } else if (normedName.startsWith(normedInput)) {
+                    startsWith.push(elem.name);
+                }
+            })
+
+            if (foundName) {
+                const success = guessWithName(newValue, currentPoke.name);
+
+                if (success) {
+                    setCurrentInput('');
+                    setPokeHasToChange(true);
+                    setStreakCount((streak) => streak + 1);
+                    setTimerPaused(true);
+                    audioRef.current?.play();
+                } else if (startsWith.length === 0) {
+                    setCurrentInput('');
+                    setSubmitFeedback(`That's not ${foundName}`);
+                    setStreakCount(-1);
+                } else {
+                    setSubmitFeedback('');
+                }
+            }
+        }
+    }, [userSettings.chosenQuizOptions.guessOption, currentPoke, pokeNames]);
+
     return (
         <div className="quiz">
             <div className="absoluteLeft">
@@ -266,7 +309,7 @@ export default function QuizContent() {
                         : <UniversalInput
                             inputValue={currentInput}
                             guessType={userSettings.chosenQuizOptions.guessOption}
-                            inputChangeCallback={setCurrentInput}
+                            inputChangeCallback={onInputChangeCallback}
                             submitCallback={guessThePokemonCallback}
                         />
                     }

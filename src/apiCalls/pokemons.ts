@@ -1,4 +1,4 @@
-import { defaultURL, pokemonsEndpoint } from "../types/api.type"
+import { defaultURL, gqlURL, pokemonsEndpoint } from "../types/api.type"
 import { Lang } from "../types/lang.type"
 import { Pokemon } from "../types/pokemon.type"
 import { getPokeType } from "./pokeTypes"
@@ -49,4 +49,41 @@ const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null
     return null
 }
 
-export { getPokeWithId }
+const getAllPokeNames = async (lang: Lang): Promise<{id: number, name: string}[]> => {
+    try {
+        const pokeRes = await fetch(gqlURL, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                query: `{
+                    pokemon_v2_pokemonspeciesname(where: {
+                        pokemon_v2_language: {
+                            name: {_eq: ${lang.id}}
+                        }
+                    }) {
+                        name
+                        pokemon_species_id
+                    }
+                }`
+            })
+        });
+
+        const json = await pokeRes.json()
+
+        // TODO : make verifs so that it doesn't do weird shit
+        return json.data.pokemon_v2_pokemonspeciesname.map((poke: any) => {
+            return {
+                id: poke.pokemon_species_id,
+                name: poke.name
+            }
+        })
+    } catch (err) {
+        console.error(err);
+    }
+
+    return [];
+}
+
+export { getPokeWithId, getAllPokeNames }
