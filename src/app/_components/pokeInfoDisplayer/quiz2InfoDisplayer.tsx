@@ -98,7 +98,7 @@ export default function Quiz2InfoDisplayer({
         return elementsArray;
     }
 
-    return <div className="infoDisplayer">
+    return <div className="quiz2InfoDisplayer">
         {elementsToDisplay()}
     </div>
 }
