@@ -16,6 +16,7 @@ interface QuizOptionsSetting {
 interface UserSettingsState {
     autoGiveup: AutoGiveupSetting
     chosenQuizOptions: QuizOptionsSetting
+    autoValidate: boolean
 }
 
 const initialState: UserSettingsState = {
@@ -27,6 +28,7 @@ const initialState: UserSettingsState = {
         infoOption: PokeInfoOptions.Image,
         guessOption: PokeGuessOptions.ID,
     },
+    autoValidate: true
 }
 
 export const userSettingsSlice = createSlice({
@@ -42,13 +44,17 @@ export const userSettingsSlice = createSlice({
         setQuizOptionsSetting(state, action: PayloadAction<QuizOptionsSetting>) {
             state.chosenQuizOptions = action.payload; 
         },
+        setAutoValidateSetting(state, action: PayloadAction<boolean>) {
+            state.autoValidate = action.payload;
+        }
     },
 })
 
-export const { setAllSettings, setAutoGiveupSetting, setQuizOptionsSetting } = userSettingsSlice.actions;
+export const { setAllSettings, setAutoGiveupSetting, setQuizOptionsSetting, setAutoValidateSetting } = userSettingsSlice.actions;
 
 export const selectUserSettings = (state: RootState) => state.userSettings;
 export const selectAutoGiveupSetting = (state: RootState) => state.userSettings.autoGiveup;
 export const selectQuizOptionsSetting = (state: RootState) => state.userSettings.chosenQuizOptions;
+export const selectAutoValidateSetting = (state: RootState) => state.userSettings.autoValidate;
 
 export default userSettingsSlice.reducer;

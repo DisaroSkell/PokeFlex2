@@ -224,6 +224,10 @@ export default function QuizContent() {
     const onInputChangeCallback = useCallback(async (newValue: string) => {
         setCurrentInput(newValue);
 
+        if (!userSettings.autoValidate) {
+            return;
+        }
+
         if (currentPoke && userSettings.chosenQuizOptions.guessOption === PokeGuessOptions.Name) {
             const startsWith: string[] = [];
             let foundName: string | undefined = undefined;
@@ -255,7 +259,12 @@ export default function QuizContent() {
                 }
             }
         }
-    }, [userSettings.chosenQuizOptions.guessOption, currentPoke, pokeNames]);
+    }, [
+        userSettings.autoValidate,
+        userSettings.chosenQuizOptions.guessOption,
+        currentPoke,
+        pokeNames
+    ]);
 
     return (
         <div className="quiz">
