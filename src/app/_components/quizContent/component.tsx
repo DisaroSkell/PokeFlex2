@@ -257,6 +257,8 @@ export default function QuizContent() {
                 } else {
                     setSubmitFeedback('');
                 }
+            } else {
+                setSubmitFeedback('');
             }
         }
     }, [
