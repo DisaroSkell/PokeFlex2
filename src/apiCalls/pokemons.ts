@@ -49,7 +49,8 @@ const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null
     return null
 }
 
-const getAllPokeNames = async (lang: Lang): Promise<{id: number, name: string}[]> => {
+interface PokeName {id: number, name: string}
+const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
     try {
         const pokeRes = await fetch(gqlURL, {
             method: 'POST',
@@ -72,13 +73,31 @@ const getAllPokeNames = async (lang: Lang): Promise<{id: number, name: string}[]
 
         const json = await pokeRes.json()
 
-        // TODO : make verifs so that it doesn't do weird shit
-        return json.data.pokemon_v2_pokemonspeciesname.map((poke: any) => {
-            return {
-                id: poke.pokemon_species_id,
-                name: poke.name
-            }
-        })
+        if (
+            !json.data?.pokemon_v2_pokemonspeciesname?.length
+        ) {
+            return [];
+        }
+
+        const namesArray = json.data.pokemon_v2_pokemonspeciesname as any[]
+
+        return namesArray
+            .map((poke: any): PokeName | null => {
+                if (
+                    !poke.pokemon_species_id
+                    || typeof poke.pokemon_species_id !== "number"
+                    || !poke.name
+                    || typeof poke.name !== "string"
+                ) {
+                    return null;
+                }
+
+                return {
+                    id: poke.pokemon_species_id,
+                    name: poke.name
+                }
+            })
+            .filter((poke: PokeName | null) => poke !== null);
     } catch (err) {
         console.error(err);
     }
