@@ -8,6 +8,7 @@ import AutoGiveupSelector from "../autoGiveupSelector/component";
 import CountdownTimer from "../countdownTimer/component";
 import CustomButton from "../customButton/component";
 import GenerationSelector from "../generationSelector/component";
+import Quiz2InfoDisplayer from '../pokeInfoDisplayer/quiz2InfoDisplayer';
 import UniversalInput from "../universalInput/component";
 
 import { PokeGuessOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
@@ -20,10 +21,10 @@ import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
 
+import { guessWithName } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quiz2Content.css";
-import Quiz2InfoDisplayer from '../pokeInfoDisplayer/quiz2InfoDisplayer';
 
 export default function Quiz2Content() {
     const { t } = useTranslation();
@@ -122,26 +123,13 @@ export default function Quiz2Content() {
         return !currentInput;
     }, [currentInput]);
 
-    function guessWithName (guess: string, nameToGuess: string): boolean {
-        const normalizedGuess = guess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
-        const normalizedName = nameToGuess.trim().replaceAll(/[^\p{L}]/gu, '').toLowerCase();
-
-        if (normalizedGuess === normalizedName) {
-            setSubmitFeedback("right");
-            return true;
-        } else {
-            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("close");
-            else setSubmitFeedback("wrong");
-            return false;
-        }
-    }
-
     const guessThePokemonCallback = useCallback(() => {
         if (!currentInput || !pokeToGuess) return;
         
-        const success = guessWithName(currentInput, pokeToGuess.name);
+        const guessResult = guessWithName(currentInput, pokeToGuess.name);
+        setSubmitFeedback(guessResult.feedback);
 
-        if (success) {
+        if (guessResult.success) {
             setPokeHasToChange(true)
             setCurrentInput('')
             setStreakCount((streak) => streak + 1)

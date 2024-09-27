@@ -7,6 +7,8 @@
     "problem": "Un problème est survenu",
     "right": "Bien joué ;)",
     "wrong": "C'est non :)",
+    "onetype": "Il n'a qu'un type",
+    "twotypes": "Il a deux types",
     "halfright": "Tu as un des deux !",
     "close": "Presque !",
     "stupid": "Pas vraiment ^^",

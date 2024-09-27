@@ -24,6 +24,7 @@ import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
 
+import { guessWithID, guessWithName, guessWithTypes } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
 import { normalizePokeName } from "@/src/utils/utils";
 
@@ -121,66 +122,6 @@ export default function QuizContent() {
         return false;
     }, [userSettings.chosenQuizOptions.guessOption, currentInput, pokeType1Input]);
 
-    function guessWithID (guess: number, idToGuess: number): boolean {
-        if (guess === idToGuess) {
-            setSubmitFeedback("right");
-            return true;
-        } else {
-            const diff = Math.abs(guess - idToGuess)
-
-            if(diff <= 5) setSubmitFeedback("close");
-            else if(diff === 10) setSubmitFeedback("stupid");
-            else if(diff % 100 === 0) setSubmitFeedback("far");
-            else setSubmitFeedback("wrong");
-            return false;
-        }
-    }
-
-    function guessWithName (guess: string, nameToGuess: string): boolean {
-        const normalizedGuess = normalizePokeName(guess);
-        const normalizedName = normalizePokeName(nameToGuess);
-
-        if (normalizedGuess === normalizedName) {
-            setSubmitFeedback("right");
-            return true;
-        } else {
-            if(nameToGuess.includes(guess) || guess.includes(nameToGuess)) setSubmitFeedback("close");
-            else setSubmitFeedback("wrong");
-            return false;
-        }
-    }
-
-    function guessWithTypes (
-        guessForType1: PokeType,
-        guessForType2: PokeType | null,
-        typesToGuess: {type1: PokeType; type2: PokeType|null}
-    ): boolean {
-        const normalizedGuessType1 = guessForType1.fullName.toString().trim().toLowerCase();
-        const normalizedGuessType2 = (guessForType2?.fullName.toString() ?? '').trim().toLowerCase();
-        const guessForTypes = normalizedGuessType1 + normalizedGuessType2;
-        const guessForTypesAlternate = normalizedGuessType2 + normalizedGuessType1;
-
-        const normalizedType1 = typesToGuess.type1.fullName.toString().trim().toLowerCase();
-        const normalizedType2 = (typesToGuess.type2?.fullName.toString() ?? '').trim().toLowerCase();
-        const typesAsString = normalizedType1 + normalizedType2;
-        const typesAlternateAsString = normalizedType2 + normalizedType1;
-
-        if (guessForTypes === typesAsString
-        ||  guessForTypes === typesAlternateAsString
-        ||  guessForTypesAlternate === typesAsString
-        ||  guessForTypesAlternate === typesAlternateAsString) {
-            setSubmitFeedback("right");
-            return true;
-        } else {
-            if(normalizedGuessType1 === normalizedType1
-            || normalizedGuessType1 === normalizedType2
-            || normalizedGuessType2 === normalizedType1
-            || normalizedGuessType2 === normalizedType2) setSubmitFeedback("halfright");
-            else setSubmitFeedback("wrong");
-            return false;
-        }
-    }
-
     const guessThePokemonCallback = useCallback(() => {
         let success = true;
         
@@ -195,17 +136,32 @@ export default function QuizContent() {
                     return;
                 }
 
-                success = guessWithID(currentInputAsNumber, currentPoke.id);
+                {
+                    const guessResult = guessWithID(currentInputAsNumber, currentPoke.id);
+                    success = guessResult.success;
+                    setSubmitFeedback(guessResult.feedback);
+                }
+
                 break;
             case PokeGuessOptions.Name:
                 if (!currentInput) return
 
-                success = guessWithName(currentInput, currentPoke.name);
+                {
+                    const guessResult = guessWithName(currentInput, currentPoke.name);
+                    success = guessResult.success;
+                    setSubmitFeedback(guessResult.feedback);
+                }
+
                 break;
             case PokeGuessOptions.Types:
                 if (!pokeType1Input) return
 
-                success = guessWithTypes(pokeType1Input, pokeType2Input, {type1: currentPoke.type1, type2: currentPoke.type2});
+                {
+                    const guessResult = guessWithTypes(pokeType1Input, pokeType2Input, {type1: currentPoke.type1, type2: currentPoke.type2});
+                    success = guessResult.success;
+                    setSubmitFeedback(guessResult.feedback);
+                }
+
                 break;
         }
 
