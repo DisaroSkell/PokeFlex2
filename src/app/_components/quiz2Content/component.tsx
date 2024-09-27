@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import nextConfig from "@/next.config.mjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,10 +8,9 @@ import AutoGiveupSelector from "../autoGiveupSelector/component";
 import CountdownTimer from "../countdownTimer/component";
 import CustomButton from "../customButton/component";
 import GenerationSelector from "../generationSelector/component";
-import PokeInfoDisplayer from "../pokeInfoDisplayer/component";
 import UniversalInput from "../universalInput/component";
 
-import { PokeGuessOptions, PokeInfoOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
+import { PokeGuessOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
