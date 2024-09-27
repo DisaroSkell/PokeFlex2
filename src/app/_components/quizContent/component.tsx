@@ -13,7 +13,7 @@ import QuizOptionsSelectors from "../quizOptionsSelectors/component";
 import TypesGuessSelectors from "../typesGuessSelectors/component";
 import UniversalInput from "../universalInput/component";
 
-import { PokeGuessOptions, Pokemon } from "@/src/types/pokemon.type";
+import { PokeGuessOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
 import { PokeType } from "@/src/types/pokeType.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
@@ -246,6 +246,7 @@ export default function QuizContent() {
                         <PokeInfoDisplayer
                             pokemon={pokeHasToChange ? null : currentPoke}
                             infoType={userSettings.chosenQuizOptions.infoOption}
+                            pokePos={PokePos.current}
                         />
                     </div>
                 </div>

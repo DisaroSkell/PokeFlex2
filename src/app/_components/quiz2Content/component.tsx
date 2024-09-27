@@ -8,10 +8,10 @@ import AutoGiveupSelector from "../autoGiveupSelector/component";
 import CountdownTimer from "../countdownTimer/component";
 import CustomButton from "../customButton/component";
 import GenerationSelector from "../generationSelector/component";
-import Quiz2InfoDisplayer from '../pokeInfoDisplayer/quiz2InfoDisplayer';
+import PokeInfoDisplayer from "../pokeInfoDisplayer/component";
 import UniversalInput from "../universalInput/component";
 
-import { PokeGuessOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
+import { PokeGuessOptions, PokeInfoOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
 
 import { getPokeWithId } from "@/src/apiCalls/pokemons";
 
@@ -192,8 +192,9 @@ export default function Quiz2Content() {
                         </div>
                     </div>
                     <div className="infoContainerContent">
-                        <Quiz2InfoDisplayer
+                        <PokeInfoDisplayer
                             pokemon={pokeHasToChange ? null : pokeToDisplay}
+                            infoType={PokeInfoOptions.Image}
                             pokePos={guessingPos ?? PokePos.current}
                         />
                     </div>
