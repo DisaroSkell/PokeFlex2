@@ -16,7 +16,7 @@ import UniversalInput from "../universalInput/component";
 import { PokeGuessOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
 import { PokeType } from "@/src/types/pokeType.type";
 
-import { getPokeWithId } from "@/src/apiCalls/pokemons";
+import { usePoke } from "@/src/lib/hooks/usePoke";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
@@ -40,7 +40,11 @@ export default function QuizContent() {
     const streaks = useAppSelector(selectStreaks);
     const userSettings = useAppSelector(selectUserSettings);
     
-    const [currentPoke, setCurrentPoke] = useState<Pokemon | null>(null)
+    const [
+        currentPoke,
+        isPokeLoading,
+        changePoke,
+    ] = usePoke(selectedLang, allGens.filter(gen => selectedGens.some(selected => gen.id === selected)));
     const [previousPoke, setPreviousPoke] = useState<Pokemon | null>(null)
     const [pokeHasToChange, setPokeHasToChange] = useState(true)
     
@@ -59,25 +63,11 @@ export default function QuizContent() {
 
     // fetch image
     useEffect(() => {
-        if (!pokeHasToChange || selectedGens.length === 0 || !selectedLang) return
+        if (!pokeHasToChange || isPokeLoading || selectedGens.length === 0 || !selectedLang) return;
         
-        // Chooses a random selected gen
-        const randomGen = allGens
-            .find(gen => gen.id === selectedGens[Math.floor(Math.random() * selectedGens.length)])
-            ?? allGens[0];
-        // Choose a random pokemon id in this gen
-        const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId)
-        
-        getPokeWithId(randomId, selectedLang)
-            .then((poke) => {
-                setCurrentPoke(poke)
-                setPokeHasToChange(false)
-            })
-            .catch((err) => {
-                console.error(err)
-                setPokeHasToChange(false)
-            })
-    }, [allGens, selectedGens, selectedLang, pokeHasToChange])
+        changePoke();
+        setPokeHasToChange(false);
+    }, [allGens, selectedGens, selectedLang, pokeHasToChange, isPokeLoading, changePoke]);
 
     // Resets on change selectors value
     useEffect(() => {
@@ -244,7 +234,7 @@ export default function QuizContent() {
                     </div>
                     <div className="infoContainerContent">
                         <PokeInfoDisplayer
-                            pokemon={pokeHasToChange ? null : currentPoke}
+                            pokemon={pokeHasToChange || isPokeLoading ? null : currentPoke}
                             infoType={userSettings.chosenQuizOptions.infoOption}
                             pokePos={PokePos.current}
                         />

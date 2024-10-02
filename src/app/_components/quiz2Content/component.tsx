@@ -1,7 +1,7 @@
 'use client';
 
 import nextConfig from "@/next.config.mjs";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import AutoGiveupSelector from "../autoGiveupSelector/component";
@@ -13,7 +13,7 @@ import UniversalInput from "../universalInput/component";
 
 import { PokeGuessOptions, PokeInfoOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
 
-import { getPokeWithId } from "@/src/apiCalls/pokemons";
+import { usePoke } from "@/src/lib/hooks/usePoke";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
@@ -36,11 +36,25 @@ export default function Quiz2Content() {
     const streaks = useAppSelector(selectStreaks);
     const userSettings = useAppSelector(selectUserSettings);
     
-    const [pokeToDisplay, setPokeToDisplay] = useState<Pokemon | null>(null);
-    const [pokeToGuess, setPokeToGuess] = useState<Pokemon | null>(null);
+    const [
+        poke1,
+        isPokeLoading,,
+        poke2,
+        changePokes,
+    ] = usePoke(selectedLang, allGens.filter(gen => selectedGens.some(selected => gen.id === selected)));
     const [previousAnswer, setPreviousAnswer] = useState<Pokemon | null>(null);
     const [pokeHasToChange, setPokeHasToChange] = useState(true);
     const [guessingPos, setGuessingPos] = useState<PokePos | null>(null);
+
+    const pokeToDisplay = useMemo(
+        () => guessingPos === PokePos.next ? poke1 : poke2,
+        [guessingPos, poke1, poke2]
+    );
+
+    const pokeToGuess = useMemo(
+        () => guessingPos === PokePos.next ? poke2 : poke1,
+        [guessingPos, poke1, poke2]
+    );
     
     const [currentInput, setCurrentInput] = useState('');
     const [submitFeedback, setSubmitFeedback] = useState('');
@@ -55,44 +69,17 @@ export default function Quiz2Content() {
 
     // fetch image
     useEffect(() => {
-        if (!pokeHasToChange || selectedGens.length === 0 || !selectedLang) return;
-        
-        // Chooses a random selected gen
-        const randomGen = allGens
-            .find(gen => gen.id === selectedGens[Math.floor(Math.random() * selectedGens.length)])
-            ?? allGens[0];
-        // Choose a random pokemon id in this gen
-        const randomId = Math.floor(Math.random() * (randomGen.lastPokemonId - randomGen.firstPokemonId + 1) + randomGen.firstPokemonId);
+        if (!pokeHasToChange || isPokeLoading || selectedGens.length === 0 || !selectedLang) return;
 
-        getPokeWithId(randomId, selectedLang)
-        .then((poke) => {
-            // Go previous or next at random
-            if ((Math.random() < 0.5 && randomId - 1 >= randomGen.firstPokemonId) || randomId + 1 > randomGen.lastPokemonId) {
-                // Previous poke
-                getPokeWithId(randomId - 1, selectedLang)
-                .then((prevPoke) => {
-                    setGuessingPos(PokePos.prev);
-                    setPokeToDisplay(poke);
-                    setPokeToGuess(prevPoke);
-                    setPokeHasToChange(false);
-                })
-            } else {
-                // Next poke
-                getPokeWithId(randomId + 1, selectedLang)
-                .then((nextPoke) => {
-                    setGuessingPos(PokePos.next);
-                    setPokeToDisplay(poke);
-                    setPokeToGuess(nextPoke);
-                    setPokeHasToChange(false);
-                })
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            setPokeHasToChange(false);
-        });
-        
-    }, [allGens, selectedGens, selectedLang, pokeHasToChange]);
+        changePokes();
+        setPokeHasToChange(false);
+        // Go previous or next at random
+        setGuessingPos(
+            Math.random() < 0.5
+            ? PokePos.prev
+            : PokePos.next
+        );
+    }, [allGens, selectedGens, selectedLang, pokeHasToChange, isPokeLoading, changePokes]);
 
     // Resets on change selectors value
     useEffect(() => {
@@ -124,8 +111,8 @@ export default function Quiz2Content() {
     }, [currentInput]);
 
     const guessThePokemonCallback = useCallback(() => {
-        if (!currentInput || !pokeToGuess) return;
-        
+        if (!currentInput || isPokeLoading || !pokeToGuess) return;
+
         const guessResult = guessWithName(currentInput, pokeToGuess.name);
         setSubmitFeedback(guessResult.feedback);
 
@@ -138,7 +125,7 @@ export default function Quiz2Content() {
         } else {
             setStreakCount(-1)
         }
-    }, [currentInput, pokeToGuess])
+    }, [currentInput, pokeToGuess, isPokeLoading]);
 
     function giveSolution(
         // pokeToGuess: Pokemon
@@ -193,7 +180,7 @@ export default function Quiz2Content() {
                     </div>
                     <div className="infoContainerContent">
                         <PokeInfoDisplayer
-                            pokemon={pokeHasToChange ? null : pokeToDisplay}
+                            pokemon={pokeHasToChange || isPokeLoading ? null : pokeToDisplay}
                             infoType={PokeInfoOptions.Image}
                             pokePos={guessingPos ?? PokePos.current}
                         />
