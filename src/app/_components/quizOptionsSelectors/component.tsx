@@ -1,27 +1,26 @@
 'use client';
 
+import { ChangeEvent, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 import CustomSelect from "../customSelect/component";
 
 import { PokeGuessOptions, PokeInfoOptions } from "@/src/types/pokemon.type";
 
+import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
+import { selectQuizOptionsSetting, setQuizOptionsSetting } from "@/src/lib/store/userSettings/userSettingsSlice";
+
 import "./quizOptionsSelectors.css"
 
 interface QuizOptionsSelectorsProps {
-    infoOptionValue: PokeInfoOptions
-    onInfoOptionChange: (newValue: PokeInfoOptions) => void
-    guessOptionValue: PokeGuessOptions
-    onGuessOptionChange: (newValue: PokeGuessOptions) => void
 }
 
 export default function QuizOptionsSelectors({
-    infoOptionValue,
-    onInfoOptionChange,
-    guessOptionValue,
-    onGuessOptionChange
 }: QuizOptionsSelectorsProps) {
     const { t } = useTranslation();
+
+    const dispatch = useAppDispatch();
+    const quizOptionsSettings = useAppSelector(selectQuizOptionsSetting);
 
     const getPokeInfoOptions = () => {
         const pokeInfoKeys = Object.keys(PokeInfoOptions);
@@ -59,32 +58,42 @@ export default function QuizOptionsSelectors({
         return options;
     }
 
+    const onChangeInfoOption = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+        const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === e.target.value);
+
+        if (foundOption) {
+            dispatch(setQuizOptionsSetting({
+                infoOption: foundOption,
+                guessOption: quizOptionsSettings.guessOption,
+            }));
+        }
+    }, [dispatch, quizOptionsSettings]);
+
+    const onChangeGuessOption = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+        const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === e.target.value)
+
+        if (foundOption) {
+            dispatch(setQuizOptionsSetting({
+                infoOption: quizOptionsSettings.infoOption,
+                guessOption: foundOption,
+            }));
+        }
+    }, [dispatch, quizOptionsSettings]);
+
     return <div className="quizSelectors pokeCard">
         <h2>{t("common:select-info-option")}</h2>
         <CustomSelect
-            value={infoOptionValue}
+            value={quizOptionsSettings.infoOption}
             options={getPokeInfoOptions()}
-            disabledValues={[guessOptionValue]}
-            onChangeCallback={e => {
-                const foundOption = Object.values(PokeInfoOptions).find(option => option.valueOf() === e.target.value)
-
-                if (foundOption) {
-                    onInfoOptionChange(foundOption)
-                }
-            }}
+            disabledValues={[quizOptionsSettings.guessOption]}
+            onChangeCallback={onChangeInfoOption}
         />
         <h2>{t("common:select-guess-option")}</h2>
         <CustomSelect
-            value={guessOptionValue}
+            value={quizOptionsSettings.guessOption}
             options={getPokeGuessOptions()}
-            disabledValues={[infoOptionValue]}
-            onChangeCallback={e => {
-                const foundOption = Object.values(PokeGuessOptions).find(option => option.valueOf() === e.target.value)
-
-                if (foundOption) {
-                    onGuessOptionChange(foundOption)
-                }
-            }}
+            disabledValues={[quizOptionsSettings.infoOption]}
+            onChangeCallback={onChangeGuessOption}
         />
     </div>
 }
