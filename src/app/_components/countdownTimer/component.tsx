@@ -5,6 +5,8 @@ import { useCountdownTimer } from "@/src/lib/hooks/useCountdownTimer";
 import { displayTimer } from "@/src/utils/utils"
 import { useEffect } from "react";
 
+import "./countdownTimer.css";
+
 interface CountdownTimerProps {
     startTime: number
     paused: boolean

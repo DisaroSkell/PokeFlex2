@@ -7,6 +7,8 @@
     "problem": "Something went wrong",
     "right": "You're right ;)",
     "wrong": "You're wrong :D",
+    "onetype": "It has only one type",
+    "twotypes": "It has two types",
     "halfright": "One is right !",
     "close": "You're close !",
     "stupid": "Ahah... No ^^",

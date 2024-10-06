@@ -21,4 +21,10 @@ export enum PokeGuessOptions {
     Types = 'types',
 }
 
+export enum PokePos {
+    current,
+    prev,
+    next,
+}
+
 export const shinyChance = 1/8192;

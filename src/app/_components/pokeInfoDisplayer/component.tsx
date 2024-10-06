@@ -1,22 +1,26 @@
 import nextConfig from "@/next.config.mjs";
 import Image from 'next/image';
 
-import { PokeInfoOptions, Pokemon, shinyChance } from "@/src/types/pokemon.type"
+import { PokeInfoOptions, Pokemon, PokePos, shinyChance } from "@/src/types/pokemon.type"
+
+import { formatNumberToMinNdigits } from "@/src/utils/utils";
 
 import "./pokeInfoDisplayer.css"
 
 interface PokeInfoDisplayerProps {
     pokemon: Pokemon | null
     infoType: PokeInfoOptions
+    pokePos: PokePos
 }
 
 export default function PokeInfoDisplayer({
     pokemon,
-    infoType
+    infoType,
+    pokePos
 }: PokeInfoDisplayerProps) {
     function getLoadingImage() {
         return <Image
-            className={'banana'}
+            className={'imageAutoFit pokemonImg banana'}
             src={`${nextConfig.basePath}/Logo.png`}
             alt={'loading'}
             priority={true}
@@ -24,26 +28,19 @@ export default function PokeInfoDisplayer({
         />
     }
 
-    function getIDElem (id: number | null) {
-        if (!id) {
-            return getLoadingImage();
-        }
-
+    function getIDElem (id: number) {
         return <p>
-            {id}
+            {formatNumberToMinNdigits(id, 3)}
         </p>
     }
 
-    function getImageElem (poke: Pokemon | null) {
-        if (!poke) {
-            return getLoadingImage();
-        }
-
+    function getImageElem (poke: Pokemon) {
         const isShiny = Math.random() < shinyChance;
-        const image = isShiny && poke.shinyImgUrl ? poke.shinyImgUrl : poke.imgUrl
+        const image = isShiny && poke.shinyImgUrl ? poke.shinyImgUrl : poke.imgUrl;
 
         return <>
         <Image
+            className={'imageAutoFit pokemonImg'}
             src={image}
             alt={poke.name}
             priority={true}
@@ -59,32 +56,79 @@ export default function PokeInfoDisplayer({
         </>
     }
 
-    function getNameElem (name: string | null) {
-        if (!name) {
-            return getLoadingImage();
-        }
-
+    function getNameElem (name: string) {
         return <p>
             {name}
         </p>
     }
 
     const elementToDisplay = () => {
-        let elem = <></>
+        if (!pokemon) {
+            return getLoadingImage();
+        }
+
+        const elementsArray: JSX.Element[] = [];
+
+        if (pokePos === PokePos.prev) {
+            elementsArray.push(<Image
+                key={elementsArray.length}
+                className={'imageAutoFit questionMark'}
+                src={`${nextConfig.basePath}/question_mark.webp`}
+                alt={'Question mark symbol'}
+                priority={true}
+                width={1} height={1}
+            />);
+            elementsArray.push(<Image
+                key={elementsArray.length}
+                className={'imageAutoFit arrow transformFlip'}
+                src={`${nextConfig.basePath}/arrow.png`}
+                alt={'Left arrow symbol'}
+                priority={true}
+                width={1} height={1}
+            />);
+        }
+
+        let infoElem = <></>
 
         switch (infoType) {
             case PokeInfoOptions.ID:
-                elem = getIDElem(pokemon ? pokemon.id : null);
+                infoElem = getIDElem(pokemon.id);
                 break;
             case PokeInfoOptions.Image:
-                elem = getImageElem(pokemon);
+                infoElem = getImageElem(pokemon);
             break;
             case PokeInfoOptions.Name:
-                elem = getNameElem(pokemon ? pokemon.name : null);
+                infoElem = getNameElem(pokemon.name);
             break;
         }
 
-        return elem;
+        elementsArray.push(<div
+            className="pokemonContainer"
+            key={elementsArray.length}
+        >
+            {infoElem}
+        </div>);
+
+        if (pokePos === PokePos.next) {
+            elementsArray.push(<Image
+                key={elementsArray.length}
+                className={'imageAutoFit arrow'}
+                src={`${nextConfig.basePath}/arrow.png`}
+                alt={'Right arrow symbol'}
+                priority={true}
+                width={1} height={1}
+            />);
+            elementsArray.push(<Image
+                key={elementsArray.length}
+                className={'imageAutoFit questionMark'}
+                src={`${nextConfig.basePath}/question_mark.webp`}
+                alt={'Question mark symbol'}
+                priority={true}
+                width={1} height={1}
+            />);
+        }
+
+        return elementsArray;
     }
 
     return <div className="infoDisplayer">
