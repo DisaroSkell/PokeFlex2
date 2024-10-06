@@ -87,8 +87,8 @@ export default function Quiz2Content() {
         setSubmitFeedback('')
         setStreakCount(0)
         setBestStreakKey("q2-" + formatStreaksKey(
-            userSettings.chosenQuizOptions.infoOption,
-            userSettings.chosenQuizOptions.guessOption,
+            PokeInfoOptions.Image,
+            PokeGuessOptions.Name,
             allGens.filter(gen => selectedGens.some(selected => gen.id === selected))
         ));
         setPokeHasToChange(true)
