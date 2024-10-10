@@ -1,6 +1,6 @@
 import { defaultURL, gqlURL, pokemonsEndpoint } from "../types/api.type"
 import { Lang } from "../types/lang.type"
-import { Pokemon } from "../types/pokemon.type"
+import { Pokemon, PokeName } from "../types/pokemon.type"
 import { getPokeType } from "./pokeTypes"
 
 import { getPokeNameWithId } from "./species"
@@ -49,7 +49,6 @@ const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null
     return null
 }
 
-interface PokeName {id: number, name: string}
 const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
     try {
         const pokeRes = await fetch(gqlURL, {
