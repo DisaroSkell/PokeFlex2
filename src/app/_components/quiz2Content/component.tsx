@@ -20,8 +20,9 @@ import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGen
 import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
+import { selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 
-import { guessWithName } from "@/src/utils/guess";
+import { guessWithName, tryAutoGuess } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quiz2Content.css";
@@ -33,6 +34,7 @@ export default function Quiz2Content() {
     const allGens = useAppSelector(selectGens);
     const selectedGensID = useAppSelector(selectSelectedGens);
     const selectedLang = useAppSelector(selectCurrentLang);
+    const pokeNames = useAppSelector(selectPokeNames);
     const streaks = useAppSelector(selectStreaks);
     const userSettings = useAppSelector(selectUserSettings);
 
@@ -165,6 +167,41 @@ export default function Quiz2Content() {
         return () => document.removeEventListener('keyup', handleKeyUp, true);
     }, [giveUpCallback]);
 
+    const onInputChangeCallback = useCallback((newValue: string) => {
+        setCurrentInput(newValue);
+
+        if (
+            !userSettings.autoValidate
+            || !pokeToGuess
+            || userSettings.chosenQuizOptions.guessOption !== PokeGuessOptions.Name
+        ) {
+            setSubmitFeedback('');
+            return;
+        }
+
+        const autoGuessResult = tryAutoGuess(newValue, pokeToGuess.name, pokeNames);
+
+        if (autoGuessResult) {
+            setCurrentInput('');
+            setSubmitFeedback(autoGuessResult.feedback);
+            if (autoGuessResult.success) {
+                setPokeHasToChange(true);
+                setStreakCount((streak) => streak + 1);
+                setTimerPaused(true);
+                audioRef.current?.play();
+            } else {
+                setStreakCount(-1);
+            }
+        } else {
+            setSubmitFeedback('');
+        }
+    }, [
+        userSettings.autoValidate,
+        userSettings.chosenQuizOptions.guessOption,
+        pokeToGuess,
+        pokeNames
+    ]);
+
     return (
         <div className="quiz">
             <div className="guessContainer">
@@ -202,7 +239,7 @@ export default function Quiz2Content() {
                     <UniversalInput
                         inputValue={currentInput}
                         guessType={PokeGuessOptions.Name}
-                        inputChangeCallback={setCurrentInput}
+                        inputChangeCallback={onInputChangeCallback}
                         submitCallback={guessThePokemonCallback}
                     />
                     <div className="buttonGroup">
