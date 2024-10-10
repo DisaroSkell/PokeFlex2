@@ -25,7 +25,7 @@ import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSli
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
 import { fetchPokeNames, selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 
-import { guessWithID, guessWithName, guessWithTypes } from "@/src/utils/guess";
+import { guessWithID, guessWithName, guessWithTypes, tryAutoGuess } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quizContent.css";
@@ -221,45 +221,33 @@ export default function QuizContent() {
         return () => document.removeEventListener('keyup', handleKeyUp, true);
     }, [giveUpCallback])
 
-    const onInputChangeCallback = useCallback(async (newValue: string) => {
+    const onInputChangeCallback = useCallback((newValue: string) => {
         setCurrentInput(newValue);
 
-        if (!userSettings.autoValidate) {
+        if (
+            !userSettings.autoValidate
+            || !currentPoke
+            || userSettings.chosenQuizOptions.guessOption !== PokeGuessOptions.Name
+        ) {
+            setSubmitFeedback('');
             return;
         }
 
-        if (currentPoke && userSettings.chosenQuizOptions.guessOption === PokeGuessOptions.Name) {
-            const startsWith: string[] = [];
-            let foundName: string | undefined = undefined;
-            const normedInput = normalizePokeName(newValue);
-            pokeNames.forEach(elem => {
-                const normedName = normalizePokeName(elem.name);
-                if (normedName === normedInput) {
-                    foundName = elem.name;
-                } else if (normedName.startsWith(normedInput)) {
-                    startsWith.push(elem.name);
-                }
-            })
+        const autoGuessResult = tryAutoGuess(newValue, currentPoke.name, pokeNames);
 
-            if (foundName) {
-                const success = guessWithName(newValue, currentPoke.name);
-
-                if (success) {
-                    setCurrentInput('');
-                    setPokeHasToChange(true);
-                    setStreakCount((streak) => streak + 1);
-                    setTimerPaused(true);
-                    audioRef.current?.play();
-                } else if (startsWith.length === 0) {
-                    setCurrentInput('');
-                    setSubmitFeedback(`That's not ${foundName}`);
-                    setStreakCount(-1);
-                } else {
-                    setSubmitFeedback('');
-                }
+        if (autoGuessResult) {
+            setCurrentInput('');
+            setSubmitFeedback(autoGuessResult.feedback);
+            if (autoGuessResult.success) {
+                setPokeHasToChange(true);
+                setStreakCount((streak) => streak + 1);
+                setTimerPaused(true);
+                audioRef.current?.play();
             } else {
-                setSubmitFeedback('');
+                setStreakCount(-1);
             }
+        } else {
+            setSubmitFeedback('');
         }
     }, [
         userSettings.autoValidate,
