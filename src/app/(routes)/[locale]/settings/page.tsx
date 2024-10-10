@@ -4,9 +4,10 @@ import { i18nSupportedLanguages } from "@/i18nConfig";
 
 import TranslationsProvider from "@/src/app/_components/providers/translationsProvider";
 import LanguageSelectors from "@/src/app/_components/languageSelectors/component";
+import GenerationSelector from "@/src/app/_components/generationSelector/component";
+import AutoValidateToggle from "@/src/app/_components/autoValidateToggle/component";
 
 import "./settings.css";
-import GenerationSelector from "@/src/app/_components/generationSelector/component";
 
 const i18nNamespaces = ["settings", "common"];
 
@@ -33,6 +34,9 @@ export default async function Quiz({
                     </div>
                     <div className="pokeCard">
                         <GenerationSelector />
+                    </div>
+                    <div className="pokeCard">
+                        <AutoValidateToggle />
                     </div>
                 </div>
             </div>

@@ -9,6 +9,11 @@ export interface Pokemon {
     type2: PokeType | null
 }
 
+export interface PokeName {
+    id: number
+    name: string
+}
+
 export enum PokeInfoOptions {
     ID = 'id',
     Name = 'name',

@@ -1,3 +1,4 @@
+import { PokeName } from "../types/pokemon.type";
 import { PokeType } from "../types/pokeType.type";
 
 import { normalizePokeName } from "./utils";
@@ -108,4 +109,40 @@ export function guessWithTypes (
         success: false,
         feedback: "wrong"
     };
+}
+
+/**
+ * This function tries to guess the pokeName if the input is included in the pokeNames array
+ * @param input what is currently in the input for the name
+ * @param pokeName name of the pokemon we are trying to guess
+ * @param pokeNames list of all pokemon names
+ * @returns guessReturnType if input corresponds to a name, else returns null
+ */
+export function tryAutoGuess (input: string, pokeName: string, pokeNames: PokeName[]): guessReturnType | null {
+    const startsWith: string[] = [];
+    let foundName: string | undefined = undefined;
+    const normedInput = normalizePokeName(input);
+    pokeNames.forEach(elem => {
+        const normedName = normalizePokeName(elem.name);
+        if (normedName === normedInput) {
+            foundName = elem.name;
+        } else if (normedName.startsWith(normedInput)) {
+            startsWith.push(elem.name);
+        }
+    })
+
+    if (foundName) {
+        const guessResult = guessWithName(input, pokeName);
+
+        if (guessResult.success) {
+            return guessResult;
+        } else if (startsWith.length === 0) {
+            return {
+                success: false,
+                feedback: `That's not ${foundName}`,
+            }
+        }
+    }
+
+    return null;
 }
