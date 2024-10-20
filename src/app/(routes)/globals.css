@@ -1,14 +1,10 @@
 @font-face {
-    font-family: Alagard;
-    src: url(~/src/assets/alagard.ttf);
+    font-family: PixelDragon;
+    src: url(~/src/assets/eight_bit_dragon.ttf);
 }
 @font-face {
     font-family: Retro;
     src: url(~/src/assets/retro_gaming.ttf);
-}
-@font-face {
-    font-family: Big;
-    src: url(~/src/assets/big.TTF);
 }
 @font-face {
     font-family: retro-monospaced;
@@ -37,7 +33,7 @@ body {
     height: 100vh;
     width: 100vw;
     color: rgb(216, 202, 8);
-    font-family: 'Alagard', sans-serif !important;
+    font-family: 'PixelDragon', sans-serif !important;
 }
 
 .header {
