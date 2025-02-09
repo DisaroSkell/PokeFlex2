@@ -1,6 +1,6 @@
-import { defaultURL, pokemonsEndpoint } from "../types/api.type"
+import { defaultURL, gqlURL, pokemonsEndpoint } from "../types/api.type"
 import { Lang } from "../types/lang.type"
-import { Pokemon } from "../types/pokemon.type"
+import { Pokemon, PokeName } from "../types/pokemon.type"
 import { getPokeType } from "./pokeTypes"
 
 import { getPokeNameWithId } from "./species"
@@ -49,4 +49,59 @@ const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null
     return null
 }
 
-export { getPokeWithId }
+const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
+    try {
+        const pokeRes = await fetch(gqlURL, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                query: `{
+                    pokemon_v2_pokemonspeciesname(where: {
+                        pokemon_v2_language: {
+                            name: {_eq: ${lang.id}}
+                        }
+                    }) {
+                        name
+                        pokemon_species_id
+                    }
+                }`
+            })
+        });
+
+        const json = await pokeRes.json()
+
+        if (
+            !json.data?.pokemon_v2_pokemonspeciesname?.length
+        ) {
+            return [];
+        }
+
+        const namesArray = json.data.pokemon_v2_pokemonspeciesname as any[]
+
+        return namesArray
+            .map((poke: any): PokeName | null => {
+                if (
+                    !poke.pokemon_species_id
+                    || typeof poke.pokemon_species_id !== "number"
+                    || !poke.name
+                    || typeof poke.name !== "string"
+                ) {
+                    return null;
+                }
+
+                return {
+                    id: poke.pokemon_species_id,
+                    name: poke.name
+                }
+            })
+            .filter((poke: PokeName | null) => poke !== null);
+    } catch (err) {
+        console.error(err);
+    }
+
+    return [];
+}
+
+export { getPokeWithId, getAllPokeNames }

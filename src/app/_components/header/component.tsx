@@ -31,6 +31,7 @@ export default async function Header({
         </div>
         <div className="pages">
             <Link className="pageButton" href={`/${locale}/quiz`}>{t("quiz")}</Link>
+            <Link className="pageButton" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>
             <Link className="pageButton" href={`/${locale}/settings`}>{t("settings")}</Link>
         </div>
     </div>

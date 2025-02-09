@@ -5,6 +5,7 @@ import storage from './storage'
 import pokeGensReducer from './pokeGens/pokeGensSlice';
 import langReducer from './lang/langSlice';
 import streakReducer from './streak/streakSlice';
+import pokeNamesReducer from './pokeNames/pokeNamesSlice';
 import pokeTypesReducer from './pokeTypes/pokeTypesSlice';
 import userSettingsReducer from './userSettings/userSettingsSlice';
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     gens: pokeGensReducer,
     lang: langReducer,
     streak: streakReducer,
+    pokeNames: pokeNamesReducer,
     pokeTypes: pokeTypesReducer,
     userSettings: userSettingsReducer,
 })

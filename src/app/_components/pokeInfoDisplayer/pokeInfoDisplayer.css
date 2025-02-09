@@ -1,25 +1,11 @@
 .infoDisplayer {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    gap: 10%;
     height: 100%;
-    width: 90%;
-    padding: 0 5%;
-    font-family: 'Retro', sans-serif;
-
-    p {
-        margin: 0;
-    }
-
-    img {
-        object-fit: contain;
-        max-height: 100%;
-        max-width: 100%;
-        width: 100%;
-        height: auto;
-    }
+    width: 98%;
+    padding: 0 1%;
 }
 
 .banana {
@@ -29,4 +15,41 @@
 @keyframes rotate {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
+}
+
+.pokemonContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Retro', sans-serif;
+    height: 100%;
+}
+
+.imageAutoFit {
+    object-fit: contain;
+    width: auto;
+}
+
+.pokemonImg {
+    max-height: 100%;
+    max-width: 100%;
+    height: 100%;
+}
+
+.questionMark {
+    max-height: 50%;
+    max-width: 50%;
+    height: 50%;
+}
+
+.arrow {
+    max-height: 25%;
+    max-width: 25%;
+    height: 25%;
+}
+
+.transformFlip {
+    transform: rotate(180deg);
 }

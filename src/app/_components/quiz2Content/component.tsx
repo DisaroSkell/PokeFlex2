@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import nextConfig from "@/next.config.mjs";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -9,28 +9,25 @@ import CountdownTimer from "../countdownTimer/component";
 import CustomButton from "../customButton/component";
 import GenerationSelector from "../generationSelector/component";
 import PokeInfoDisplayer from "../pokeInfoDisplayer/component";
-import QuizOptionsSelectors from "../quizOptionsSelectors/component";
-import TypesGuessSelectors from "../typesGuessSelectors/component";
 import UniversalInput from "../universalInput/component";
 
-import { PokeGuessOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
-import { PokeType } from "@/src/types/pokeType.type";
+import { PokeGuessOptions, PokeInfoOptions, Pokemon, PokePos } from "@/src/types/pokemon.type";
 
-import { usePoke } from "@/src/lib/hooks/usePoke";
+import { use2Pokes } from "@/src/lib/hooks/use2Pokes";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
 import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
-import { fetchPokeNames, selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
+import { selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 
-import { guessWithID, guessWithName, guessWithTypes, tryAutoGuess } from "@/src/utils/guess";
+import { guessWithName, tryAutoGuess } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
-import "./quizContent.css";
+import "./quiz2Content.css";
 
-export default function QuizContent() {
+export default function Quiz2Content() {
     const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
@@ -46,59 +43,68 @@ export default function QuizContent() {
     }, [selectedGensID]);
     
     const [
-        currentPoke,
+        poke1,
+        poke2,
         isPokeLoading,
-        changePoke,
-    ] = usePoke(selectedLang, selectedGens);
-    const [previousPoke, setPreviousPoke] = useState<Pokemon | null>(null)
-    const [pokeHasToChange, setPokeHasToChange] = useState(true)
+        changePokes,
+    ] = use2Pokes(selectedLang, selectedGens);
+    const [previousAnswer, setPreviousAnswer] = useState<Pokemon | null>(null);
+    const [pokeHasToChange, setPokeHasToChange] = useState(true);
+    const [guessingPos, setGuessingPos] = useState<PokePos | null>(null);
+
+    const pokeToDisplay = useMemo(
+        () => guessingPos === PokePos.next ? poke1 : poke2,
+        [guessingPos, poke1, poke2]
+    );
+
+    const pokeToGuess = useMemo(
+        () => guessingPos === PokePos.next ? poke2 : poke1,
+        [guessingPos, poke1, poke2]
+    );
     
-    const [currentInput, setCurrentInput] = useState('')
-    const [pokeType1Input, setPokeType1Input] = useState<PokeType | null>(null)
-    const [pokeType2Input, setPokeType2Input] = useState<PokeType | null>(null)
-    const [submitFeedback, setSubmitFeedback] = useState('')
+    const [currentInput, setCurrentInput] = useState('');
+    const [submitFeedback, setSubmitFeedback] = useState('');
     
-    const [streakCount, setStreakCount] = useState(0)
-    const [bestStreakKey, setBestStreakKey] = useState('')
+    const [streakCount, setStreakCount] = useState(0);
+    const [bestStreakKey, setBestStreakKey] = useState('');
 
     const [isTimerPaused, setTimerPaused] = useState(false);
     const [timerResetKey, setTimerResetKey] = useState(0);
 
-    const audioRef = useRef<HTMLAudioElement>(null)
-
-    // set poke names
-    useEffect(() => {
-        dispatch(fetchPokeNames(selectedLang));
-    }, [dispatch, selectedLang]);
+    const audioRef = useRef<HTMLAudioElement>(null);
 
     // fetch image
     useEffect(() => {
         if (!pokeHasToChange || isPokeLoading || selectedGens.length === 0 || !selectedLang) return;
-        
-        changePoke();
+
+        changePokes();
         setPokeHasToChange(false);
-    }, [allGens, selectedGens, selectedLang, pokeHasToChange, isPokeLoading, changePoke]);
+        // Go previous or next at random
+        setGuessingPos(
+            Math.random() < 0.5
+            ? PokePos.prev
+            : PokePos.next
+        );
+    }, [allGens, selectedGens, selectedLang, pokeHasToChange, isPokeLoading, changePokes]);
 
     // Resets on change selectors value
     useEffect(() => {
         setCurrentInput('')
         setSubmitFeedback('')
         setStreakCount(0)
-        setBestStreakKey(formatStreaksKey(
-            userSettings.chosenQuizOptions.infoOption,
-            userSettings.chosenQuizOptions.guessOption,
+        setBestStreakKey("q2-" + formatStreaksKey(
+            PokeInfoOptions.Image,
+            PokeGuessOptions.Name,
             selectedGens,
         ));
         setPokeHasToChange(true)
-        setPokeType1Input(null);
-        setPokeType2Input(null);
     }, [allGens, selectedGens, userSettings.chosenQuizOptions])
 
     // Reset timer on Pokémon change and auto give up value change
     useEffect(() => {
         setTimerPaused(false);
         setTimerResetKey(key => key + 1);
-    }, [currentPoke, userSettings.autoGiveup.enabled]);
+    }, [pokeToDisplay, userSettings.autoGiveup.enabled]);
 
     // Streak increase check
     useEffect(() => {
@@ -107,104 +113,44 @@ export default function QuizContent() {
     }, [streakCount, streaks, bestStreakKey, dispatch])
 
     const isCurrentGuessEmpty = useCallback(() => {
-        switch(userSettings.chosenQuizOptions.guessOption) {
-            case PokeGuessOptions.ID:
-                if (!currentInput) return true;
-                break;
-            case PokeGuessOptions.Name:
-                if (!currentInput) return true;
-                break;
-            case PokeGuessOptions.Types:
-                if (!pokeType1Input) return true;
-                break;
-        }
-
-        return false;
-    }, [userSettings.chosenQuizOptions.guessOption, currentInput, pokeType1Input]);
+        return !currentInput;
+    }, [currentInput]);
 
     const guessThePokemonCallback = useCallback(() => {
-        let success = true;
-        
-        if (currentPoke) switch(userSettings.chosenQuizOptions.guessOption) {
-            case PokeGuessOptions.ID:
-                if (!currentInput) return
+        if (!currentInput || isPokeLoading || !pokeToGuess) return;
 
-                const currentInputAsNumber = parseInt(currentInput);
+        const guessResult = guessWithName(currentInput, pokeToGuess.name);
+        setSubmitFeedback(guessResult.feedback);
 
-                if (isNaN(currentInputAsNumber)) {
-                    setSubmitFeedback("problem");
-                    return;
-                }
-
-                {
-                    const guessResult = guessWithID(currentInputAsNumber, currentPoke.id);
-                    success = guessResult.success;
-                    setSubmitFeedback(guessResult.feedback);
-                }
-
-                break;
-            case PokeGuessOptions.Name:
-                if (!currentInput) return
-
-                {
-                    const guessResult = guessWithName(currentInput, currentPoke.name);
-                    success = guessResult.success;
-                    setSubmitFeedback(guessResult.feedback);
-                }
-
-                break;
-            case PokeGuessOptions.Types:
-                if (!pokeType1Input) return
-
-                {
-                    const guessResult = guessWithTypes(pokeType1Input, pokeType2Input, {type1: currentPoke.type1, type2: currentPoke.type2});
-                    success = guessResult.success;
-                    setSubmitFeedback(guessResult.feedback);
-                }
-
-                break;
-        }
-
-        if (success) {
+        if (guessResult.success) {
             setPokeHasToChange(true)
             setCurrentInput('')
-            setPokeType1Input(null)
-            setPokeType2Input(null)
             setStreakCount((streak) => streak + 1)
             setTimerPaused(true);
             audioRef.current?.play()
         } else {
             setStreakCount(-1)
         }
-    }, [currentInput, currentPoke, userSettings.chosenQuizOptions.guessOption, pokeType1Input, pokeType2Input])
+    }, [currentInput, pokeToGuess, isPokeLoading]);
 
-    function giveSolution(pokeToGuess: Pokemon, guessOption: PokeGuessOptions) {
-        switch(guessOption) {
-            case PokeGuessOptions.ID:
-                setSubmitFeedback("solution-id");
-                break;
-            case PokeGuessOptions.Name:
-                setSubmitFeedback("solution-name");
-                break;
-            case PokeGuessOptions.Types:
-                if (pokeToGuess.type2) setSubmitFeedback("solution-types");
-                else setSubmitFeedback("solution-type");
-                break;
-        }
+    function giveSolution(
+        // pokeToGuess: Pokemon
+    ) {
+        // console.log("Pokémon was this: ", pokeToGuess)
+
+        setSubmitFeedback("solution-name");
     }
 
     const giveUpCallback = useCallback(() => {
-        if(currentPoke) {
-            setPreviousPoke(currentPoke);
+        if(pokeToGuess) {
+            setPreviousAnswer(pokeToGuess);
             setPokeHasToChange(true);
             setCurrentInput('');
-            setPokeType1Input(null);
-            setPokeType2Input(null);
             setStreakCount(0);
             setTimerPaused(true);
-            giveSolution(currentPoke, userSettings.chosenQuizOptions.guessOption);
+            giveSolution();
         }
-    }, [currentPoke, userSettings.chosenQuizOptions.guessOption])
+    }, [pokeToGuess]);
 
     const autoGiveUpCallback = useCallback(() => {
         if (userSettings.autoGiveup.enabled) giveUpCallback();
@@ -219,21 +165,21 @@ export default function QuizContent() {
         document.addEventListener('keyup', handleKeyUp, true);
 
         return () => document.removeEventListener('keyup', handleKeyUp, true);
-    }, [giveUpCallback])
+    }, [giveUpCallback]);
 
     const onInputChangeCallback = useCallback((newValue: string) => {
         setCurrentInput(newValue);
 
         if (
             !userSettings.autoValidate
-            || !currentPoke
+            || !pokeToGuess
             || userSettings.chosenQuizOptions.guessOption !== PokeGuessOptions.Name
         ) {
             setSubmitFeedback('');
             return;
         }
 
-        const autoGuessResult = tryAutoGuess(newValue, currentPoke.name, pokeNames);
+        const autoGuessResult = tryAutoGuess(newValue, pokeToGuess.name, pokeNames);
 
         if (autoGuessResult) {
             setCurrentInput('');
@@ -252,21 +198,17 @@ export default function QuizContent() {
     }, [
         userSettings.autoValidate,
         userSettings.chosenQuizOptions.guessOption,
-        currentPoke,
+        pokeToGuess,
         pokeNames
     ]);
 
     return (
         <div className="quiz">
-            <div className="absoluteLeft">
-                <QuizOptionsSelectors />
-            </div>
-
             <div className="guessContainer">
                 <div className="pokeCard infoContainer">
                     <div className="infoContainerHeader">
                         <p>
-                            {t(submitFeedback, { poke: previousPoke })}
+                            {t(submitFeedback, { poke: previousAnswer })}
                         </p>
                         <div className="streaksContainer">
                             <p>
@@ -279,9 +221,9 @@ export default function QuizContent() {
                     </div>
                     <div className="infoContainerContent">
                         <PokeInfoDisplayer
-                            pokemon={pokeHasToChange || isPokeLoading ? null : currentPoke}
-                            infoType={userSettings.chosenQuizOptions.infoOption}
-                            pokePos={PokePos.current}
+                            pokemon={pokeHasToChange || isPokeLoading ? null : pokeToDisplay}
+                            infoType={PokeInfoOptions.Image}
+                            pokePos={guessingPos ?? PokePos.current}
                         />
                     </div>
                 </div>
@@ -294,24 +236,12 @@ export default function QuizContent() {
                 />}
 
                 <div className="inputGroup">
-                    {
-                        userSettings.chosenQuizOptions.guessOption === PokeGuessOptions.Types ?
-                        <TypesGuessSelectors 
-                            typesValue={{
-                                type1: pokeType1Input?.id ?? '',
-                                type2: pokeType2Input?.id ?? ''
-                            }}
-                            onTypesChange={(newType1, newType2) => {
-                                setPokeType1Input(newType1);
-                                setPokeType2Input(newType2);
-                            }} />
-                        : <UniversalInput
-                            inputValue={currentInput}
-                            guessType={userSettings.chosenQuizOptions.guessOption}
-                            inputChangeCallback={onInputChangeCallback}
-                            submitCallback={guessThePokemonCallback}
-                        />
-                    }
+                    <UniversalInput
+                        inputValue={currentInput}
+                        guessType={PokeGuessOptions.Name}
+                        inputChangeCallback={onInputChangeCallback}
+                        submitCallback={guessThePokemonCallback}
+                    />
                     <div className="buttonGroup">
                         <CustomButton label={`${t("guess")} ! (↵)`} type={"primary"} onClickCallback={guessThePokemonCallback} disabled={isCurrentGuessEmpty()} />
                         <div className="victimButton">

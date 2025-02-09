@@ -12,8 +12,10 @@ export function normalizePokeName(s: string) {
 }
 
 export function formatNumberToMinNdigits(numberToFormat: number, n: number): string {
-    if (n <= 0) {
-        return numberToFormat.toString()
+    const numberString = numberToFormat.toString()
+
+    if (n <= 0 || numberString.length >= n) {
+        return numberString
     }
     
     let result = ''
@@ -22,7 +24,7 @@ export function formatNumberToMinNdigits(numberToFormat: number, n: number): str
         result += '0'
     }
     
-    result = (result + numberToFormat).slice(-n)
+    result = (result + numberString).slice(-n)
     
     return result
 }
