@@ -6,7 +6,7 @@ import initTranslations from "@/src/i18n";
 
 import "./header.css"
 
-const i18nNamespaces = ["header"];
+const i18nNamespaces = ["common"];
 
 interface HeaderProps {
     locale: string
