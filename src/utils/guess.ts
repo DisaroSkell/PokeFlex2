@@ -139,7 +139,7 @@ export function tryAutoGuess (input: string, pokeName: string, pokeNames: PokeNa
         } else if (startsWith.length === 0) {
             return {
                 success: false,
-                feedback: `That's not ${foundName}`,
+                feedback: `wrong-autovalidate`,
             }
         }
     }

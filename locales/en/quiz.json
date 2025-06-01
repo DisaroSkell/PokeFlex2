@@ -7,6 +7,7 @@
     "problem": "Something went wrong",
     "right": "You're right ;)",
     "wrong": "You're wrong :D",
+    "wrong-autovalidate": "That's not it",
     "onetype": "It has only one type",
     "twotypes": "It has two types",
     "halfright": "One is right !",
