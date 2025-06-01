@@ -1,4 +1,6 @@
 {
     "welcome": "Bienvenue sur ce super site de fou !",
-    "go-quiz": "Accéder au Quiz"
+    "go-quiz": "Accéder au Quiz",
+    "flex-explain": "Le but de ce quiz est de tester vos connaissances sur les données des Pokémon. Vous pourrez choisir quelles données vous souhaitez afficher et sur lesquelles vous voulez être interrogé. Vous pouvez choisir parmi divers points de données concernant le Pokémon, tels que le type, le nom ou l'id.",
+    "chain-explain": "Le but de ce quiz est de réviser l'ordre du PokéDex. Il faut saisir le nom du Pokémon représenté par le (?) qui peut être situé avant ou après le Pokémon de référence."
 }
