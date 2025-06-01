@@ -20,7 +20,7 @@ import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGen
 import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
-import { selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
+import { fetchPokeNames, selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 
 import { guessWithName, tryAutoGuess } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
@@ -72,6 +72,11 @@ export default function Quiz2Content() {
     const [timerResetKey, setTimerResetKey] = useState(0);
 
     const audioRef = useRef<HTMLAudioElement>(null);
+
+    // set poke names
+    useEffect(() => {
+        dispatch(fetchPokeNames(selectedLang));
+    }, [dispatch, selectedLang]);
 
     // fetch image
     useEffect(() => {
