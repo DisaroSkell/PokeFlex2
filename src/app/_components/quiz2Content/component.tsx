@@ -208,7 +208,7 @@ export default function Quiz2Content() {
     ]);
 
     return (
-        <div className="quiz">
+        <div className="quiz2">
             <div className="guessContainer">
                 <div className="pokeCard infoContainer">
                     <div className="infoContainerHeader">
@@ -257,7 +257,7 @@ export default function Quiz2Content() {
                 </div>
             </div>
 
-            <div className="absoluteRight">
+            <div className="rightSection">
                 <div className="pokeCard">
                     <GenerationSelector />
                 </div>
