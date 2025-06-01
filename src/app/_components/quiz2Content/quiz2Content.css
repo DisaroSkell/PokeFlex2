@@ -1,9 +1,9 @@
-.quiz {
+.quiz2 {
     height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     font-size: 20px;
 }
 
@@ -73,12 +73,10 @@
     }
 }
 
-.absoluteRight {
+.rightSection {
     display: flex;
     flex-direction: column;
     height: 80%;
     justify-content: space-around;
     align-items: center;
-    position: absolute;
-    right: 5%;
 }
