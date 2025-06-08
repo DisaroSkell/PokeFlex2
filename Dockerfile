@@ -17,7 +17,7 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-RUN sed -i '/basePath/d' ./next.config.js
+RUN sed -i '/basePath/d' ./next.config.mjs
 
 RUN bun run build
 
