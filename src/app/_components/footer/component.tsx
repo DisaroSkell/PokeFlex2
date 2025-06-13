@@ -32,30 +32,6 @@ export default async function Footer({
             target="_blank"
             rel="license noopener noreferrer"
             style={{ display: "inline-block" }}
-        >CC BY-NC-SA 4.0<Image
-            className="ccImage"
-            src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"
-            alt=""
-            height={22}
-            width={22}
-        /><Image
-            className="ccImage"
-            src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"
-            alt=""
-            height={22}
-            width={22}
-        /><Image
-            className="ccImage"
-            src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"
-            alt=""
-            height={22}
-            width={22}
-        /><Image
-            className="ccImage"
-            src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"
-            alt=""
-            height={22}
-            width={22}
-        /></a></p>
+        >CC BY-NC-SA 4.0</a></p>
     </div>
 }
