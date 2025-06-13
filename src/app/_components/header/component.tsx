@@ -29,6 +29,12 @@ export default async function Header({
                 />
             </Link>
         </div>
+        <input type="checkbox" id="menuToggle" className="menuToggle" />
+        <label htmlFor="menuToggle" className="phoneMenu" tabIndex={0}>
+            <span />
+            <span />
+            <span />
+        </label>
         <div className="pages">
             <Link className="pageButton" href={`/${locale}/quiz`}>{t("quiz")}</Link>
             <Link className="pageButton" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>
