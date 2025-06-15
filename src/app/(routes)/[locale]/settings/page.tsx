@@ -26,18 +26,16 @@ export default async function Quiz({
 
     return <TranslationsProvider locale={locale} namespaces={i18nNamespaces} resources={resources}>
         <div className="settingsPage">
-            <div className="pokeCard settingsContainer">
-                <h1>{t('settings')}</h1>
-                <div className="settingsGrid">
-                    <div className="pokeCard">
-                        <LanguageSelectors />
-                    </div>
-                    <div className="pokeCard">
-                        <GenerationSelector />
-                    </div>
-                    <div className="pokeCard">
-                        <AutoValidateToggle />
-                    </div>
+            <h1>{t('settings')}</h1>
+            <div className="settingsContainer">
+                <div className="pokeCard">
+                    <LanguageSelectors />
+                </div>
+                <div className="pokeCard generationSettings">
+                    <GenerationSelector />
+                </div>
+                <div className="pokeCard" style={{display: "flex", justifyContent: "center"}}>
+                    <AutoValidateToggle />
                 </div>
             </div>
         </div>
