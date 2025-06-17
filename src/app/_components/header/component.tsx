@@ -4,6 +4,8 @@ import Image from 'next/image';
 
 import initTranslations from "@/src/i18n";
 
+import BurgerMenu from "@/src/app/_components/burgerMenu/component";
+
 import "./header.css"
 
 const i18nNamespaces = ["common"];
@@ -17,6 +19,12 @@ export default async function Header({
 }: HeaderProps) {
     const { t } = await initTranslations(locale, i18nNamespaces);
 
+    const pagesButtons = [
+        <Link key="quiz" className="pageButton" href={`/${locale}/quiz`}>{t("quiz")}</Link>,
+        <Link key="quiz2" className="pageButton" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>,
+        <Link key="settings" className="pageButton" href={`/${locale}/settings`}>{t("settings")}</Link>,
+    ];
+
     return <div className="pokeHeader">
         <div className="container">
             <Link href={`/${locale}/`}>
@@ -29,16 +37,15 @@ export default async function Header({
                 />
             </Link>
         </div>
-        <input type="checkbox" id="menuToggle" className="menuToggle" />
-        <label htmlFor="menuToggle" className="phoneMenu" tabIndex={0}>
-            <span />
-            <span />
-            <span />
-        </label>
+
         <div className="pages">
-            <Link className="pageButton" href={`/${locale}/quiz`}>{t("quiz")}</Link>
-            <Link className="pageButton" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>
-            <Link className="pageButton" href={`/${locale}/settings`}>{t("settings")}</Link>
+            {pagesButtons}
         </div>
+
+        <BurgerMenu menuContent={
+            <div className="pagesVertical">
+                {pagesButtons}
+            </div>
+        }/>
     </div>
 }

@@ -37,59 +37,24 @@
     white-space: nowrap;
 }
 
-.menuToggle {
-    display: none;
-}
-
-.phoneMenu {
-    display: none;
+.pagesVertical {
+    display: flex;
     flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
-    width: 35px;
-    height: 40px;
-    gap: 6px;
-    margin-right: 10px;
-}
-
-.phoneMenu span {
-    display: block;
-    height: 4px;
+    align-items: center;
+    height: 100%;
     width: 100%;
-    background: black;
-    border-radius: 2px;
-    transition: 0.3s;
+    padding: 1vh;
+    gap: 2vh;
+
+    .pageButton {
+        text-align: center;
+        width: 100%;
+        padding: 5% 10%;
+    }
 }
 
 @media (max-width: 600px) {
     .pages {
         display: none;
-        position: absolute;
-        flex-direction: column;
-        align-items: center;
-        width: 50%;
-        top: 69px;
-        right: 10px;
-        padding: 10px;
-        gap: 10px;
-        border: 3px solid black;
-        border-top: 0;
-        border-radius: 0 0 10px 10px;
-        z-index: 10;
-        background: rgb(48, 42, 38);
-
-        .pageButton {
-            width: fit-content;
-            padding: 5% 10%;
-        }
-    }
-    .menuToggle:checked ~ .phoneMenu + .pages {
-        display: flex;
-    }
-    .pages.open {
-        display: flex;
-    }
-    .phoneMenu {
-        display: flex;
     }
 }
