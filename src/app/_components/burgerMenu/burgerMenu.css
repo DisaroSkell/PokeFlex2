@@ -28,7 +28,15 @@
     width: 100vw;
     z-index: 9;
     overflow: hidden;
-    animation: fade-in 0.5s forwards;
+}
+
+.slideMenu.open {
+    display: flex;
+    animation: fade-in 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
+}
+.slideMenu.closing {
+    display: flex;
+    animation: fade-out 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
 }
 
 @keyframes fade-in {
@@ -37,6 +45,15 @@
     }
     to {
         background: rgb(0, 0, 0, 0.8);
+    }
+}
+
+@keyframes fade-out {
+    from {
+        background: rgb(0, 0, 0, 0.8);
+    }
+    to {
+        background: rgb(0, 0, 0, 0);
     }
 }
 
@@ -53,7 +70,13 @@
     border-left: 3px solid black;
     z-index: 10;
     background: rgb(48, 42, 38);
-    animation: slide-in 0.5s forwards;
+}
+
+.slideMenuContent.open {
+    animation: slide-in 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
+}
+.slideMenuContent.closing {
+    animation: slide-out 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
 }
 
 @keyframes slide-in {
@@ -62,6 +85,15 @@
     }
     to {
         transform: translateX(0);
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
     }
 }
 
