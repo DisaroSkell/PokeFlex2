@@ -18,7 +18,7 @@
     transition: 0.3s;
 }
 
-.slideMenu {
+.slideMenuBackground {
     display: none;
     position: absolute;
     top: 0;
@@ -30,11 +30,11 @@
     overflow: hidden;
 }
 
-.slideMenu.open {
-    display: flex;
+.slideMenuBackground.open {
+    display: none;
     animation: fade-in 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
 }
-.slideMenu.closing {
+.slideMenuBackground.closing {
     display: flex;
     animation: fade-out 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
 }
@@ -57,7 +57,7 @@
     }
 }
 
-.slideMenuContent {
+.slideMenu {
     display: flex;
     position: absolute;
     flex-direction: column;
@@ -72,10 +72,10 @@
     background: rgb(48, 42, 38);
 }
 
-.slideMenuContent.open {
+.slideMenu.open {
     animation: slide-in 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
 }
-.slideMenuContent.closing {
+.slideMenu.closing {
     animation: slide-out 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
 }
 
@@ -120,8 +120,24 @@
     background-color: black;
 }
 
+.slideMenuContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 1vh;
+    gap: 2vh;
+
+    .navLink {
+        text-align: center;
+        width: 100%;
+        padding: 5% 10%;
+    }
+}
+
 @media (max-width: 600px) {
     .phoneMenu, .open {
-        display: flex;
+        display: flex !important;
     }
 }

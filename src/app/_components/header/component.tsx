@@ -1,12 +1,13 @@
 import nextConfig from "@/next.config.mjs";
-import Link from "next/link";
 import Image from 'next/image';
+import Link from "next/link";
 
 import initTranslations from "@/src/i18n";
 
 import BurgerMenu from "@/src/app/_components/burgerMenu/component";
+import { BurgerMenuType } from "@/src/types/burgerMenuTypes";
 
-import "./header.css"
+import "./header.css";
 
 const i18nNamespaces = ["common"];
 
@@ -42,10 +43,6 @@ export default async function Header({
             {pagesButtons}
         </div>
 
-        <BurgerMenu menuContent={
-            <div className="pagesVertical">
-                {pagesButtons}
-            </div>
-        }/>
+        <BurgerMenu menuType={BurgerMenuType.Navigation} />
     </div>
 }
