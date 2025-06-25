@@ -12,14 +12,6 @@
     }
 }
 
-.navLink {
-    text-decoration: none;
-    background-color: cadetblue;
-    border: 3px solid black;
-    border-radius: 10px;
-    padding: 10px;
-}
-
 .quizPresentation{
     display: flex;
     justify-content: space-around;

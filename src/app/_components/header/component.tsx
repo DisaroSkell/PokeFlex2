@@ -20,9 +20,9 @@ export default async function Header({
     const { t } = await initTranslations(locale, i18nNamespaces);
 
     const pagesButtons = [
-        <Link key="quiz" className="pageButton" href={`/${locale}/quiz`}>{t("quiz")}</Link>,
-        <Link key="quiz2" className="pageButton" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>,
-        <Link key="settings" className="pageButton" href={`/${locale}/settings`}>{t("settings")}</Link>,
+        <Link key="quiz" className="navLink" href={`/${locale}/quiz`}>{t("quiz")}</Link>,
+        <Link key="quiz2" className="navLink" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>,
+        <Link key="settings" className="navLink" href={`/${locale}/settings`}>{t("settings")}</Link>,
     ];
 
     return <div className="pokeHeader">

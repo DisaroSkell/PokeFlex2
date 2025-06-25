@@ -70,6 +70,15 @@ p {
     padding: 20px;
 }
 
+.navLink {
+    text-decoration: none;
+    background-color: cadetblue;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 1vh;
+    white-space: nowrap;
+}
+
 @media (max-width: 600px) {
     .footer {
         font-size: 2.8vw;
