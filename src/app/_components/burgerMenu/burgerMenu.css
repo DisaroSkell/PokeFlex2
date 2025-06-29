@@ -3,19 +3,18 @@
     flex-direction: column;
     justify-content: center;
     cursor: pointer;
-    width: 35px;
+    width: 45px;
     height: 40px;
     gap: 6px;
-    margin-right: 10px;
+    padding-right: 10px;
 }
 
 .phoneMenu span {
     display: block;
     height: 4px;
     width: 100%;
-    background: black;
+    background: rgb(216, 202, 8);
     border-radius: 2px;
-    transition: 0.3s;
 }
 
 .slideMenuBackground {

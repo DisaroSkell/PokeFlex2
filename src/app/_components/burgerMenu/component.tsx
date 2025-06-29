@@ -103,7 +103,7 @@ interface SubBurgerMenuProps {
     closeMenu: () => void;
 }
 
-export function LinksBurgerMenu({
+function LinksBurgerMenu({
     closeMenu,
 }: SubBurgerMenuProps) {
     const { i18n, t } = useTranslation();

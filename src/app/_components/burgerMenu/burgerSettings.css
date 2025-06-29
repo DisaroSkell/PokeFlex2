@@ -1,0 +1,31 @@
+.burgerSettings {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    .openArrow {
+        position: absolute;
+        content: '';
+        top: 50vh;
+        left: calc(100vw - 20px);
+        border: 10px solid;
+        border-color: transparent rgb(216, 202, 8) transparent transparent;
+        cursor: pointer;
+    }
+
+    .slideMenuContent {
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    h2 {
+        font-size: min(6vw, 1.5em);
+    }
+}
+
+@media (max-width: 1300px) {
+    .burgerSettings, .slideMenu.open, .slideMenuBackground.open {
+        display: flex;
+    }
+}
