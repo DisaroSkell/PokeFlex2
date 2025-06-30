@@ -32,7 +32,7 @@ export default function AutoGiveupSelector() {
     return <div className="timerSliderContainer">
         <CheckboxWithLabel
             key={"autogiveup"}
-            label={t("auto-giveup")}
+            label={t("common:auto-giveup")}
             value={autoGiveupSetting.enabled}
             onValueChange={setAutoGiveup}
         />
@@ -40,7 +40,7 @@ export default function AutoGiveupSelector() {
             min={1}
             max={5 * 60}
             value={autoGiveupSetting.selectedTimeBeforeGiveup}
-            label={t("time-before-giveup")}
+            label={t("common:time-before-giveup")}
             onChange={setSelectedTimeBeforeGiveup}
             disabled={!autoGiveupSetting.enabled}
         />
