@@ -18,8 +18,6 @@
     "solution-name": "Its name was {{poke.name}}",
     "solution-types": "Its types were {{poke.type1.fullName}} and {{poke.type2.fullName}}",
     "solution-type": "Its type was {{poke.type1.fullName}}",
-    "auto-giveup": "Auto give up",
-    "time-before-giveup": "Time before auto give up",
     "id": "ID",
     "name": "Name",
     "imgUrl": "Image",

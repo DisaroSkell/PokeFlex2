@@ -3,84 +3,131 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     font-size: 20px;
-}
 
-.guessContainer {
-    height: 80%;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.infoContainer {
-    height: 50%;
-    width: 50%;
-}
-
-.infoContainerHeader {
-    display: flex;
-    justify-content: space-between;
-    height: 20%;
-    width: 100%;
-    padding: 2%;
-}
-
-.streaksContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.infoContainerContent {
-    height: 80%;
-}
-
-.inputGroup {
-    display: flex;
-    flex-direction: column;
-    height: 30%;
-    justify-content: space-between;
-    width: fit-content;
-
-    input {
-        width: 100%;
-        font-size: 30px;
-    }
-}
-
-.buttonGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    height: fit-content;
-    width: 100%;
-    margin-top: 10px;
-
-    button {
-        font-size: 40px;
+    .guessContainer {
+        height: 100%;
+        max-width: 50%;
+        aspect-ratio: 1/1;
+        padding: 2vh 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
     }
     
-    .victimButton > button {
-        transform: scale(0.5);
+    .infoContainer {
+        height: 50%;
+        width: 50%;
     }
-}
+    
+    .infoContainerHeader {
+        display: flex;
+        justify-content: space-between;
+        gap: 1vw;
+        height: 20%;
+        width: 100%;
+        padding: 2%;
+    }
+    
+    .streaksContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+    }
+    
+    .infoContainerContent {
+        height: 80%;
+    }
+    
+    .inputGroup {
+        display: flex;
+        flex-direction: column;
+        height: 30%;
+        justify-content: space-between;
+        width: fit-content;
+    
+        input {
+            width: 100%;
+            font-size: 30px;
+        }
+    }
+    
+    .buttonGroup {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: fit-content;
+        width: 100%;
+    
+        button {
+            font-size: 40px;
+        }
+        
+        .victimButton > button {
+            transform: scale(0.5);
+        }
+    }
+    
+    .buttonGroupMobile {
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        height: fit-content;
+        width: 100%;
+    
+        button {
+            font-size: 24px;
+        }
+    }
+    
+    .rightSection {
+        display: flex;
+        flex-direction: column;
+        max-width: 20%;
+        height: 100%;
+        justify-content: space-around;
+        align-items: center;
+    }
+    
+    .leftSection {
+        max-width: 20%;
+    }
+    
+    @media (max-width: 1300px) {
+        .leftSection, .rightSection {
+            display: none;
+        }
 
-.absoluteRight {
-    display: flex;
-    flex-direction: column;
-    height: 80%;
-    justify-content: space-around;
-    align-items: center;
-    position: absolute;
-    right: 5%;
-}
+        .guessContainer {
+            max-width: 100%;
+    
+            .infoContainer {
+                aspect-ratio: 1/1;
+                width: auto;
+                max-width: 100%;
+            }
+        }
+    }
 
-.absoluteLeft {
-    position: absolute;
-    left: 5%;
+    @media (max-width: 600px) {
+        .guessContainer {
+            width: 100%;
+            padding-left: 5vw;
+            padding-right: 5vw;
+    
+            .infoContainer {
+                width: 100%;
+            }
+        }
+    
+        .buttonGroup {
+            display: none;
+        }
+    
+        .buttonGroupMobile {
+            display: flex;
+        }
+    }
 }

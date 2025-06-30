@@ -61,7 +61,14 @@ export const pokeGensSlice = createSliceWithThunks({
                 },
                 fulfilled: (state, action) => {
                     state.loading = false;
-                    state.gens = action.payload;
+                    if (
+                        state.gens.length !== action.payload.length || !state.gens.every(
+                            (gen, index) => gen.id === action.payload[index].id
+                                && gen.name === action.payload[index].name
+                                && gen.firstPokemonId === action.payload[index].firstPokemonId
+                                && gen.lastPokemonId === action.payload[index].lastPokemonId
+                        )
+                    ) state.gens = action.payload;
                     if (!state.selectedGens.length) state.selectedGens = action.payload.map(gen => gen.id);
                 }
             }

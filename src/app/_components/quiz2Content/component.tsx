@@ -26,6 +26,7 @@ import { guessWithName, tryAutoGuess } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quiz2Content.css";
+import BurgerSettings from "../burgerMenu/burgerSettings";
 
 export default function Quiz2Content() {
     const { t } = useTranslation();
@@ -253,6 +254,19 @@ export default function Quiz2Content() {
                             <CustomButton label={`${t("giveup")} :( (Esc)`} type={"alert"} onClickCallback={giveUpCallback} />
                         </div>
                     </div>
+                    <div className="buttonGroupMobile">
+                        <CustomButton
+                            label={`${t("guess")} !`}
+                            type={"primary"}
+                            onClickCallback={guessThePokemonCallback}
+                            disabled={isCurrentGuessEmpty()}
+                        />
+                        <CustomButton
+                            label={`${t("giveup")} :(`}
+                            type={"alert"}
+                            onClickCallback={giveUpCallback}
+                        />
+                    </div>
                     <audio ref={audioRef} src={`${nextConfig.basePath}/sounds/success.mp3`} />
                 </div>
             </div>
@@ -265,6 +279,17 @@ export default function Quiz2Content() {
                     <AutoGiveupSelector />
                 </div>
             </div>
+
+            <BurgerSettings>
+                <>
+                    <div className="pokeCard">
+                        <GenerationSelector />
+                    </div>
+                    <div className="pokeCard">
+                        <AutoGiveupSelector />
+                    </div>
+                </>
+            </BurgerSettings>
         </div>
     );
 }

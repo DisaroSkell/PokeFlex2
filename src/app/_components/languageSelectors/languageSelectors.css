@@ -1,7 +1,7 @@
 .languageCard {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    gap: 4vh;
     align-items: center;
     height: 100%;
     width: 100%;
@@ -11,14 +11,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50%;
     width: 100%;
 }
 
 .languageSelector {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
+    gap: 2vh;
     align-items: center;
     text-align: center;
     height: 100%;
