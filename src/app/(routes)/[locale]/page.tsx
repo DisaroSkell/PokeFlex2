@@ -26,7 +26,7 @@ export default async function Home({
     return (
         <TranslationsProvider locale={locale} namespaces={i18nNamespaces} resources={resources}>
             <div className="mainContainer">
-                <h1>{t("welcome")}</h1>
+                <h1>PokéFlex 2</h1>
                 <div className="quizPresentation">
                     <div className="pokeCard flexQuizPresentation">
                         <h2>{t("common:quiz")}</h2>

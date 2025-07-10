@@ -1,0 +1,19 @@
+.tutorialModalBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+    padding: 5%;
+    background-color: rgb(0, 0, 0, 0.8);
+
+    .tutorialModal {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+    }
+}
