@@ -27,7 +27,7 @@ const initialState: UserSettingsState = {
     },
     chosenQuizOptions: {
         infoOption: PokeInfoOptions.Image,
-        guessOption: PokeGuessOptions.ID,
+        guessOption: PokeGuessOptions.Name,
     },
     autoValidate: true,
     displayTutorial: true,
