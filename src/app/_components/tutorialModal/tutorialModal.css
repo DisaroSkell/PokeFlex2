@@ -16,4 +16,30 @@
         height: 100%;
         width: 100%;
     }
+
+    .navigateButtonsContainer {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        * {
+            font-size: large;
+        }
+    }
+
+    /* .quizSettings {} */
+
+    .quizSettingsMobile {
+        display: none;
+    }
+
+    @media (max-width: 1300px) {
+        .quizSettings {
+            display: none;
+        }
+
+        .quizSettingsMobile {
+            display: block;
+        }
+    }
 }
