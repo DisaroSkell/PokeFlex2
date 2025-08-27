@@ -9,7 +9,7 @@ import TutorialModal from "../../_components/tutorialModal/component";
 
 import "../globals.css";
 
-const i18nNamespaces = ["common"];
+const i18nNamespaces = ["common", "tuto"];
 
 export default async function DefaultLayout({
   children,

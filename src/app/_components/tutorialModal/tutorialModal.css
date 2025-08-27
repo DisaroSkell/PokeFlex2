@@ -27,19 +27,42 @@
         }
     }
 
-    /* .quizSettings {} */
+    .quizSettingsShowcase {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+
+        .quizSettingsShowcaseItem {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1vh;
+        }
+    }
 
     .quizSettingsMobile {
         display: none;
     }
 
     @media (max-width: 1300px) {
-        .quizSettings {
-            display: none;
-        }
-
         .quizSettingsMobile {
-            display: block;
+            display: flex;
+            align-items: center;
+            text-align: justify;
+            gap: 5vw;
+
+            * {
+                height: fit-content;
+            }
+
+            .mockMenuArrow {
+                content: '';
+                border: 10px solid;
+                border-color: transparent rgb(216, 202, 8) transparent transparent;
+                aspect-ratio: 1 / 1;
+            }
         }
     }
 }

@@ -78,6 +78,14 @@ p {
     padding: 1vh;
     white-space: nowrap;
 }
+    
+.uninteractable {
+    pointer-events: none;
+
+    select {
+        color: transparent;
+    }
+}
 
 @media (max-width: 600px) {
     .footer {

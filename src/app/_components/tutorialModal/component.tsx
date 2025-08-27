@@ -10,6 +10,8 @@ import LanguageSelectors from '../languageSelectors/component';
 import CustomButton from '../customButton/component';
 
 import './tutorialModal.css';
+import GenerationSelector from '../generationSelector/component';
+import QuizOptionsSelectors from '../quizOptionsSelectors/component';
 
 export default function TutorialModal() {
     const { t } = useTranslation();
@@ -36,7 +38,7 @@ export default function TutorialModal() {
     return isOpen && displayTutorialSetting && <div className='tutorialModalBg'>
         <div className='pokeCard tutorialModal'>
             <h1>{t('common:welcome')}</h1>
-            {panels[currentPanel]()}
+            {panels[currentPanel](t)}
             <div className='navigateButtonsContainer'>
                 <CustomButton
                     label='<'
@@ -65,31 +67,38 @@ export default function TutorialModal() {
 const panels = [
     LangPanel,
     QuizPresPanel,
-    SettingsPresPanel,
-    // EmptyPanel,
 ]
 
-function LangPanel() {
+function LangPanel(t: ReturnType<typeof useTranslation>['t']) {
     return <>
         <div className="pokeCard">
             <LanguageSelectors />
         </div>
-        <p>Don't forget to validate for it to take effect. Next press on the arrow at the bottom right.</p>
+        <p>{ t('tuto:language-explain') }</p>
     </>
 }
 
-function QuizPresPanel() {
+function QuizPresPanel(t: ReturnType<typeof useTranslation>['t']) {
     return <>
-        Hello, here is an explaination of how quizzes work and presentation of their settings (for desktop AND mobile).
-        <div className="quizSettings">Desktop explain</div>
-        <div className="quizSettingsMobile">Mobile explain</div>
+        <p style={{ textAlign: 'justify' }} >{ t('tuto:quiz-desc') }</p>
+        <div className='quizSettingsShowcase'>
+            <div className='quizSettingsShowcaseItem'>
+                <div className='pokeCard uninteractable'>
+                    <GenerationSelector />
+                </div>
+                <p>{ t('tuto:gen-settings') }</p>
+            </div>
+            <div className='quizSettingsShowcaseItem'>
+                <div className='uninteractable'>
+                    <QuizOptionsSelectors />
+                </div>
+                <p>{ t('tuto:guess-settings') }</p>
+            </div>
+        </div>
+        <div className="quizSettingsMobile">
+            <p>{ t('tuto:mobile-menu') }</p>
+            <div>{'=>'}</div>
+            <div className="mockMenuArrow"></div>
+        </div>
     </>
-}
-
-function SettingsPresPanel() {
-    return <>And here we present the settings page.</>
-}
-
-function EmptyPanel() {
-    return <></>
 }
