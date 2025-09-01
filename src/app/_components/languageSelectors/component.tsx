@@ -46,8 +46,6 @@ export default function LanguageSelectors({
         if (!firstVisit) return;
 
         // Update pokeLang to locale
-        console.log("allLangs", allLangs);
-        console.log("currentLocale", currentLocale);
         const foundLang = allLangs.find(lang => lang.id === currentLocale)
 
         if (foundLang && foundLang.id !== selectedLang.id) {
