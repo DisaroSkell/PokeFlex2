@@ -11,6 +11,7 @@ import { Lang, supportedLanguages } from "@/src/types/lang.type";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
 import { fetchLangs, setSelectedLang } from "@/src/lib/store/lang/langSlice";
+import { selectDisplayTutorialSetting } from "@/src/lib/store/userSettings/userSettingsSlice";
 
 import { capitalize } from "@/src/utils/utils";
 
@@ -26,6 +27,7 @@ export default function LanguageSelectors({
 }: LanguageSelectorsProps) {
     const allLangs = useAppSelector(state => state.lang.langs)
     const selectedLang = useAppSelector(state => state.lang.selectedLang)
+    const firstVisit = useAppSelector(selectDisplayTutorialSetting)
     const dispatch = useAppDispatch()
 
     const { i18n, t } = useTranslation();
@@ -39,6 +41,18 @@ export default function LanguageSelectors({
     useEffect(() => {
         dispatch(fetchLangs())
     }, [dispatch]);
+
+    useEffect(() => {
+        if (!firstVisit) return;
+
+        // Update pokeLang to locale
+        const foundLang = allLangs.find(lang => lang.id === currentLocale)
+
+        if (foundLang && foundLang.id !== selectedLang.id) {
+            setPokeLang(foundLang.id);
+            dispatch(setSelectedLang(foundLang))
+        }
+    }, [firstVisit])
 
     function mapLanguagesToOptions(langs: Lang[]) {
         return langs.map(l => ({

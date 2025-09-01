@@ -17,6 +17,7 @@ interface UserSettingsState {
     autoGiveup: AutoGiveupSetting
     chosenQuizOptions: QuizOptionsSetting
     autoValidate: boolean
+    displayTutorial: boolean
 }
 
 const initialState: UserSettingsState = {
@@ -26,9 +27,10 @@ const initialState: UserSettingsState = {
     },
     chosenQuizOptions: {
         infoOption: PokeInfoOptions.Image,
-        guessOption: PokeGuessOptions.ID,
+        guessOption: PokeGuessOptions.Name,
     },
-    autoValidate: true
+    autoValidate: true,
+    displayTutorial: true,
 }
 
 export const userSettingsSlice = createSlice({
@@ -46,15 +48,19 @@ export const userSettingsSlice = createSlice({
         },
         setAutoValidateSetting(state, action: PayloadAction<boolean>) {
             state.autoValidate = action.payload;
-        }
+        },
+        setDisplayTutorialSetting(state, action: PayloadAction<boolean>) {
+            state.displayTutorial = action.payload;
+        },
     },
 })
 
-export const { setAllSettings, setAutoGiveupSetting, setQuizOptionsSetting, setAutoValidateSetting } = userSettingsSlice.actions;
+export const { setAllSettings, setAutoGiveupSetting, setQuizOptionsSetting, setAutoValidateSetting, setDisplayTutorialSetting } = userSettingsSlice.actions;
 
 export const selectUserSettings = (state: RootState) => state.userSettings;
 export const selectAutoGiveupSetting = (state: RootState) => state.userSettings.autoGiveup;
 export const selectQuizOptionsSetting = (state: RootState) => state.userSettings.chosenQuizOptions;
 export const selectAutoValidateSetting = (state: RootState) => state.userSettings.autoValidate;
+export const selectDisplayTutorialSetting = (state: RootState) => state.userSettings.displayTutorial;
 
 export default userSettingsSlice.reducer;

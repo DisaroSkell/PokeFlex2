@@ -1,5 +1,4 @@
 {
-    "welcome": "Welcome to PokéFlex 2!",
     "go-quiz": "Go to Quiz",
     "flex-explain": "The purpose of this quiz is to test your knowledge of Pokémon data. You will be able to chose which data you want to be shown and which data you want to guess about a Pokémon. You can choose from various data points about the Pokémon, such as type, name, or id.",
     "chain-explain": "The purpose of this quiz is to check your knowledge of the order of the PokéDex. You need to enter the name of the Pokémon represented by the (?), which may come before or after the shown Pokémon."
