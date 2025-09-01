@@ -5,7 +5,7 @@ export function capitalize(s: string) {
 export function normalizePokeName(s: string) {
     return s
         .trim()
-        .replaceAll(/[^\p{L}]/gu, '')
+        .replaceAll(/[^\p{L}0-9]/gu, '')
         .toLowerCase()
         .normalize("NFD")
         .replace(/\p{Diacritic}/gu, '');
