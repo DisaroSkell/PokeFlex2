@@ -135,7 +135,7 @@ export default function LanguageSelectors({
                 />
             </div>
         </div>
-        <div className="buttonsContainer">
+        <div className="langButtonsContainer">
             <CustomButton label={t("common:cancel")} type="primary" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges} />
             <CustomButton label={t("common:confirm")} type="secondary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges} />
         </div>
