@@ -67,12 +67,12 @@ export default function QuizContent() {
 
     const audioRef = useRef<HTMLAudioElement>(null)
 
-    // set poke names
+    // Set poke names
     useEffect(() => {
         dispatch(fetchPokeNames(selectedLang));
     }, [dispatch, selectedLang]);
 
-    // fetch image
+    // Change current poke
     useEffect(() => {
         if (!pokeHasToChange || isPokeLoading || selectedGens.length === 0 || !selectedLang) return;
         

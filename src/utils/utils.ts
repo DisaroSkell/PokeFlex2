@@ -5,7 +5,7 @@ export function capitalize(s: string) {
 export function normalizePokeName(s: string) {
     return s
         .trim()
-        .replaceAll(/[^\p{L}]/gu, '')
+        .replaceAll(/[^\p{L}0-9]/gu, '')
         .toLowerCase()
         .normalize("NFD")
         .replace(/\p{Diacritic}/gu, '');
@@ -36,4 +36,13 @@ export function displayTimer(totalMilliseconds: number) {
     const totalMinutes = Math.floor(totalSeconds / 60);
 
     return `${totalMinutes}:${seconds}.${milliseconds}`;
+}
+
+export function shuffleArray(array: number[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
 }

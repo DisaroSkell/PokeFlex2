@@ -32,3 +32,13 @@
     background-color: rgb(19, 14, 10);
     border-radius: 30px;
 }
+
+.langButtonsContainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+
+    button {
+        font-size: 20px;
+    }
+}
