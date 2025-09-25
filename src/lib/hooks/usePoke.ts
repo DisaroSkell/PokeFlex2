@@ -6,7 +6,7 @@ import { Generation } from "@/src/types/generation.type";
 import { Lang } from "@/src/types/lang.type";
 import { Pokemon, } from "@/src/types/pokemon.type";
 
-import { pickRandomIdInGens } from "@/src/utils/poke";
+import { createShuffledListOfIdsInGens } from "@/src/utils/poke";
 
 /**
  * Hook to handle a Pokémon
@@ -22,6 +22,8 @@ export function usePoke(
     boolean,
     () => void,
 ] {
+    const [rngList, setRngList] = useState<number[]>([]);
+
     const QUEUE_CAPACITY = 2;
     const [pokeQueue, setPokeQueue] = useState<Pokemon[]>([]);
 
@@ -32,7 +34,10 @@ export function usePoke(
         if (gens.length === 0) return;
         
         if (pokeQueue.length === 0) setIsLoading(true);
-        const randomId = pickRandomIdInGens(gens);
+        if (rngList.length === 0)
+            setRngList(createShuffledListOfIdsInGens(gens));
+        const randomId = rngList.shift();
+        if (!randomId) return;
         
         const poke = await getPokeWithId(randomId, lang);
         if (poke) setPokeQueue(prevQueue => {
@@ -44,13 +49,20 @@ export function usePoke(
         });
 
         setIsLoading(false);
-    }, [gens, lang]);
+    }, [gens, lang, rngList]);
 
     // Fill queue
     useEffect(() => {
         if (pokeQueue.length >= QUEUE_CAPACITY) return;
         fillQueueByOne();
     }, [pokeQueue, fillQueueByOne]);
+
+    // Clear queue when params change
+    useEffect(() => {
+        setRngList(createShuffledListOfIdsInGens(gens));
+        setPokeQueue([]);
+        setIsLoading(true);
+    }, [lang, gens]);
 
     function changePoke() {
         setPokeQueue(currentValue => {
@@ -60,12 +72,6 @@ export function usePoke(
             return newValue;
         });
     }
-
-    // Clear queue when params change
-    useEffect(() => {
-        setPokeQueue([]);
-        setIsLoading(true);
-    }, [lang, gens]);
 
     return [currentPoke, isLoading, changePoke];
 }

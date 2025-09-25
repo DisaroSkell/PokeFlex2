@@ -1,0 +1,142 @@
+.phoneMenu {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    width: 45px;
+    height: 40px;
+    gap: 6px;
+    padding-right: 10px;
+}
+
+.phoneMenu span {
+    display: block;
+    height: 4px;
+    width: 100%;
+    background: rgb(216, 202, 8);
+    border-radius: 2px;
+}
+
+.slideMenuBackground {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.8);
+    height: 100vh;
+    width: 100vw;
+    z-index: 9;
+    overflow: hidden;
+}
+
+.slideMenuBackground.open {
+    display: none;
+    animation: fade-in 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
+}
+.slideMenuBackground.closing {
+    display: flex;
+    animation: fade-out 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
+}
+
+@keyframes fade-in {
+    from {
+        background: rgb(0, 0, 0, 0);
+    }
+    to {
+        background: rgb(0, 0, 0, 0.8);
+    }
+}
+
+@keyframes fade-out {
+    from {
+        background: rgb(0, 0, 0, 0.8);
+    }
+    to {
+        background: rgb(0, 0, 0, 0);
+    }
+}
+
+.slideMenu {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 75%;
+    padding: 10px;
+    right: 0;
+    gap: 10px;
+    border-left: 3px solid black;
+    z-index: 10;
+    background: rgb(48, 42, 38);
+}
+
+.slideMenu.open {
+    animation: slide-in 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
+}
+.slideMenu.closing {
+    animation: slide-out 0.5s forwards; /* /!\ Match with component timeout duration /!\ */
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.slideMenuHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 2vw;
+
+    .logoImg {
+        object-fit: contain;
+        max-height: 100%;
+        max-width: 100%;
+        height: 5vh;
+        width: auto;
+    }
+}
+
+.horizontalRuler {
+    width: 100%;
+    height: .3vh;
+    border-radius: 30px;
+    background-color: black;
+}
+
+.slideMenuContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 1vh;
+    gap: 2vh;
+
+    .navLink {
+        text-align: center;
+        width: 100%;
+        padding: 5% 10%;
+    }
+}
+
+@media (max-width: 600px) {
+    .phoneMenu, .open {
+        display: flex !important;
+    }
+}

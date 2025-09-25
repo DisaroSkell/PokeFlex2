@@ -20,12 +20,13 @@ import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGen
 import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
-import { selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
+import { fetchPokeNames, selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 
 import { guessWithName, tryAutoGuess } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
 
 import "./quiz2Content.css";
+import BurgerSettings from "../burgerMenu/burgerSettings";
 
 export default function Quiz2Content() {
     const { t } = useTranslation();
@@ -73,7 +74,12 @@ export default function Quiz2Content() {
 
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    // fetch image
+    // Set poke names
+    useEffect(() => {
+        dispatch(fetchPokeNames(selectedLang));
+    }, [dispatch, selectedLang]);
+
+    // Change current poke
     useEffect(() => {
         if (!pokeHasToChange || isPokeLoading || selectedGens.length === 0 || !selectedLang) return;
 
@@ -203,7 +209,7 @@ export default function Quiz2Content() {
     ]);
 
     return (
-        <div className="quiz">
+        <div className="quiz2">
             <div className="guessContainer">
                 <div className="pokeCard infoContainer">
                     <div className="infoContainerHeader">
@@ -248,11 +254,24 @@ export default function Quiz2Content() {
                             <CustomButton label={`${t("giveup")} :( (Esc)`} type={"alert"} onClickCallback={giveUpCallback} />
                         </div>
                     </div>
+                    <div className="buttonGroupMobile">
+                        <CustomButton
+                            label={`${t("guess")} !`}
+                            type={"primary"}
+                            onClickCallback={guessThePokemonCallback}
+                            disabled={isCurrentGuessEmpty()}
+                        />
+                        <CustomButton
+                            label={`${t("giveup")} :(`}
+                            type={"alert"}
+                            onClickCallback={giveUpCallback}
+                        />
+                    </div>
                     <audio ref={audioRef} src={`${nextConfig.basePath}/sounds/success.mp3`} />
                 </div>
             </div>
 
-            <div className="absoluteRight">
+            <div className="rightSection">
                 <div className="pokeCard">
                     <GenerationSelector />
                 </div>
@@ -260,6 +279,17 @@ export default function Quiz2Content() {
                     <AutoGiveupSelector />
                 </div>
             </div>
+
+            <BurgerSettings>
+                <>
+                    <div className="pokeCard">
+                        <GenerationSelector />
+                    </div>
+                    <div className="pokeCard">
+                        <AutoGiveupSelector />
+                    </div>
+                </>
+            </BurgerSettings>
         </div>
     );
 }

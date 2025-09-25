@@ -26,8 +26,19 @@ export default async function Home({
     return (
         <TranslationsProvider locale={locale} namespaces={i18nNamespaces} resources={resources}>
             <div className="mainContainer">
-                <h1>{t("welcome")}</h1>
-                <Link className="navLink" href={`/${locale}/quiz`}>{t("go-quiz")}</Link>
+                <h1>PokéFlex 2</h1>
+                <div className="quizPresentation">
+                    <div className="pokeCard flexQuizPresentation">
+                        <h2>{t("common:quiz")}</h2>
+                        <p>{t("flex-explain")}</p>
+                        <Link className="navLink" href={`/${locale}/quiz`}>{t("go-quiz")}</Link>
+                    </div>
+                    <div className="pokeCard chainQuizPresentation">
+                        <h2>{t("common:quiz2")}</h2>
+                        <p>{t("chain-explain")}</p>
+                        <Link className="navLink" href={`/${locale}/quiz2`}>{t("go-quiz")}</Link>
+                    </div>
+                </div>
             </div>
         </TranslationsProvider>
     );

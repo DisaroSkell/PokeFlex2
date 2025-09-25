@@ -1,12 +1,15 @@
 import nextConfig from "@/next.config.mjs";
-import Link from "next/link";
 import Image from 'next/image';
+import Link from "next/link";
 
 import initTranslations from "@/src/i18n";
 
-import "./header.css"
+import BurgerMenu from "@/src/app/_components/burgerMenu/component";
+import { BurgerMenuType } from "@/src/types/burgerMenuTypes";
 
-const i18nNamespaces = ["header"];
+import "./header.css";
+
+const i18nNamespaces = ["common"];
 
 interface HeaderProps {
     locale: string
@@ -16,6 +19,12 @@ export default async function Header({
     locale,
 }: HeaderProps) {
     const { t } = await initTranslations(locale, i18nNamespaces);
+
+    const pagesButtons = [
+        <Link key="quiz" className="navLink" href={`/${locale}/quiz`}>{t("quiz")}</Link>,
+        <Link key="quiz2" className="navLink" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>,
+        <Link key="settings" className="navLink" href={`/${locale}/settings`}>{t("settings")}</Link>,
+    ];
 
     return <div className="pokeHeader">
         <div className="container">
@@ -29,10 +38,11 @@ export default async function Header({
                 />
             </Link>
         </div>
+
         <div className="pages">
-            <Link className="pageButton" href={`/${locale}/quiz`}>{t("quiz")}</Link>
-            <Link className="pageButton" href={`/${locale}/quiz2`}>{t("quiz2")}</Link>
-            <Link className="pageButton" href={`/${locale}/settings`}>{t("settings")}</Link>
+            {pagesButtons}
         </div>
+
+        <BurgerMenu menuType={BurgerMenuType.Navigation} />
     </div>
 }

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import AutoGiveupSelector from "../autoGiveupSelector/component";
+import BurgerSettings from "../burgerMenu/burgerSettings";
 import CountdownTimer from "../countdownTimer/component";
 import CustomButton from "../customButton/component";
 import GenerationSelector from "../generationSelector/component";
@@ -19,11 +20,11 @@ import { PokeType } from "@/src/types/pokeType.type";
 import { usePoke } from "@/src/lib/hooks/usePoke";
 
 import { useAppDispatch, useAppSelector } from "@/src/lib/store/hooks";
-import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
 import { selectCurrentLang } from "@/src/lib/store/lang/langSlice";
+import { selectGens, selectSelectedGens } from "@/src/lib/store/pokeGens/pokeGensSlice";
+import { fetchPokeNames, selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 import { incrementStreak, selectStreaks } from "@/src/lib/store/streak/streakSlice";
 import { selectUserSettings } from "@/src/lib/store/userSettings/userSettingsSlice";
-import { fetchPokeNames, selectPokeNames } from "@/src/lib/store/pokeNames/pokeNamesSlice";
 
 import { guessWithID, guessWithName, guessWithTypes, tryAutoGuess } from "@/src/utils/guess";
 import { formatStreaksKey } from "@/src/utils/streaks";
@@ -66,12 +67,12 @@ export default function QuizContent() {
 
     const audioRef = useRef<HTMLAudioElement>(null)
 
-    // set poke names
+    // Set poke names
     useEffect(() => {
         dispatch(fetchPokeNames(selectedLang));
     }, [dispatch, selectedLang]);
 
-    // fetch image
+    // Change current poke
     useEffect(() => {
         if (!pokeHasToChange || isPokeLoading || selectedGens.length === 0 || !selectedLang) return;
         
@@ -258,7 +259,7 @@ export default function QuizContent() {
 
     return (
         <div className="quiz">
-            <div className="absoluteLeft">
+            <div className="leftSection">
                 <QuizOptionsSelectors />
             </div>
 
@@ -270,10 +271,10 @@ export default function QuizContent() {
                         </p>
                         <div className="streaksContainer">
                             <p>
-                                {t("best-streak")}: {streaks[bestStreakKey] ?? 0}
+                                {t("best-streak")}: {streaks[bestStreakKey] ?? 0}
                             </p>
                             <p>
-                                {t("current-streak")}: {streakCount === -1 ? t("streak-broke") : streakCount}
+                                {t("current-streak")}: {streakCount === -1 ? t("streak-broke") : streakCount}
                             </p>
                         </div>
                     </div>
@@ -318,11 +319,24 @@ export default function QuizContent() {
                             <CustomButton label={`${t("giveup")} :( (Esc)`} type={"alert"} onClickCallback={giveUpCallback} />
                         </div>
                     </div>
+                    <div className="buttonGroupMobile">
+                        <CustomButton
+                            label={`${t("guess")} !`}
+                            type={"primary"}
+                            onClickCallback={guessThePokemonCallback}
+                            disabled={isCurrentGuessEmpty()}
+                        />
+                        <CustomButton
+                            label={`${t("giveup")} :(`}
+                            type={"alert"}
+                            onClickCallback={giveUpCallback}
+                        />
+                    </div>
                     <audio ref={audioRef} src={`${nextConfig.basePath}/sounds/success.mp3`} />
                 </div>
             </div>
 
-            <div className="absoluteRight">
+            <div className="rightSection">
                 <div className="pokeCard">
                     <GenerationSelector />
                 </div>
@@ -330,6 +344,18 @@ export default function QuizContent() {
                     <AutoGiveupSelector />
                 </div>
             </div>
+
+            <BurgerSettings>
+                <>
+                    <QuizOptionsSelectors />
+                    <div className="pokeCard">
+                        <GenerationSelector />
+                    </div>
+                    <div className="pokeCard">
+                        <AutoGiveupSelector />
+                    </div>
+                </>
+            </BurgerSettings>
         </div>
     );
 }

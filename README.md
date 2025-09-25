@@ -6,7 +6,7 @@ PokéFlex 2 is a quizzing website about Pokémon. It uses the [PokéAPI](https:/
 
 ## How to use the application
 
-You can access the application [here](https://disaroskell.github.io/PokeFlex2/)
+You can access the application [here](https://pokeflex.disaroskell.com/)
 
 In the home page, you can select your language and go to the quiz page.
 In the quiz page, you can select which Pokémon generations you want to be quizzed on.
