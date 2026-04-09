@@ -1,10 +1,12 @@
-import { RootState } from '../store';
+import { type PayloadAction } from '@reduxjs/toolkit';
+
 import { createSliceWithThunks } from '../customCreateSlice';
 
-import { PayloadAction } from '@reduxjs/toolkit';
-import { Generation } from '@/src/types/generation.type'
-import { getAllGens } from '@/src/apiCalls/generations';
-import { Lang } from '@/src/types/lang.type';
+import { getAllGens } from '../../../apiCalls/generations';
+
+import type { Generation } from '../../../types/generation.type';
+import type { Lang } from '../../../types/lang.type';
+import type { RootState } from '../store';
 
 interface GenState {
     gens: Generation[]
@@ -21,7 +23,7 @@ const initialState: GenState = {
   selectedGens: [],
   loading: false,
   error: null,
-}
+};
 
 export const pokeGensSlice = createSliceWithThunks({
     name: 'pokeGens',

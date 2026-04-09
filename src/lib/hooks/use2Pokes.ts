@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { getPokeWithId } from "@/src/apiCalls/pokemons";
+import { getPokeWithId } from "@/apiCalls/pokemons";
 
-import { Generation } from "@/src/types/generation.type";
-import { Lang } from "@/src/types/lang.type";
-import { Pokemon, } from "@/src/types/pokemon.type";
+import type { Generation } from "@/types/generation.type";
+import type { Lang } from "@/types/lang.type";
+import type { Pokemon } from "@/types/pokemon.type";
 
 /**
  * Hook to handle a Pokémon

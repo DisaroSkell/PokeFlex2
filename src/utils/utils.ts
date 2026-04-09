@@ -12,21 +12,21 @@ export function normalizePokeName(s: string) {
 }
 
 export function formatNumberToMinNdigits(numberToFormat: number, n: number): string {
-    const numberString = numberToFormat.toString()
+    const numberString = numberToFormat.toString();
 
     if (n <= 0 || numberString.length >= n) {
-        return numberString
+        return numberString;
     }
     
-    let result = ''
+    let result = '';
     
     for (let i = 1; i < n; i++) {
-        result += '0'
+        result += '0';
     }
     
-    result = (result + numberString).slice(-n)
+    result = (result + numberString).slice(-n);
     
-    return result
+    return result;
 }
 
 export function displayTimer(totalMilliseconds: number) {

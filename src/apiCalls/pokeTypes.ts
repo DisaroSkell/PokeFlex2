@@ -1,6 +1,6 @@
-import { defaultURL, pokeTypesEndpoint } from "../types/api.type"
-import { Lang } from "../types/lang.type"
-import { PokeType } from "../types/pokeType.type"
+import { defaultURL, pokeTypesEndpoint } from "@/types/api.type";
+import type { Lang } from "@/types/lang.type";
+import type { PokeType } from "@/types/pokeType.type";
 
 const getPokeType = async (directURL: string, lang: Lang): Promise<PokeType|null> => {
     try {
@@ -21,19 +21,19 @@ const getPokeType = async (directURL: string, lang: Lang): Promise<PokeType|null
         return {
             id: json.name,
             fullName: foundLanguage.name
-        }
+        };
     } catch (err) {
         console.error(err);
     }
 
     return null;
-}
+};
 
 const getAllPokeTypes = async (lang: Lang): Promise<PokeType[]> => {
     const allPokeTypes: PokeType[] = [];
 
     try {
-        const allPokeTypesRes = await fetch(defaultURL + pokeTypesEndpoint)
+        const allPokeTypesRes = await fetch(defaultURL + pokeTypesEndpoint);
         const allPokeTypesJson = await allPokeTypesRes.json();
 
         for (let index = 0; index < allPokeTypesJson.results.length; index++) {
@@ -43,15 +43,15 @@ const getAllPokeTypes = async (lang: Lang): Promise<PokeType[]> => {
                 continue;
             }
 
-            const foundType = await getPokeType(typeUrl, lang)
+            const foundType = await getPokeType(typeUrl, lang);
 
-            if (foundType) allPokeTypes.push(foundType)
+            if (foundType) allPokeTypes.push(foundType);
         }
     } catch (err) {
         console.error(err);
     }
 
     return allPokeTypes;
-}
+};
 
-export { getPokeType, getAllPokeTypes }
+export { getAllPokeTypes, getPokeType };

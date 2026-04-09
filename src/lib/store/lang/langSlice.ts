@@ -1,10 +1,11 @@
-import { RootState } from '../store';
+import { type PayloadAction } from '@reduxjs/toolkit';
+
 import { createSliceWithThunks } from '../customCreateSlice';
 
-import { PayloadAction } from '@reduxjs/toolkit';
+import { getAllOfficialLanguages } from '../../../apiCalls/lang';
 
-import { defaultLanguage, Lang, supportedLanguages } from "@/src/types/lang.type"
-import { getAllOfficialLanguages } from '@/src/apiCalls/lang';
+import { defaultLanguage, type Lang, supportedLanguages } from "@/types/lang.type";
+import type { RootState } from '../store';
 
 interface LangState {
     langs: Lang[]
@@ -21,7 +22,7 @@ const initialState: LangState = {
     selectedLang: defaultLanguage,
     loading: false,
     error: null,
-}
+};
 
 export const langSlice = createSliceWithThunks({
     name: 'langs',

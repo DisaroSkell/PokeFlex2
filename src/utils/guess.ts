@@ -1,7 +1,7 @@
-import { PokeName } from "../types/pokemon.type";
-import { PokeType } from "../types/pokeType.type";
-
 import { normalizePokeName } from "./utils";
+
+import type { PokeName } from "@/types/pokemon.type";
+import type { PokeType } from "@/types/pokeType.type";
 
 interface guessReturnType {
     success: boolean,
@@ -15,8 +15,8 @@ export function guessWithID (guess: number, idToGuess: number): guessReturnType 
             feedback: "right"
         };
     } else {
-        const diff = Math.abs(guess - idToGuess)
-        let feedback = "wrong"
+        const diff = Math.abs(guess - idToGuess);
+        let feedback = "wrong";
 
         if(diff <= 5) feedback = "close";
         else if(diff === 10) feedback = "stupid";
@@ -39,7 +39,7 @@ export function guessWithName (guess: string, nameToGuess: string): guessReturnT
             feedback: "right"
         };
     } else {
-        let feedback = "wrong"
+        const feedback = "wrong";
 
         // if(normalizedName.includes(normalizedGuess) || normalizedGuess.includes(normalizedName)) feedback = "close";
 
@@ -83,16 +83,16 @@ export function guessWithTypes (
         };
     }
 
-    let type1Found = false
+    let type1Found = false;
     if (guessForType1.id === typesToGuess.type1.id
     || guessForType1.id === typesToGuess.type2.id) {
-        type1Found = true
+        type1Found = true;
     }
 
-    let type2Found = false
+    let type2Found = false;
     if (guessForType2.id === typesToGuess.type1.id
     || guessForType2.id === typesToGuess.type2.id) {
-        type2Found = true
+        type2Found = true;
     }
 
     if (type1Found && type2Found) return {
@@ -129,7 +129,7 @@ export function tryAutoGuess (input: string, pokeName: string, pokeNames: PokeNa
         } else if (normedName.startsWith(normedInput)) {
             startsWith.push(elem.name);
         }
-    })
+    });
 
     if (foundName) {
         const guessResult = guessWithName(input, pokeName);
@@ -140,7 +140,7 @@ export function tryAutoGuess (input: string, pokeName: string, pokeNames: PokeNa
             return {
                 success: false,
                 feedback: `wrong-autovalidate`,
-            }
+            };
         }
     }
 

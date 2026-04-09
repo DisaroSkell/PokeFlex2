@@ -1,16 +1,16 @@
-import { defaultURL, gqlURL, pokemonsEndpoint } from "../types/api.type"
-import { Lang } from "../types/lang.type"
-import { Pokemon, PokeName } from "../types/pokemon.type"
-import { getPokeType } from "./pokeTypes"
+import { defaultURL, gqlURL, pokemonsEndpoint } from "@/types/api.type";
+import type { Lang } from "@/types/lang.type";
+import type { Pokemon, PokeName } from "@/types/pokemon.type";
 
-import { getPokeNameWithId } from "./species"
+import { getPokeType } from "./pokeTypes";
+import { getPokeNameWithId } from "./species";
 
 const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null> => {
     try {
-        const pokeRes = await fetch(defaultURL + pokemonsEndpoint + pokeId)
+        const pokeRes = await fetch(defaultURL + pokemonsEndpoint + pokeId);
         
         if (pokeRes.ok) {
-            const json = await pokeRes.json()
+            const json = await pokeRes.json();
 
             if (
                 !json.id
@@ -20,7 +20,7 @@ const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null
                 || !json.types
                 || !json.types[0]?.type?.name
             ) {
-                return null
+                return null;
             }
 
             const pokemonTranslatedName = await getPokeNameWithId(json.id, lang);
@@ -40,14 +40,14 @@ const getPokeWithId = async (pokeId: number, lang: Lang): Promise<Pokemon | null
                 shinyImgUrl,
                 type1: pokemonType1,
                 type2: pokemonType2,
-            }
+            };
         }
     } catch (err) {
-        console.error(err)
+        console.error(err);
     }
 
-    return null
-}
+    return null;
+};
 
 const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
     try {
@@ -70,7 +70,7 @@ const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
             })
         });
 
-        const json = await pokeRes.json()
+        const json = await pokeRes.json();
 
         if (
             !json.data?.pokemon_v2_pokemonspeciesname?.length
@@ -78,7 +78,7 @@ const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
             return [];
         }
 
-        const namesArray = json.data.pokemon_v2_pokemonspeciesname as any[]
+        const namesArray = json.data.pokemon_v2_pokemonspeciesname as any[];
 
         return namesArray
             .map((poke: any): PokeName | null => {
@@ -94,7 +94,7 @@ const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
                 return {
                     id: poke.pokemon_species_id,
                     name: poke.name
-                }
+                };
             })
             .filter((poke: PokeName | null) => poke !== null);
     } catch (err) {
@@ -102,6 +102,7 @@ const getAllPokeNames = async (lang: Lang): Promise<PokeName[]> => {
     }
 
     return [];
-}
+};
 
-export { getPokeWithId, getAllPokeNames }
+export { getAllPokeNames, getPokeWithId };
+

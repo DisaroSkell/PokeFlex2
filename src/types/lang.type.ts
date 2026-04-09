@@ -1,4 +1,4 @@
-import { i18nDefaultLanguage, i18nSupportedLanguages } from "@/i18nConfig"
+import { i18nDefaultLanguage, i18nSupportedLanguages } from "@/i18n";
 
 export interface Lang {
     id: string
@@ -6,12 +6,12 @@ export interface Lang {
 }
 
 export const supportedLanguages: Lang[] = i18nSupportedLanguages.map(lang => {
-    const tryFullName = new Intl.DisplayNames([lang], { type: 'language' }).of(lang)
+    const tryFullName = new Intl.DisplayNames([lang], { type: 'language' }).of(lang);
 
     if (tryFullName) return {
         id: lang,
         fullName: tryFullName
-    }
+    };
 }).filter(lang => !!lang);
 
 export const defaultLanguage: Lang = {

@@ -8,4 +8,4 @@ export const genBounds = [
     { start: 722, end: 809 },
     { start: 810, end: 905 },
     { start: 906, end: 1025 },
-]
+];

@@ -1,6 +1,6 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistStore, persistReducer } from 'redux-persist'
-import storage from './storage'
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistStore, persistReducer } from 'redux-persist';
+import storage from './storage';
 
 import pokeGensReducer from './pokeGens/pokeGensSlice';
 import langReducer from './lang/langSlice';
@@ -16,14 +16,14 @@ const rootReducer = combineReducers({
     pokeNames: pokeNamesReducer,
     pokeTypes: pokeTypesReducer,
     userSettings: userSettingsReducer,
-})
+});
 
 const persistConfig = {
     key: 'root',
     storage,
-}
+};
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const makeStore = () => {
     let store = configureStore({
@@ -34,12 +34,12 @@ export const makeStore = () => {
                     ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
                 },
             }),
-    })
+    });
 
-    let persistor = persistStore(store)
+    let persistor = persistStore(store);
 
-    return { ...store, persistor }
-}
+    return { ...store, persistor };
+};
 
 export type AppStore = ReturnType<typeof makeStore>
 export type RootState = ReturnType<AppStore['getState']>

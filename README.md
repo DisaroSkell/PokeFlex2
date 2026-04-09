@@ -1,39 +1,73 @@
-# PokéFlex 2
+# React + TypeScript + Vite
 
-## Description
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-PokéFlex 2 is a quizzing website about Pokémon. It uses the [PokéAPI](https://pokeapi.co/). With it you can train to learn Pokémon IDs, names and types.
+Currently, two official plugins are available:
 
-## How to use the application
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-You can access the application [here](https://pokeflex.disaroskell.com/)
+## React Compiler
 
-In the home page, you can select your language and go to the quiz page.
-In the quiz page, you can select which Pokémon generations you want to be quizzed on.
-You can also select which information will be given, and which information you will be asked to give.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Install from GitHub
+## Expanding the ESLint configuration
 
-If you want to play locally, you can download the projet from github and follow these steps :
-- Open a terminal in the projet root
-- Enter the following commands:
-```sh
-npm install
-npm run build
-npm start
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-You can now access the site through the given url in the terminal.
 
-## Contribution
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-This is an open source project under the license [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1).
-If you want to contribute, you can contact me on discord (disaroskell).
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Special Thanks
-
-I'd like to thank eveyone that helped me for this project:
-- The alpher tester
-- The beta testers (especially those who gave me feedbacks)
-- My friends and familly that encourages me through this project
-- People who helped me debug some features
-- And a really special thanks to @Skaliya for the graphics
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```

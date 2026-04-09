@@ -16,7 +16,6 @@
 - Bellsprout feedbacks "Nice"
 - Machoke feedbacks "SIX SEVEN"
 - Choisir les sprites
-- Linting in the CI/CD
 - Seeding + Daily
 - Option => mute sounds
 - Fading notif for good/bad guesses (will free space in guess container)
@@ -30,7 +29,5 @@
 - Preload sounds (?)
 - Time flies even when image is still loading
 - Shiny can go away if dom changes => Shiny should be an attribute of the mon when you get it
-
-## Refactor:
-- Reorder imports
-- Empty lines at end of files
+- ESLint errors
+- When switching language, confirm button sometimes doesn't confirm and you have to press it twice

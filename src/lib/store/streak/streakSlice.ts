@@ -1,5 +1,6 @@
-import { RootState } from "../store"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+
+import type { RootState } from "../store";
 
 interface streakState {
     // Key example : "PokeInfoOptions.ID-PokeGuessOptions.Name-[1,2,3,4,5,6,7]"
@@ -15,7 +16,7 @@ const initialState: streakState = {
     maxStreaks: {},
     loading: false,
     error: null,
-}
+};
 
 export const streakSlice = createSlice({
     name: 'streak',
@@ -33,7 +34,7 @@ export const streakSlice = createSlice({
             }
         }
     },
-})
+});
 
 export const { incrementStreak } = streakSlice.actions;
 

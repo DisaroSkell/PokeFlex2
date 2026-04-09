@@ -1,0 +1,104 @@
+@font-face {
+    font-family: PixelDragon;
+    src: url(~/src/assets/fonts/eight_bit_dragon.ttf);
+}
+@font-face {
+    font-family: Retro;
+    src: url(~/src/assets/fonts/retro_gaming.ttf);
+}
+@font-face {
+    font-family: retro-monospaced;
+    src: url(~/src/assets/fonts/kongtext.ttf);
+}
+
+/* CSS reset */
+h1,
+h2,
+h3,
+p {
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+/* End CSS reset */
+
+body {
+    background-image: url(~/background.png);
+    background-color: rgb(54, 5, 95);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    color: rgb(216, 202, 8);
+    font-family: 'PixelDragon', sans-serif !important;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+p {
+    line-height: 1.5em;
+}
+
+.header {
+    flex-shrink: 0;
+    font-size: 100%;
+    height: 8%;
+    font-size: 1.7vh;
+}
+
+.mainContent {
+    flex: 1;
+    height: 88%;
+    margin-bottom: 4%;
+    overflow-y: auto;
+}
+
+.footer {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 4%;
+    font-size: 1.7vh;
+}
+
+.pokeCard {
+    height: fit-content;
+    width: fit-content;
+    background-color: rgb(48, 42, 38);
+    border-radius: 20px;
+    border: 3px solid rgb(19, 14, 10);
+    padding: 20px;
+    box-shadow: 5px 5px 5px black;
+}
+
+.navLink {
+    text-decoration: none;
+    background-color: cadetblue;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 1vh;
+    white-space: nowrap;
+}
+    
+.uninteractable {
+    pointer-events: none;
+
+    select {
+        color: transparent;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer {
+        font-size: 2.8vw;
+    }
+}

@@ -1,10 +1,10 @@
-import { RootState } from '../store';
 import { createSliceWithThunks } from '../customCreateSlice';
 
-import { getAllPokeTypes } from '@/src/apiCalls/pokeTypes';
+import { getAllPokeTypes } from '../../../apiCalls/pokeTypes';
 
-import { PokeType } from '@/src/types/pokeType.type'
-import { Lang } from '@/src/types/lang.type';
+import type { Lang } from '../../../types/lang.type';
+import type { PokeType } from '../../../types/pokeType.type';
+import type { RootState } from '../store';
 
 interface PokeTypeState {
     types: PokeType[]
@@ -19,7 +19,7 @@ const initialState: PokeTypeState = {
   types: [],
   loading: false,
   error: null,
-}
+};
 
 export const pokeTypesSlice = createSliceWithThunks({
     name: 'pokeTypes',
