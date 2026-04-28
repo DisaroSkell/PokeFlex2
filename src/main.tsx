@@ -13,7 +13,7 @@ import './global.css';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
             <Routes>
                 <Route path="/" element={<Navigate to={`/${i18nDefaultLanguage}`} replace />} />
                 

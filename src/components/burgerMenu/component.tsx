@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
+import logo from "/Logo.png";
+
 import CustomButton from "@/components/customButton/component";
 
 import { BurgerMenuType } from "@/types/burgerMenuTypes";
@@ -69,7 +71,7 @@ export default function BurgerMenu({
                     <div className="slideMenuHeader">
                         <img
                             className="logoImg"
-                            src={`/Logo.png`}
+                            src={logo}
                             alt={'App logo'}
                             width={1} height={1}
                         />

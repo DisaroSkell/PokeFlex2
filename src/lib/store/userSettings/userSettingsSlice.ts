@@ -38,8 +38,8 @@ export const userSettingsSlice = createSlice({
     name: 'userSettings',
     initialState,
     reducers: {
-        setAllSettings(state, action: PayloadAction<UserSettingsState>) {
-            state = action.payload;
+        setAllSettings(_state, action: PayloadAction<UserSettingsState>) {
+            return action.payload;
         },
         setAutoGiveupSetting(state, action: PayloadAction<AutoGiveupSetting>) {
             state.autoGiveup = action.payload;

@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
+import logo from "/Logo.png";
+
 import BurgerMenu from "@/components/burgerMenu/component";
 
 import { BurgerMenuType } from "@/types/burgerMenuTypes";
@@ -24,7 +26,7 @@ export default function Header() {
             <Link to={`/${locale}/`}>
                 <img
                     className="logoImg"
-                    src={`/Logo.png`}
+                    src={logo}
                     alt={'App logo'}
                 />
             </Link>

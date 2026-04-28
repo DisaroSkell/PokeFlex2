@@ -1,5 +1,7 @@
 import type { JSX } from "react";
 
+import logo from "/Logo.png";
+
 import arrow from "@/assets/symbols/arrow.png";
 import questionMark from "@/assets/symbols/question_mark.webp";
 
@@ -23,7 +25,7 @@ export default function PokeInfoDisplayer({
     function getLoadingImage() {
         return <img
             className={'imageAutoFit pokemonImg banana'}
-            src={`/Logo.png`}
+            src={logo}
             alt={'loading'}
             width={1} height={1}
         />;

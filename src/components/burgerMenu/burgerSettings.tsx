@@ -1,5 +1,7 @@
 import { useMemo, useState, type JSX } from "react";
 
+import logo from "/Logo.png";
+
 import CustomButton from "@/components/customButton/component";
 
 import './burgerMenu.css';
@@ -63,7 +65,7 @@ export default function BurgerSettings({
                         <div className="slideMenuHeader">
                             <img
                                 className="logoImg"
-                                src={`/Logo.png`}
+                                src={logo}
                                 alt={'App logo'}
                                 width={1} height={1}
                             />
