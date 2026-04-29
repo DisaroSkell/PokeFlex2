@@ -21,7 +21,6 @@
 - Fading notif for good/bad guesses (will free space in guess container)
 
 ## Fix:
-- When selecting no gen in gen selector, cancel is disabled and validate is hittable
 - Allow spaces and simple quotes in text field for pokemons
 - When giving up for pokémon types, it says "its type(s) was/were [types]" but it would be better if it said "[pokemon]'s type(s) is/are [types]"
 - Fairy type shouldn't exist when max gen is lower than 6 (add text to explain this to users)

@@ -86,7 +86,7 @@ export default function GenerationSelector() {
         let i = 0;
         while (i < genOptions.length && !genOptions[i].selected) i++;
 
-        return i !== genOptions.length;
+        return i === genOptions.length;
     }
 
     function confirmChangesCallback() {
@@ -117,8 +117,8 @@ export default function GenerationSelector() {
             </div>
 
             <div className="buttonsContainer">
-                <CustomButton label={t("common:cancel")} type="primary" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges || !isEmptyGenSelection()} />
-                <CustomButton label={t("common:confirm")} type="secondary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges} />
+                <CustomButton label={t("common:cancel")} type="primary" onClickCallback={cancelChangesCallback} disabled={!unsavedChanges} />
+                <CustomButton label={t("common:confirm")} type="secondary" onClickCallback={confirmChangesCallback} disabled={!unsavedChanges || isEmptyGenSelection()} />
             </div>
         </div>
     );
