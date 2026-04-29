@@ -58,7 +58,6 @@ p {
 .mainContent {
     flex: 1;
     height: 88%;
-    margin-bottom: 4%;
     overflow-y: auto;
 }
 
