@@ -25,8 +25,9 @@
 - When giving up for pokémon types, it says "its type(s) was/were [types]" but it would be better if it said "[pokemon]'s type(s) is/are [types]"
 - Fairy type shouldn't exist when max gen is lower than 6 (add text to explain this to users)
 - Footer with info for Pokemon Company and stuff (check pkmnquiz)
-- Preload sounds (?)
 - Time flies even when image is still loading
 - Shiny can go away if dom changes => Shiny should be an attribute of the mon when you get it
 - ESLint errors
-- When switching language, confirm button sometimes doesn't confirm and you have to press it twice
+
+## Refactor
+- Quiz components shouldn't be components and be put in their respective pages
