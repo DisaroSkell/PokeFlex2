@@ -32,11 +32,11 @@ export default function GenerationSelector() {
     }, [dispatch, i18n.language]);
 
     useEffect(() => {
-        setGenOptions(allGens.map((gen) => {return{
+        setGenOptions(allGens.map((gen) => ({
             key: gen.id,
             label: gen.name,
             selected: selectedGens.some((genId) => gen.id === genId)
-        };}));
+        })));
     }, [allGens, selectedGens]);
 
     useEffect(() => {
@@ -101,11 +101,11 @@ export default function GenerationSelector() {
     }
 
     function cancelChangesCallback() {
-        setGenOptions(allGens.map((gen) => {return{
+        setGenOptions(allGens.map((gen) => ({
             key: gen.id,
             label: gen.name,
             selected: selectedGens.some((genId) => gen.id === genId)
-        };}));
+        })));
     }
     
     return (

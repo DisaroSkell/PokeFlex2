@@ -6,8 +6,10 @@ import { selectAutoValidateSetting, setAutoValidateSetting } from "@/lib/store/u
 
 import CheckboxWithLabel from "@/components/checkboxWithLabel/component";
 
+const i18nNamespaces = ["settings"];
+
 export default function AutoValidateToggle() {
-    const { t } = useTranslation("settings");
+    const { t } = useTranslation(i18nNamespaces);
     const autoValidateSetting = useAppSelector(selectAutoValidateSetting);
     const dispatch = useAppDispatch();
 

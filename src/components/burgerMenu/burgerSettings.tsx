@@ -1,4 +1,4 @@
-import { useMemo, useState, type JSX } from "react";
+import { useMemo, useState } from "react";
 
 import logo from "/Logo.png";
 
@@ -8,7 +8,7 @@ import './burgerMenu.css';
 import './burgerSettings.css';
 
 interface BurgerSettingsProps {
-    children: JSX.Element;
+    children: React.ReactNode;
 }
 
 export default function BurgerSettings({

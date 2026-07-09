@@ -35,10 +35,10 @@ export default function TypesGuessSelectors({
     }, [dispatch, langs, i18n]);
 
     function getPokeTypesAsOptions(pokeTypes: PokeType[]) {
-        return [{value: '', label: ' '}, ...pokeTypes.map(type => {return {
+        return [{value: '', label: ' '}, ...pokeTypes.map(type => ({
             value: type.id,
             label: type.fullName
-        };}).sort((a, b) => {
+        })).sort((a, b) => {
             if (a.label.match(/[^\p{L}]/gu) && !b.label.match(/[^\p{L}]/gu)) {
                 return 1;
             }
