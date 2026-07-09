@@ -8,21 +8,20 @@ PokéFlex 2 is a quizzing website about Pokémon. It uses the [PokéAPI](https:/
 
 You can access the application [here](https://pokeflex.disaroskell.com/)
 
-In the home page, you can select your language and go to the quiz page.
-In the quiz page, you can select which Pokémon generations you want to be quizzed on.
-You can also select which information will be given, and which information you will be asked to give.
+When opening the website for the first time, you can select your language and everything is explained in a tutorial modal.
+There are two types of quiz : Flex Quiz and Chain Quiz.
+You can select which Pokémon generations you want to be quizzed on in both quiz pages and in the settings page.
+The Flex Quiz aims to strengthen your Pokémon overall knowledge. You can select which information will be given, and which information you will be asked to give.
+The Chain Quiz will make you learn PokéDex order. You will be shown a Pokémon and asked to guess the one who is before or after it.
+Don't hesitate to check the settings page.
 
 ## Install from GitHub
 
-If you want to play locally, you can download the projet from github and follow these steps :
-- Open a terminal in the projet root
-- Enter the following commands:
+If you want to play locally, you can download the projet from github and run it using bun :
 ```sh
-npm install
-npm run build
-npm start
+bun install
+bun run dev
 ```
-You can now access the site through the given url in the terminal.
 
 ## Contribution
 
@@ -34,6 +33,5 @@ If you want to contribute, you can contact me on discord (disaroskell).
 I'd like to thank eveyone that helped me for this project:
 - The alpher tester
 - The beta testers (especially those who gave me feedbacks)
-- My friends and familly that encourages me through this project
+- My friends and familly that encouraged me through this project
 - People who helped me debug some features
-- And a really special thanks to @Skaliya for the graphics

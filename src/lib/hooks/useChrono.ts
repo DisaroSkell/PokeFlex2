@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useEffect, useState } from "react";
+import { type Dispatch, useCallback, useEffect, useState } from "react";
 
 export function useChrono(
     refreshRate: number = 10, // 0.01 second
@@ -24,7 +24,7 @@ export function useChrono(
             setLastUpdateDate(Date.now());
         }, refreshRate);
 
-        return () => clearInterval(interval)
+        return () => clearInterval(interval);
     }, [refreshRate, paused, lastUpdateDate]);
 
     const resume: Dispatch<void> = useCallback(() => {

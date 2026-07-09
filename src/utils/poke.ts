@@ -1,5 +1,6 @@
-import { Generation } from "../types/generation.type";
 import { shuffleArray } from "./utils";
+
+import type { Generation } from "@/types/generation.type";
 
 export function pickRandomIdInGens(gens: Generation[]) {
     // Chooses a random gen

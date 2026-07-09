@@ -1,7 +1,8 @@
-import { PokeGuessOptions, PokeInfoOptions } from "@/src/types/pokemon.type"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-import { RootState } from "../store"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import type { RootState } from "@/lib/store/store";
+
+import { PokeGuessOptions, PokeInfoOptions } from "@/types/pokemon.type";
 
 interface AutoGiveupSetting {
     enabled: boolean
@@ -31,20 +32,20 @@ const initialState: UserSettingsState = {
     },
     autoValidate: true,
     displayTutorial: true,
-}
+};
 
 export const userSettingsSlice = createSlice({
     name: 'userSettings',
     initialState,
     reducers: {
-        setAllSettings(state, action: PayloadAction<UserSettingsState>) {
-            state = action.payload; 
+        setAllSettings(_state, action: PayloadAction<UserSettingsState>) {
+            return action.payload;
         },
         setAutoGiveupSetting(state, action: PayloadAction<AutoGiveupSetting>) {
-            state.autoGiveup = action.payload; 
+            state.autoGiveup = action.payload;
         },
         setQuizOptionsSetting(state, action: PayloadAction<QuizOptionsSetting>) {
-            state.chosenQuizOptions = action.payload; 
+            state.chosenQuizOptions = action.payload;
         },
         setAutoValidateSetting(state, action: PayloadAction<boolean>) {
             state.autoValidate = action.payload;
@@ -53,7 +54,7 @@ export const userSettingsSlice = createSlice({
             state.displayTutorial = action.payload;
         },
     },
-})
+});
 
 export const { setAllSettings, setAutoGiveupSetting, setQuizOptionsSetting, setAutoValidateSetting, setDisplayTutorialSetting } = userSettingsSlice.actions;
 

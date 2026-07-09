@@ -1,38 +1,38 @@
-import { defaultURL, langEndpoint } from "../types/api.type"
-import { Lang } from "../types/lang.type"
+import { defaultURL, langEndpoint } from "@/types/api.type";
+import type { Lang } from "@/types/lang.type";
 
 const getAllOfficialLanguages = async (): Promise<Lang[]> => {
     try {
-        const langRes = await fetch(defaultURL + langEndpoint)
+        const langRes = await fetch(defaultURL + langEndpoint);
         
         if (langRes.ok) {
-            const json = await langRes.json()
+            const json = await langRes.json();
 
             if (
                 !json.results
                 || !json.results.length
             ) {
-                return []
+                return [];
             }
 
-            const allLanguages: Lang[] = []
+            const allLanguages: Lang[] = [];
 
             for (let i = 0; i < json.results.length; i++) {
-                const tryFullName = new Intl.DisplayNames([json.results[i].name], { type: 'language' }).of(json.results[i].name)
+                const tryFullName = new Intl.DisplayNames([json.results[i].name], { type: 'language' }).of(json.results[i].name);
 
                 if (tryFullName) allLanguages.push({
                     id: json.results[i].name,
                     fullName: tryFullName
-                })
+                });
             }
 
-            return allLanguages
+            return allLanguages;
         }
     } catch (err) {
-        console.error(err)
+        console.error(err);
     }
 
-    return []
-}
+    return [];
+};
 
-export { getAllOfficialLanguages }
+export { getAllOfficialLanguages };

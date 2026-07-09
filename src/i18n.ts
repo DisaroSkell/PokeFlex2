@@ -1,9 +1,17 @@
-import { createInstance, i18n, Namespace, Resource } from 'i18next';
-import { initReactI18next } from 'react-i18next/initReactI18next';
+import { createInstance, type i18n, type Namespace, type Resource } from 'i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
-import { i18nConfig } from '@/i18nConfig';
+import { initReactI18next } from 'react-i18next/initReactI18next';
 
-export default async function initTranslations(
+export const i18nSupportedLanguages = ['en', 'fr'/* , 'ja-HRKT' */];
+export const i18nDefaultLanguage = i18nSupportedLanguages[0];
+
+export const i18nConfig = {
+    locales: i18nSupportedLanguages,
+    defaultLocale: i18nDefaultLanguage,
+    prefixDefault: true,
+};
+
+export default function initTranslations(
     locale: string,
     namespaces: Namespace,
     i18nInstance?: i18n,
@@ -17,12 +25,12 @@ export default async function initTranslations(
         i18nInstance.use(
             resourcesToBackend(
                 (language: string, namespace: string) =>
-                    import(`@/locales/${language}/${namespace}.json`)
+                    import(`../locales/${language}/${namespace}.json`)
             )
         );
     }
     
-    await i18nInstance.init({
+    i18nInstance.init({
         lng: locale,
         resources,
         fallbackLng: i18nConfig.defaultLocale,
@@ -30,7 +38,8 @@ export default async function initTranslations(
         defaultNS: namespaces[0],
         fallbackNS: namespaces[0],
         ns: namespaces,
-        preload: resources ? [] : i18nConfig.locales
+        preload: resources ? [] : i18nConfig.locales,
+        react: { useSuspense: true },
     });
     
     return {

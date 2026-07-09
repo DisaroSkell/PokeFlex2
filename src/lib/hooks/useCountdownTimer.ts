@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useEffect, useState } from "react";
+import { type Dispatch, useCallback, useEffect, useState } from "react";
 
 export function useCountdownTimer(
     startTime: number = 60000, // 1 minute
@@ -33,7 +33,7 @@ export function useCountdownTimer(
             setLastUpdateDate(Date.now());
         }, refreshRate);
 
-        return () => clearInterval(interval)
+        return () => clearInterval(interval);
     }, [refreshRate, paused, lastUpdateDate, timeOverCallback]);
 
     useEffect(() => {

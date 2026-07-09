@@ -1,7 +1,7 @@
-export const defaultURL = 'https://pokeapi.co/api/v2/'
-export const gqlURL = 'https://beta.pokeapi.co/graphql/v1beta/'
-export const pokemonsEndpoint = 'pokemon/'
-export const speciesEndpoint = 'pokemon-species/'
-export const pokeTypesEndpoint = 'type/'
-export const generationsEndpoint = 'generation/'
-export const langEndpoint = 'language/'
+export const defaultURL = 'https://pokeapi.co/api/v2/';
+export const gqlURL = 'https://beta.pokeapi.co/graphql/v1beta/';
+export const pokemonsEndpoint = 'pokemon/';
+export const speciesEndpoint = 'pokemon-species/';
+export const pokeTypesEndpoint = 'type/';
+export const generationsEndpoint = 'generation/';
+export const langEndpoint = 'language/';

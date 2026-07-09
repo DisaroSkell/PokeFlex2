@@ -1,4 +1,4 @@
-ARG NODE_VERSION=24
+ARG NODE_VERSION=25
 
 FROM node:${NODE_VERSION}-alpine AS builder
 
@@ -11,41 +11,21 @@ RUN apk add --no-cache bash curl unzip sed && \
 
 ENV PATH="${PATH}:/root/.bun/bin"
 
-COPY package.json bun.lock tsconfig.json ./
+COPY package.json bun.lock tsconfig.json vite.config.ts ./
 
 RUN bun install --frozen-lockfile
 
 COPY . .
 
-RUN sed -i 's/basePath: .*,/basePath: "",/' ./next.config.mjs
+RUN sed -i 's/basePath: .*,/basePath: "",/' ./vite.config.ts
 
 RUN bun run build
 
-ENV NODE_ENV=production
+FROM nginx:alpine AS runner
 
-RUN rm -rf node_modules && \
-  rm -rf /root/.bun/install/cache/ && \
-  bun install --frozen-lockfile --production
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN curl -sf https://gobinaries.com/tj/node-prune | sh && \
-  node-prune
+EXPOSE 80
 
-FROM node:${NODE_VERSION}-alpine AS runner
-
-ENV NODE_ENV=production
-
-WORKDIR /app
-
-# Copy the bundled code from the builder stage
-COPY --from=builder --chown=node:node /app/package.json ./
-COPY --from=builder --chown=node:node /app/.next ./.next
-COPY --from=builder --chown=node:node /app/node_modules ./node_modules
-COPY --from=builder --chown=node:node /app/public ./public
-
-RUN chown -R node:node /app
-
-USER node
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
