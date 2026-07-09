@@ -1,12 +1,12 @@
 import { type PayloadAction } from '@reduxjs/toolkit';
 
-import { createSliceWithThunks } from '../customCreateSlice';
+import { createSliceWithThunks } from '@/lib/store/customCreateSlice';
+import type { RootState } from '@/lib/store/store';
 
-import { getAllGens } from '../../../apiCalls/generations';
+import { getAllGens } from '@/apiCalls/generations';
 
-import type { Generation } from '../../../types/generation.type';
-import type { Lang } from '../../../types/lang.type';
-import type { RootState } from '../store';
+import type { Generation } from '@/types/generation.type';
+import type { Lang } from '@/types/lang.type';
 
 interface GenState {
     gens: Generation[]

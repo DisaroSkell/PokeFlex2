@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-import type { RootState } from "../store";
+import type { RootState } from "@/lib/store/store";
 
 interface streakState {
     // Key example : "PokeInfoOptions.ID-PokeGuessOptions.Name-[1,2,3,4,5,6,7]"

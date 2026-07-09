@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-import type { RootState } from "../store";
+import type { RootState } from "@/lib/store/store";
 
 import { PokeGuessOptions, PokeInfoOptions } from "@/types/pokemon.type";
 

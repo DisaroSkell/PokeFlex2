@@ -1,10 +1,10 @@
-import { createSliceWithThunks } from '../customCreateSlice';
+import { createSliceWithThunks } from '@/lib/store/customCreateSlice';
+import type { RootState } from '@/lib/store/store';
 
-import { getAllPokeNames } from '../../../apiCalls/pokemons';
+import { getAllPokeNames } from '@/apiCalls/pokemons';
 
-import type { Lang } from '../../../types/lang.type';
-import type { PokeName } from '../../../types/pokemon.type';
-import type { RootState } from '../store';
+import type { Lang } from '@/types/lang.type';
+import type { PokeName } from '@/types/pokemon.type';
 
 interface PokeNamesState {
     names: PokeName[]

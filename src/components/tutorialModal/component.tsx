@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '../../lib/store/hooks';
-import { selectDisplayTutorialSetting, setDisplayTutorialSetting } from '../../lib/store/userSettings/userSettingsSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { selectDisplayTutorialSetting, setDisplayTutorialSetting } from '@/lib/store/userSettings/userSettingsSlice';
 
-import CustomButton from '../customButton/component';
-import GenerationSelector from '../generationSelector/component';
-import LanguageSelectors from '../languageSelectors/component';
-import QuizOptionsSelectors from '../quizOptionsSelectors/component';
+import CustomButton from '@/components/customButton/component';
+import GenerationSelector from '@/components/generationSelector/component';
+import LanguageSelectors from '@/components/languageSelectors/component';
+import QuizOptionsSelectors from '@/components/quizOptionsSelectors/component';
 
 import './tutorialModal.css';
 

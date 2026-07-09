@@ -1,11 +1,11 @@
 import { type PayloadAction } from '@reduxjs/toolkit';
 
-import { createSliceWithThunks } from '../customCreateSlice';
+import { createSliceWithThunks } from '@/lib/store/customCreateSlice';
+import type { RootState } from '@/lib/store/store';
 
-import { getAllOfficialLanguages } from '../../../apiCalls/lang';
+import { getAllOfficialLanguages } from '@/apiCalls/lang';
 
 import { defaultLanguage, type Lang, supportedLanguages } from "@/types/lang.type";
-import type { RootState } from '../store';
 
 interface LangState {
     langs: Lang[]

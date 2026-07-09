@@ -1,10 +1,10 @@
-import { createSliceWithThunks } from '../customCreateSlice';
+import { createSliceWithThunks } from '@/lib/store/customCreateSlice';
+import type { RootState } from '@/lib/store/store';
 
-import { getAllPokeTypes } from '../../../apiCalls/pokeTypes';
+import { getAllPokeTypes } from '@/apiCalls/pokeTypes';
 
-import type { Lang } from '../../../types/lang.type';
-import type { PokeType } from '../../../types/pokeType.type';
-import type { RootState } from '../store';
+import type { Lang } from '@/types/lang.type';
+import type { PokeType } from '@/types/pokeType.type';
 
 interface PokeTypeState {
     types: PokeType[]
